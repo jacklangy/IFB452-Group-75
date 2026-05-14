@@ -1,0 +1,24 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "Assessment Task 3 for IFB452.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacklangy/IFB452-Group-75.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacklangy/IFB452-Group-75/issues"
+  },
+  "homepage": "https://github.com/jacklangy/IFB452-Group-75#readme",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
