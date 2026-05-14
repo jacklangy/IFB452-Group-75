@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SEC Settlement Portal</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#08111f;
+      color:white;
+      overflow-x:hidden;
+    }
+
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:25px 8%;
+      background:rgba(0,0,0,0.3);
+      backdrop-filter:blur(8px);
+      position:fixed;
+      width:100%;
+      z-index:1000;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:bold;
+      color:#00ffb3;
+    }
+
+    nav ul{
+      display:flex;
+      gap:30px;
+      list-style:none;
+    }
+
+    nav ul li a{
+      text-decoration:none;
+      color:white;
+      transition:0.3s;
+    }
+
+    nav ul li a:hover{
+      color:#00ffb3;
+    }
+
+    .hero{
+      padding-top:140px;
+      padding-bottom:80px;
+      text-align:center;
+      background:
+        linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+        url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=1600&auto=format&fit=crop');
+      background-size:cover;
+      background-position:center;
+    }
+
+    .hero h1{
+      font-size:58px;
+      margin-bottom:20px;
+    }
+
+    .hero p{
+      color:#d6d6d6;
+      font-size:20px;
+      max-width:700px;
+      margin:auto;
+      line-height:1.6;
+    }
+
+    section{
+      padding:90px 8%;
+    }
+
+    .section-title{
+      text-align:center;
+      margin-bottom:60px;
+    }
+
+    .section-title h2{
+      font-size:42px;
+      color:#00ffb3;
+      margin-bottom:10px;
+    }
+
+    .settlement-container{
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      gap:40px;
+    }
+
+    .card{
+      background:#111c2e;
+      padding:35px;
+      border-radius:25px;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .card h3{
+      color:#00ffb3;
+      margin-bottom:25px;
+      font-size:28px;
+    }
+
+    .trade-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px 0;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    .trade-row:last-child{
+      border-bottom:none;
+    }
+
+    .trade-info h4{
+      margin-bottom:8px;
+      font-size:20px;
+    }
+
+    .trade-info p{
+      color:#bdbdbd;
+      line-height:1.6;
+    }
+
+    .green{
+      color:#00ffb3;
+      font-weight:bold;
+    }
+
+    .status{
+      padding:8px 18px;
+      border-radius:20px;
+      background:#00ffb320;
+      color:#00ffb3;
+      font-size:14px;
+      font-weight:bold;
+    }
+
+    .summary-box{
+      display:flex;
+      flex-direction:column;
+      gap:25px;
+    }
+
+    .summary-item{
+      background:#08111f;
+      padding:20px;
+      border-radius:18px;
+    }
+
+    .summary-item p{
+      color:#bdbdbd;
+      margin-bottom:10px;
+    }
+
+    .summary-item h2{
+      color:#00ffb3;
+      font-size:32px;
+    }
+
+    .payment-methods{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:25px;
+      margin-top:40px;
+    }
+
+    .payment-card{
+      background:#111c2e;
+      padding:30px;
+      border-radius:20px;
+      text-align:center;
+      border:1px solid rgba(255,255,255,0.08);
+      transition:0.3s;
+    }
+
+    .payment-card:hover{
+      transform:translateY(-5px);
+      border-color:#00ffb3;
+    }
+
+    .payment-card h3{
+      color:#00ffb3;
+      margin-bottom:15px;
+    }
+
+    .checkout{
+      margin-top:60px;
+      background:#111c2e;
+      padding:40px;
+      border-radius:25px;
+    }
+
+    form{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:25px;
+    }
+
+    .full{
+      grid-column:1/3;
+    }
+
+    input{
+      padding:16px;
+      border:none;
+      border-radius:12px;
+      background:#08111f;
+      color:white;
+      font-size:15px;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:16px 35px;
+      background:#00ffb3;
+      color:#08111f;
+      text-decoration:none;
+      border-radius:40px;
+      font-weight:bold;
+      transition:0.3s;
+      border:none;
+      cursor:pointer;
+    }
+
+    .btn:hover{
+      background:white;
+      transform:translateY(-3px);
+    }
+
+    .settlement-status{
+      margin-top:50px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:25px;
+    }
+
+    .status-card{
+      background:#111c2e;
+      padding:30px;
+      border-radius:20px;
+      text-align:center;
+    }
+
+    .status-card h2{
+      font-size:40px;
+      color:#00ffb3;
+      margin-bottom:10px;
+    }
+
+    footer{
+      text-align:center;
+      padding:30px;
+      background:#050b14;
+      color:#aaa;
+      margin-top:60px;
+    }
+
+    @media(max-width:900px){
+
+      .settlement-container{
+        grid-template-columns:1fr;
+      }
+
+      form{
+        grid-template-columns:1fr;
+      }
+
+      .full{
+        grid-column:auto;
+      }
+
+      .hero h1{
+        font-size:42px;
+      }
+
+      nav ul{
+        display:none;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">SEC</div>
+
+    <ul>
+      <li><a href="#">Settlement</a></li>
+      <li><a href="#">Ethereum</a></li>
+      <li><a href="#">Smart Contracts</a></li>
+      <li><a href="#">Oracle</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <h1>Ethereum Energy Settlement</h1>
+
+    <p>
+      Secure blockchain settlement between energy buyers and stakeholders
+      using Ethereum smart contracts and oracle verified delivery data.
+    </p>
+  </div>
+
+  <section>
+
+    <div class="section-title">
+      <h2>Pending Settlement</h2>
+      <p>Blockchain verified energy transaction overview</p>
+    </div>
+
+    <div class="settlement-container">
+
+      <div class="card">
+
+        <h3>Trade Details</h3>
+
+        <div class="trade-row">
+          <div class="trade-info">
+            <h4>Producer</h4>
+            <p>SolarGrid Homes Pty Ltd</p>
+          </div>
+
+          <span class="status">Verified</span>
+        </div>
+
+        <div class="trade-row">
+          <div class="trade-info">
+            <h4>Consumer</h4>
+            <p>West District Apartments</p>
+          </div>
+
+          <span class="status">Matched</span>
+        </div>
+
+        <div class="trade-row">
+          <div class="trade-info">
+            <h4>Energy Delivered</h4>
+            <p>245 kWh Renewable Solar Energy</p>
+          </div>
+
+          <span class="green">Confirmed</span>
+        </div>
+
+        <div class="trade-row">
+          <div class="trade-info">
+            <h4>Settlement Window</h4>
+            <p>14 May 2026 • 6:00 PM AEST</p>
+          </div>
+
+          <span class="green">Active</span>
+        </div>
+
+      </div>
+
+      <div class="summary-box">
+
+        <div class="summary-item">
+          <p>Total Trade Value</p>
+          <h2>0.084 ETH</h2>
+        </div>
+
+        <div class="summary-item">
+          <p>Estimated Gas Fee</p>
+          <h2>0.0012 ETH</h2>
+        </div>
+
+        <div class="summary-item">
+          <p>Settlement Status</p>
+          <h2>Pending</h2>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section>
+
+    <div class="section-title">
+      <h2>Ethereum Settlement</h2>
+      <p>Secure smart contract settlement using Ethereum blockchain</p>
+    </div>
+
+    <div class="payment-methods">
+
+      <div class="payment-card">
+        <h3>⟠ Ethereum Smart Contract</h3>
+
+        <p>
+          All settlements are processed through Ethereum smart contracts
+          with decentralized verification and immutable transaction records.
+        </p>
+      </div>
+
+      <div class="payment-card">
+        <h3>🔐 Wallet Authentication</h3>
+
+        <p>
+          Buyers and stakeholders authenticate transactions using
+          Ethereum wallet signatures and blockchain verification.
+        </p>
+      </div>
+
+      <div class="payment-card">
+        <h3>⚡ Oracle Verification</h3>
+
+        <p>
+          Smart meter oracle data confirms energy delivery before
+          Ethereum settlement is finalized on-chain.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="checkout">
+
+      <h3 style="margin-bottom:30px; color:#00ffb3; font-size:32px;">
+        Complete Ethereum Settlement
+      </h3>
+
+      <form>
+
+        <input type="text" placeholder="Buyer Wallet Address" required>
+
+        <input type="text" placeholder="Producer Wallet Address" required>
+
+        <input type="text" placeholder="Ethereum Smart Contract ID" class="full" required>
+
+        <input type="text" placeholder="Settlement Amount (ETH)" required>
+
+        <input type="text" placeholder="Gas Fee Estimate (GWEI)">
+
+        <input type="text" placeholder="Oracle Verification ID" class="full">
+
+        <button class="btn full" type="submit">
+          Confirm On-Chain Settlement
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+  <section>
+
+    <div class="section-title">
+      <h2>Blockchain Settlement Stats</h2>
+      <p>Live transaction metrics from SEC Ethereum network</p>
+    </div>
+
+    <div class="settlement-status">
+
+      <div class="status-card">
+        <h2>1,284</h2>
+        <p>Completed Smart Contracts</p>
+      </div>
+
+      <div class="status-card">
+        <h2>184 ETH</h2>
+        <p>Total Energy Settled</p>
+      </div>
+
+      <div class="status-card">
+        <h2>99.98%</h2>
+        <p>Settlement Accuracy</p>
+      </div>
+
+      <div class="status-card">
+        <h2>4 sec</h2>
+        <p>Average Block Confirmation</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    © 2026 SEC Ethereum Settlement Portal
+  </footer>
+
+</body>
+</html>
