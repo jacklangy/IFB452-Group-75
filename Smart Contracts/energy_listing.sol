@@ -5,6 +5,8 @@ pragma solidity ^0.8.3;
 
 contract EnergyTrading {
     address public owner;
+    mapping(address => bool) public isRegulator;
+    mapping(address => bool) public isMember;
 
     struct EnergyListing {
         address seller;
@@ -20,9 +22,12 @@ contract EnergyTrading {
 
     constructor() {
         owner = msg.sender;
+        isMember[msg.sender] = true;
+        // emit regulatorAdded(msg.sender, address(0));
     }
     function listEnergy(uint256 _amount, uint256 _price) external {
         require (_amount > 0, "amount must be greater than zero");
+        require(isMember[msg.sender], "Must be a member to call this");
 
         listings[ListingId] = EnergyListing({
             seller: msg.sender,
@@ -35,16 +40,9 @@ contract EnergyTrading {
         ListingId++;
     }
 
-    // function buyEnergy(uint256 _id) external payable {
-    //     EnergyListing storage listing = listings[_id];
-
-    //     require(listing.isActive, "Listing is not available");
-    //     require(msg.value >= listing.costPerKwh, "insufficient funds");
-    //     require(msg.sender != listing.seller, "Cannot buy your own listing");
-
-    //     listing.isActive = false;
-
-    //     emit EnergyPurchased(_id, msg.sender, listing.amountKwh);
+    // function memberAction() external view returns (string memory) {
+    //     require(isMember[msg.sender], "Must be a member to call this");
+    //     return "Welcome to the inner circle.";
     // }
 
     function cancelListing(uint256 _id) external {
