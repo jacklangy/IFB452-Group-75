@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SEC - Smart Energy Connect</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -20,11 +19,7 @@
       --warning: #ffb347;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: var(--bg);
@@ -38,7 +33,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 22px 8%;
-      background: rgba(8,17,31,0.85);
+      background: rgba(8,17,31,0.88);
       backdrop-filter: blur(12px);
       position: fixed;
       width: 100%;
@@ -46,30 +41,11 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .logo {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--accent);
-      letter-spacing: 2px;
-    }
+    .logo { font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 2px; }
 
-    nav ul {
-      display: flex;
-      gap: 30px;
-      list-style: none;
-      align-items: center;
-    }
-
-    nav ul li a {
-      text-decoration: none;
-      color: #ccc;
-      transition: color 0.2s;
-      font-size: 15px;
-    }
-
-    nav ul li a:hover {
-      color: var(--accent);
-    }
+    nav ul { display: flex; gap: 30px; list-style: none; align-items: center; }
+    nav ul li a { text-decoration: none; color: #ccc; transition: color 0.2s; font-size: 15px; }
+    nav ul li a:hover { color: var(--accent); }
 
     #connectBtn {
       background: transparent;
@@ -82,15 +58,8 @@
       font-size: 13px;
       transition: all 0.25s;
     }
-
-    #connectBtn:hover {
-      background: var(--accent);
-      color: var(--bg);
-    }
-
-    #connectBtn.connected {
-      background: var(--accent-dim);
-    }
+    #connectBtn:hover { background: var(--accent); color: var(--bg); }
+    #connectBtn.connected { background: var(--accent-dim); }
 
     header {
       height: 100vh;
@@ -130,25 +99,11 @@
       line-height: 1.7;
     }
 
-    section {
-      padding: 90px 8%;
-    }
+    section { padding: 90px 8%; }
 
-    .section-title {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-title h2 {
-      font-size: 42px;
-      font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .section-title p {
-      color: var(--text-muted);
-    }
+    .section-title { text-align: center; margin-bottom: 60px; }
+    .section-title h2 { font-size: 42px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+    .section-title p { color: var(--text-muted); }
 
     .features {
       display: grid;
@@ -162,20 +117,12 @@
       border-radius: 18px;
       border: 1px solid var(--border);
     }
-
-    .card h3 {
-      margin-bottom: 12px;
-      color: var(--accent);
-    }
-
-    .card p {
-      color: #99aabb;
-      line-height: 1.6;
-    }
+    .card h3 { margin-bottom: 12px; color: var(--accent); }
+    .card p { color: #99aabb; line-height: 1.6; }
 
     .btn {
       display: inline-block;
-      padding: 14px 36px;
+      padding: 13px 30px;
       background: var(--accent);
       color: var(--bg);
       text-decoration: none;
@@ -184,124 +131,168 @@
       border: none;
       cursor: pointer;
       font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      transition: all 0.2s;
     }
-
-    .btn-danger {
-      background: var(--danger);
-      color: white;
-    }
+    .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); }
+    .btn-outline:hover { background: var(--accent); color: var(--bg); }
+    .btn-sm { padding: 9px 18px; font-size: 12px; }
 
     .wallet-panel {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 30px;
+      padding: 28px 32px;
       margin-bottom: 40px;
     }
 
-    .wallet-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-    }
-
-    .wallet-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .wallet-stat .label {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+    .wallet-row { display: flex; flex-wrap: wrap; gap: 36px; align-items: center; }
+    .wallet-stat { display: flex; flex-direction: column; gap: 6px; }
+    .wallet-stat .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+    .wallet-stat .value { font-size: 14px; font-family: 'Space Mono', monospace; }
 
     .badge {
-      padding: 6px 14px;
+      padding: 5px 14px;
       border-radius: 20px;
       font-size: 12px;
       display: inline-block;
       font-family: 'Space Mono', monospace;
+      font-weight: 700;
     }
+    .badge-member  { background: rgba(0,255,179,0.15);  color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
+    .badge-regulator { background: rgba(255,179,71,0.15); color: var(--warning); border: 1px solid rgba(255,179,71,0.3); }
+    .badge-pending { background: rgba(100,150,255,0.15); color: #88aaff;        border: 1px solid rgba(100,150,255,0.3); }
+    .badge-none    { background: rgba(255,255,255,0.06); color: #888;           border: 1px solid #333; }
 
-    .badge-member {
-      background: rgba(0,255,179,0.15);
-      color: var(--accent);
-    }
-
-    .badge-regulator {
-      background: rgba(255,179,71,0.15);
-      color: var(--warning);
-    }
-
-    .badge-none {
-      background: rgba(255,255,255,0.08);
-      color: #888;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      max-width: 500px;
-    }
+    .form-col { display: flex; flex-direction: column; gap: 14px; max-width: 480px; }
 
     input {
-      padding: 14px 18px;
+      padding: 13px 18px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: var(--surface);
       color: white;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input:focus { outline: none; border-color: var(--accent); }
+    input::placeholder { color: #445; }
+    input[readonly] { opacity: 0.6; cursor: default; }
+
+    /* Role views */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .no-role-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px;
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .no-role-box h3 { font-size: 22px; margin-bottom: 14px; }
+    .no-role-box p { color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
+
+    .member-box {
+      background: var(--surface2);
+      border: 1px solid rgba(0,255,179,0.2);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+    }
+    .member-box h3 { font-size: 22px; color: var(--accent); margin-bottom: 10px; }
+    .member-box .sub { color: var(--text-muted); margin-bottom: 28px; line-height: 1.6; }
+    #memberResult {
+      margin-top: 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      color: var(--accent);
+      min-height: 20px;
     }
 
-    input:focus {
-      outline: none;
-      border-color: var(--accent);
+    .reg-header { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+    .reg-header h3 { font-size: 22px; color: var(--warning); }
+
+    .reg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .reg-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .reg-card h4 { font-size: 12px; color: #aac; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+
+    .input-row { display: flex; gap: 10px; }
+    .input-row input { font-size: 13px; padding: 10px 14px; }
+
+    .queue-section { margin-top: 10px; }
+    .queue-section h4 { font-size: 12px; color: #aac; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+
+    #applicantList { display: flex; flex-direction: column; gap: 10px; }
+
+    .applicant-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .applicant-addr { font-family: 'Space Mono', monospace; font-size: 13px; color: #ccd; }
+    .applicant-actions { display: flex; gap: 10px; }
+
+    .empty-queue {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-family: 'Space Mono', monospace;
+      padding: 20px;
+      text-align: center;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
     }
 
     #toast {
       position: fixed;
       bottom: 30px;
       right: 30px;
-      padding: 14px 24px;
+      padding: 14px 22px;
       border-radius: 12px;
       font-size: 13px;
+      font-family: 'Space Mono', monospace;
       z-index: 9999;
       opacity: 0;
-      transition: 0.3s;
+      transform: translateY(6px);
+      transition: all 0.3s;
+      pointer-events: none;
+      max-width: 360px;
     }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { background: rgba(0,255,179,0.12); color: var(--accent); border: 1px solid var(--accent); }
+    #toast.error   { background: rgba(255,77,109,0.12); color: var(--danger); border: 1px solid var(--danger); }
+    #toast.info    { background: rgba(255,179,71,0.1);  color: var(--warning); border: 1px solid var(--warning); }
 
-    #toast.show {
-      opacity: 1;
-    }
+    footer { text-align: center; padding: 30px; background: #050b14; color: #445; font-size: 13px; }
 
-    #toast.success {
-      background: rgba(0,255,179,0.15);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-    }
-
-    #toast.error {
-      background: rgba(255,77,109,0.15);
-      color: var(--danger);
-      border: 1px solid var(--danger);
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px;
-      background: #050b14;
-      color: #556;
-    }
-
-    @media(max-width:768px) {
-      .hero-content h1 {
-        font-size: 40px;
-      }
-
-      nav ul {
-        display: none;
-      }
+    @media(max-width: 768px) {
+      .hero-content h1 { font-size: 40px; }
+      nav ul { display: none; }
+      .reg-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -311,477 +302,369 @@
 <div id="toast"></div>
 
 <header>
-
   <nav>
     <div class="logo">SEC</div>
-
     <ul>
       <li><a href="#features">Features</a></li>
-      <li><a href="#membership">Membership</a></li>
-      <li>
-        <button id="connectBtn">
-          Connect Wallet
-        </button>
-      </li>
+      <li><a href="#portal">Portal</a></li>
+      <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
     </ul>
   </nav>
 
   <div class="hero">
     <div class="hero-content">
       <h1>Decentralized Energy Trading</h1>
-
-      <p>
-        Secure blockchain-based renewable energy trading platform
-        with regulator-managed membership access.
-      </p>
-
-      <a href="#membership" class="btn">
-        Start Trading
-      </a>
+      <p>Secure blockchain-based renewable energy trading with regulator-managed membership access.</p>
+      <a href="#portal" class="btn">Start Trading</a>
     </div>
   </div>
-
 </header>
 
 <section id="features">
-
   <div class="section-title">
     <h2>Platform Features</h2>
     <p>Blockchain powered energy marketplace</p>
   </div>
-
   <div class="features">
-
     <div class="card">
       <h3>⚡ Smart Contracts</h3>
-      <p>
-        Secure automated trading using Ethereum smart contracts.
-      </p>
+      <p>Secure automated trading using Ethereum smart contracts.</p>
     </div>
-
     <div class="card">
       <h3>🔒 Secure Payments</h3>
-      <p>
-        Decentralized crypto settlements between stakeholders.
-      </p>
+      <p>Decentralized crypto settlements between energy stakeholders.</p>
     </div>
-
     <div class="card">
       <h3>☑️ Regulator Controlled</h3>
-      <p>
-        Membership approval handled transparently on-chain.
-      </p>
+      <p>Membership approval handled transparently on-chain by regulators.</p>
     </div>
-
   </div>
-
 </section>
 
-<section id="membership">
-
+<section id="portal">
   <div class="section-title">
     <h2>Membership Portal</h2>
-    <p>Connect wallet and access the SEC network</p>
+    <p>Connect your wallet to access the SEC network</p>
   </div>
 
+  <!-- Wallet Status Bar -->
   <div class="wallet-panel">
-
     <div class="wallet-row">
-
       <div class="wallet-stat">
         <span class="label">Wallet</span>
-        <span id="walletAddr">Not Connected</span>
+        <span class="value" id="walletAddr">Not Connected</span>
       </div>
-
       <div class="wallet-stat">
         <span class="label">Network</span>
-        <span id="networkName">—</span>
+        <span class="value" id="networkName">—</span>
       </div>
-
       <div class="wallet-stat">
         <span class="label">Role</span>
-        <span id="roleDisplay">
-          <span class="badge badge-none">No Role</span>
-        </span>
+        <span id="roleDisplay"><span class="badge badge-none">—</span></span>
       </div>
-
+      <div style="margin-left:auto;">
+        <button class="btn btn-outline btn-sm" onclick="refreshStatus()">↻ Refresh</button>
+      </div>
     </div>
-
   </div>
 
-  <form id="joinForm">
+  <!-- VIEW: NOT CONNECTED -->
+  <div id="viewNotConnected" class="view active">
+    <div class="no-role-box">
+      <h3>Connect Your Wallet</h3>
+      <p>Connect your MetaMask wallet to check your membership status or apply to join the SEC energy trading network.</p>
+      <button class="btn" onclick="connectWallet()">Connect Wallet</button>
+    </div>
+  </div>
 
-    <input
-      type="text"
-      id="inputName"
-      placeholder="Full Name"
-      required
-    >
+  <!-- VIEW: NO ROLE -->
+  <div id="viewNoRole" class="view">
+    <div class="no-role-box">
+      <h3>Apply for Membership</h3>
+      <p>Submit your application on-chain. A regulator will review and approve or reject your wallet address.</p>
 
-    <input
-      type="email"
-      id="inputEmail"
-      placeholder="Email Address"
-      required
-    >
+      <div id="pendingNotice" style="display:none; margin-bottom:24px; padding:14px 20px; background:rgba(100,150,255,0.08); border:1px solid rgba(100,150,255,0.25); border-radius:12px; color:#88aaff; font-size:14px; font-family:'Space Mono',monospace;">
+        ⏳ Your application is pending regulator approval.
+      </div>
 
-    <input
-      type="text"
-      id="inputBlockchainId"
-      placeholder="Wallet Address"
-      readonly
-    >
+      <div class="form-col" id="applyForm" style="margin: 0 auto; text-align: left;">
+        <input type="text" id="inputName" placeholder="Full Name" required />
+        <input type="email" id="inputEmail" placeholder="Email Address" required />
+        <input type="text" id="inputBlockchainId" placeholder="Wallet Address" readonly />
+        <button class="btn" onclick="applyForMembership()">Submit On-Chain Application</button>
+        <p style="font-size:12px; color:#556; font-family:'Space Mono',monospace;">This submits a transaction. Gas fees apply.</p>
+      </div>
+    </div>
+  </div>
 
-    <button class="btn" type="submit">
-      Apply For Membership
-    </button>
+  <!-- VIEW: MEMBER -->
+  <div id="viewMember" class="view">
+    <div class="member-box">
+      <h3>🏅 Member Dashboard</h3>
+      <p class="sub">You are a verified SEC member. Access on-chain member functionality below.</p>
+      <button class="btn" onclick="callMemberAction()">Call memberAction()</button>
+      <p id="memberResult"></p>
+    </div>
+  </div>
 
-  </form>
+  <!-- VIEW: REGULATOR -->
+  <div id="viewRegulator" class="view">
 
-  <div id="memberArea" style="display:none;margin-top:40px;">
-    <div class="card">
+    <div class="reg-header">
+      <h3>🛡️ Regulator Dashboard</h3>
+      <span class="badge badge-regulator">Regulator</span>
+    </div>
 
-      <h3>🏅 Member Area</h3>
+    <div class="queue-section">
+      <h4>
+        📋 Pending Applications
+        <button class="btn btn-outline btn-sm" style="margin-left:12px;" onclick="loadApplicants()">↻ Refresh</button>
+      </h4>
+      <div id="applicantList">
+        <div class="empty-queue">No pending applications</div>
+      </div>
+    </div>
 
-      <p style="margin-bottom:20px;">
-        Access on-chain member functionality.
-      </p>
-
-      <button class="btn" id="memberActionBtn">
-        Run memberAction()
-      </button>
-
-      <p id="memberResult" style="margin-top:15px;"></p>
-
+    <div class="reg-grid" style="margin-top:40px;">
+      <div class="reg-card">
+        <h4>Promote to Member</h4>
+        <div class="input-row">
+          <input type="text" id="promoteAddr" placeholder="0x... address" />
+          <button class="btn btn-sm" onclick="promoteMember()">Promote</button>
+        </div>
+      </div>
+      <div class="reg-card">
+        <h4>Demote Member</h4>
+        <div class="input-row">
+          <input type="text" id="demoteAddr" placeholder="0x... address" />
+          <button class="btn btn-danger btn-sm" onclick="demoteMember()">Demote</button>
+        </div>
+      </div>
+      <div class="reg-card">
+        <h4>Add Regulator</h4>
+        <div class="input-row">
+          <input type="text" id="addRegAddr" placeholder="0x... address" />
+          <button class="btn btn-sm" onclick="addRegulator()">Add</button>
+        </div>
+      </div>
+      <div class="reg-card">
+        <h4>Remove Regulator</h4>
+        <div class="input-row">
+          <input type="text" id="removeRegAddr" placeholder="0x... address" />
+          <button class="btn btn-danger btn-sm" onclick="removeRegulator()">Remove</button>
+        </div>
+      </div>
     </div>
   </div>
 
 </section>
 
-<footer>
-  © 2026 SEC | Smart Energy Connect
-</footer>
+<footer>© 2026 SEC | Smart Energy Connect</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
-
 <script>
 
-  // =========================================================
-  // CONTRACT CONFIG
-  // =========================================================
-
-  const CONTRACT_ADDRESS =
-    "0x1f2Da2978824f27a9657aE83D26C84Cee13201c1";
+  // ── CONFIG ───────────────────────────────────────────────
+  // Replace with your NEW contract address after redeploying authentication.sol
+  const CONTRACT_ADDRESS = "0xD6840F1485B82c57cE8AC8373f0386C2828989bD";
 
   const ABI = [
-
-    {
-      "inputs":[
-        {
-          "internalType":"address",
-          "name":"",
-          "type":"address"
-        }
-      ],
-      "name":"isMember",
-      "outputs":[
-        {
-          "internalType":"bool",
-          "name":"",
-          "type":"bool"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-
-    {
-      "inputs":[
-        {
-          "internalType":"address",
-          "name":"",
-          "type":"address"
-        }
-      ],
-      "name":"isRegulator",
-      "outputs":[
-        {
-          "internalType":"bool",
-          "name":"",
-          "type":"bool"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-
-    {
-      "inputs":[],
-      "name":"memberAction",
-      "outputs":[
-        {
-          "internalType":"string",
-          "name":"",
-          "type":"string"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    }
-
+    "function isMember(address) view returns (bool)",
+    "function isRegulator(address) view returns (bool)",
+    "function hasPendingApplication(address) view returns (bool)",
+    "function getApplicants() view returns (address[])",
+    "function memberAction() view returns (string)",
+    "function applyForMembership() external",
+    "function approveApplicant(address) external",
+    "function rejectApplicant(address) external",
+    "function promoteToMember(address) external",
+    "function demoteFromMember(address) external",
+    "function addRegulator(address) external",
+    "function removeRegulator(address) external"
   ];
 
-  // =========================================================
-  // STATE
-  // =========================================================
+  let provider, signer, contract, currentAccount;
 
-  let provider;
-  let signer;
-  let contract;
-  let currentAccount;
-
-  // =========================================================
-  // TOAST
-  // =========================================================
-
-  function toast(message, type = "success") {
-
-    const toastEl =
-      document.getElementById("toast");
-
-    toastEl.innerText = message;
-
-    toastEl.className =
-      `show ${type}`;
-
-    setTimeout(() => {
-      toastEl.className = "";
-    }, 4000);
+  // ── TOAST ────────────────────────────────────────────────
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = `show ${type}`;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.className = '', 4500);
   }
 
-  // =========================================================
-  // CONNECT WALLET
-  // =========================================================
+  // ── VIEWS ────────────────────────────────────────────────
+  function showView(id) {
+    ['viewNotConnected','viewNoRole','viewMember','viewRegulator']
+      .forEach(v => document.getElementById(v).classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
 
+  // ── CONNECT ──────────────────────────────────────────────
   async function connectWallet() {
-
+    if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
     try {
+      provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = await provider.getSigner();
+      currentAccount = await signer.getAddress();
+      contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-      if (!window.ethereum) {
+      const network = await provider.getNetwork();
+      document.getElementById('walletAddr').textContent = currentAccount;
+      document.getElementById('networkName').textContent = `${network.name} (${network.chainId})`;
+      document.getElementById('inputBlockchainId').value = currentAccount;
 
-        toast(
-          "MetaMask not detected",
-          "error"
-        );
-
-        return;
-      }
-
-      await window.ethereum.request({
-        method: "eth_requestAccounts"
-      });
-
-      provider =
-        new ethers.BrowserProvider(window.ethereum);
-
-      signer =
-        await provider.getSigner();
-
-      currentAccount =
-        await signer.getAddress();
-
-      contract =
-        new ethers.Contract(
-          CONTRACT_ADDRESS,
-          ABI,
-          signer
-        );
-
-      const network =
-        await provider.getNetwork();
-
-      document.getElementById("walletAddr")
-        .innerText = currentAccount;
-
-      document.getElementById("networkName")
-        .innerText =
-          `${network.name} (${network.chainId})`;
-
-      document.getElementById("inputBlockchainId")
-        .value = currentAccount;
-
-      const shortAddress =
-        currentAccount.slice(0,6) +
-        "..." +
-        currentAccount.slice(-4);
-
-      const connectBtn =
-        document.getElementById("connectBtn");
-
-      connectBtn.innerText = shortAddress;
-
-      connectBtn.classList.add("connected");
+      const btn = document.getElementById('connectBtn');
+      btn.textContent = currentAccount.slice(0,6) + '...' + currentAccount.slice(-4);
+      btn.classList.add('connected');
 
       await refreshStatus();
-
-      toast("Wallet connected");
-
+      toast('Wallet connected', 'success');
+      window.ethereum.on('accountsChanged', () => location.reload());
     } catch (err) {
-
-      console.error(err);
-
-      toast(
-        err.message,
-        "error"
-      );
+      toast(err.reason || err.message, 'error');
     }
   }
 
-  // =========================================================
-  // REFRESH STATUS
-  // =========================================================
-
+  // ── REFRESH STATUS ───────────────────────────────────────
   async function refreshStatus() {
-
-    if (!contract) return;
-
+    if (!contract || !currentAccount) return;
     try {
+      const [isMem, isReg, isPending] = await Promise.all([
+        contract.isMember(currentAccount),
+        contract.isRegulator(currentAccount),
+        contract.hasPendingApplication(currentAccount)
+      ]);
 
-      const isMember =
-        await contract.isMember(currentAccount);
+      let badge = '<span class="badge badge-none">No Role</span>';
+      if (isReg)          badge = '<span class="badge badge-regulator">Regulator</span>';
+      else if (isMem)     badge = '<span class="badge badge-member">Member</span>';
+      else if (isPending) badge = '<span class="badge badge-pending">Pending</span>';
+      document.getElementById('roleDisplay').innerHTML = badge;
 
-      const isRegulator =
-        await contract.isRegulator(currentAccount);
-
-      let badge =
-        `<span class="badge badge-none">
-          No Role
-        </span>`;
-
-      if (isRegulator) {
-
-        badge =
-          `<span class="badge badge-regulator">
-            Regulator
-          </span>`;
-
-      } else if (isMember) {
-
-        badge =
-          `<span class="badge badge-member">
-            Member
-          </span>`;
-
-        document.getElementById("memberArea")
-          .style.display = "block";
+      if (isReg) {
+        showView('viewRegulator');
+        await loadApplicants();
+      } else if (isMem) {
+        showView('viewMember');
+      } else {
+        showView('viewNoRole');
+        document.getElementById('pendingNotice').style.display = isPending ? 'block' : 'none';
+        document.getElementById('applyForm').style.display    = isPending ? 'none'  : 'flex';
       }
-
-      document.getElementById("roleDisplay")
-        .innerHTML = badge;
-
     } catch (err) {
-
-      console.error(err);
-
-      toast(
-        "Failed to read contract",
-        "error"
-      );
+      toast('Failed to read contract: ' + (err.reason || err.message), 'error');
     }
   }
 
-  // =========================================================
-  // MEMBER ACTION
-  // =========================================================
+  // ── APPLY ────────────────────────────────────────────────
+  async function applyForMembership() {
+    if (!contract) { toast('Connect wallet first', 'error'); return; }
+    try {
+      toast('Sending application...', 'info');
+      const tx = await contract.applyForMembership();
+      toast('⏳ Waiting for confirmation...', 'info');
+      await tx.wait();
+      toast('✅ Application submitted on-chain!', 'success');
+      await refreshStatus();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+  }
 
+  // ── MEMBER ACTION ────────────────────────────────────────
   async function callMemberAction() {
-
+    if (!contract) return;
     try {
-
-      const result =
-        await contract.memberAction();
-
-      document.getElementById("memberResult")
-        .innerText = result;
-
-      toast("memberAction() executed");
-
+      const result = await contract.memberAction();
+      document.getElementById('memberResult').textContent = '→ ' + result;
+      toast('memberAction() executed', 'success');
     } catch (err) {
-
-      console.error(err);
-
-      toast(
-        err.message,
-        "error"
-      );
+      toast(err.reason || err.message, 'error');
     }
   }
 
-  // =========================================================
-  // EVENTS
-  // =========================================================
-
-  document
-    .getElementById("connectBtn")
-    .addEventListener(
-      "click",
-      connectWallet
-    );
-
-  document
-    .getElementById("memberActionBtn")
-    .addEventListener(
-      "click",
-      callMemberAction
-    );
-
-  document
-    .getElementById("joinForm")
-    .addEventListener(
-      "submit",
-      function(event) {
-
-        event.preventDefault();
-
-        if (!currentAccount) {
-
-          toast(
-            "Connect wallet first",
-            "error"
-          );
-
-          return;
-        }
-
-        toast(
-          "Membership application submitted"
-        );
+  // ── LOAD APPLICANTS ──────────────────────────────────────
+  async function loadApplicants() {
+    if (!contract) return;
+    try {
+      const applicants = await contract.getApplicants();
+      const container = document.getElementById('applicantList');
+      if (applicants.length === 0) {
+        container.innerHTML = '<div class="empty-queue">No pending applications</div>';
+        return;
       }
-    );
-
-  // =========================================================
-  // AUTO CONNECT
-  // =========================================================
-
-  window.addEventListener(
-    "load",
-    async () => {
-
-      if (!window.ethereum) return;
-
-      const accounts =
-        await window.ethereum.request({
-          method: "eth_accounts"
-        });
-
-      if (accounts.length > 0) {
-
-        connectWallet();
-      }
+      container.innerHTML = applicants.map(addr => `
+        <div class="applicant-row">
+          <span class="applicant-addr">${addr}</span>
+          <div class="applicant-actions">
+            <button class="btn btn-sm" onclick="approveApplicant('${addr}')">✅ Approve</button>
+            <button class="btn btn-danger btn-sm" onclick="rejectApplicant('${addr}')">✗ Reject</button>
+          </div>
+        </div>
+      `).join('');
+    } catch (err) {
+      toast('Failed to load applicants', 'error');
     }
-  );
+  }
+
+  // ── TX HELPER ────────────────────────────────────────────
+  async function sendTx(fn) {
+    try {
+      toast('Sending transaction...', 'info');
+      const tx = await fn();
+      toast('⏳ Waiting for confirmation...', 'info');
+      await tx.wait();
+      toast('✅ Confirmed!', 'success');
+      await refreshStatus();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // ── REGULATOR ACTIONS ────────────────────────────────────
+  async function approveApplicant(addr) {
+    await sendTx(() => contract.approveApplicant(addr));
+    await loadApplicants();
+  }
+  async function rejectApplicant(addr) {
+    await sendTx(() => contract.rejectApplicant(addr));
+    await loadApplicants();
+  }
+  async function promoteMember() {
+    const addr = document.getElementById('promoteAddr').value.trim();
+    if (!ethers.isAddress(addr)) { toast('Invalid address', 'error'); return; }
+    await sendTx(() => contract.promoteToMember(addr));
+    document.getElementById('promoteAddr').value = '';
+  }
+  async function demoteMember() {
+    const addr = document.getElementById('demoteAddr').value.trim();
+    if (!ethers.isAddress(addr)) { toast('Invalid address', 'error'); return; }
+    await sendTx(() => contract.demoteFromMember(addr));
+    document.getElementById('demoteAddr').value = '';
+  }
+  async function addRegulator() {
+    const addr = document.getElementById('addRegAddr').value.trim();
+    if (!ethers.isAddress(addr)) { toast('Invalid address', 'error'); return; }
+    await sendTx(() => contract.addRegulator(addr));
+    document.getElementById('addRegAddr').value = '';
+  }
+  async function removeRegulator() {
+    const addr = document.getElementById('removeRegAddr').value.trim();
+    if (!ethers.isAddress(addr)) { toast('Invalid address', 'error'); return; }
+    await sendTx(() => contract.removeRegulator(addr));
+    document.getElementById('removeRegAddr').value = '';
+  }
+
+  // ── AUTO CONNECT ─────────────────────────────────────────
+  window.addEventListener('load', async () => {
+    if (!window.ethereum) return;
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    if (accounts.length > 0) connectWallet();
+  });
 
 </script>
-
 </body>
 </html>
