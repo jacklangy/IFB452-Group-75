@@ -1,60 +1,68 @@
-<!DOCTYPE html> <>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart-Energy-Connect - Energy Listings</title>
+  <title>SEC - Energy Listings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
+    :root {
+      --accent: #00ffb3;
+      --accent-dim: rgba(0,255,179,0.12);
+      --bg: #08111f;
+      --surface: #111c2e;
+      --surface2: #0d1728;
+      --border: rgba(255,255,255,0.08);
+      --text-muted: #8899aa;
+      --danger: #ff4d6d;
+      --warning: #ffb347;
     }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #08111f;
+      background: var(--bg);
       color: white;
       overflow-x: hidden;
+      font-family: 'Syne', sans-serif;
     }
 
-    /* ── Nav ── */
+    /* ── NAV ── */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 25px 8%;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(8px);
+      padding: 22px 8%;
+      background: rgba(8,17,31,0.88);
+      backdrop-filter: blur(12px);
       position: fixed;
       width: 100%;
       z-index: 1000;
+      border-bottom: 1px solid var(--border);
     }
 
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #00ffb3;
-    }
+    .logo { font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 2px; text-decoration: none; }
 
-    nav ul {
-      display: flex;
-      gap: 30px;
-      list-style: none;
-    }
+    nav ul { display: flex; gap: 30px; list-style: none; align-items: center; }
+    nav ul li a { text-decoration: none; color: #ccc; transition: color 0.2s; font-size: 15px; }
+    nav ul li a:hover, nav ul li a.active { color: var(--accent); }
 
-    nav ul li a {
-      text-decoration: none;
-      color: white;
-      transition: 0.3s;
+    #connectBtn {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      padding: 9px 22px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      transition: all 0.25s;
     }
+    #connectBtn:hover { background: var(--accent); color: var(--bg); }
+    #connectBtn.connected { background: var(--accent-dim); }
 
-    nav ul li a:hover {
-      color: #00ffb3;
-    }
-
-    /* ── Page hero banner ── */
+    /* ── PAGE HERO ── */
     .page-hero {
       padding: 160px 8% 80px;
       background:
@@ -64,261 +72,218 @@
       background-position: center;
     }
 
-    .page-hero h1 {
-      font-size: 52px;
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
+    .page-hero h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p { font-size: 18px; color: #b0bec5; max-width: 620px; line-height: 1.7; }
 
-    .page-hero h1 span {
-      color: #00ffb3;
-    }
+    /* ── SECTIONS ── */
+    section { padding: 80px 8%; }
 
-    .page-hero p {
-      font-size: 18px;
-      color: #d6d6d6;
-      max-width: 620px;
-      line-height: 1.7;
-    }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 38px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+    .section-title p { color: var(--text-muted); }
 
-    /* ── Sections ── */
-    section {
-      padding: 80px 8%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .section-title h2 {
-      font-size: 38px;
-      color: #00ffb3;
-      margin-bottom: 10px;
-    }
-
-    .section-title p {
-      color: #aaa;
-      font-size: 16px;
-    }
-
-    /* ── Buttons ── */
+    /* ── BUTTONS ── */
     .btn {
       display: inline-block;
-      padding: 14px 32px;
-      background: #00ffb3;
-      color: #08111f;
+      padding: 13px 30px;
+      background: var(--accent);
+      color: var(--bg);
       text-decoration: none;
       border-radius: 40px;
-      font-weight: bold;
-      transition: 0.3s;
+      font-weight: 700;
       border: none;
       cursor: pointer;
-      font-size: 15px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      transition: all 0.2s;
     }
-
-    .btn:hover {
-      transform: translateY(-3px);
-      background: white;
-    }
+    .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
     .btn-outline {
       background: transparent;
-      border: 2px solid #00ffb3;
-      color: #00ffb3;
-      padding: 10px 24px;
-      border-radius: 40px;
-      font-weight: bold;
-      font-size: 14px;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 13px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
     }
+    .btn-outline:hover { background: var(--accent); color: var(--bg); }
+    .btn-outline:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    .btn-outline:hover {
-      background: #00ffb3;
-      color: #08111f;
-    }
-
-    /* ── Status badges ── */
+    /* ── BADGES ── */
     .badge {
       display: inline-block;
       padding: 4px 14px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      font-family: 'Space Mono', monospace;
     }
+    .badge-open     { background: rgba(0,255,179,0.12);  color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
+    .badge-matched  { background: rgba(255,200,0,0.12);  color: #ffc800;        border: 1px solid rgba(255,200,0,0.3); }
+    .badge-settled  { background: rgba(100,200,100,0.12);color: #64c864;        border: 1px solid rgba(100,200,100,0.3); }
+    .badge-expired  { background: rgba(255,80,80,0.12);  color: #ff5050;        border: 1px solid rgba(255,80,80,0.3); }
+    .badge-member   { background: var(--accent-dim);     color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
+    .badge-regulator{ background: rgba(255,179,71,0.12); color: var(--warning); border: 1px solid rgba(255,179,71,0.3); }
+    .badge-none     { background: rgba(255,255,255,0.06);color: #888;           border: 1px solid #333; }
 
-    .badge-open    { background: rgba(0,255,179,0.15); color: #00ffb3; border: 1px solid #00ffb3; }
-    .badge-matched { background: rgba(255,200,0,0.15);  color: #ffc800; border: 1px solid #ffc800; }
-    .badge-settled { background: rgba(100,200,100,0.15);color: #64c864; border: 1px solid #64c864; }
-    .badge-expired { background: rgba(255,80,80,0.15);  color: #ff5050; border: 1px solid #ff5050; }
+    /* ── WALLET BAR ── */
+    .wallet-bar {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 28px;
+      margin-bottom: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      align-items: center;
+    }
+    .wallet-stat { display: flex; flex-direction: column; gap: 5px; }
+    .wallet-stat .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+    .wallet-stat .value { font-size: 13px; font-family: 'Space Mono', monospace; }
 
-    /* ── Stats row ── */
+    /* ── ACCESS WALL ── */
+    #accessWall {
+      background: var(--surface2);
+      border: 1px solid rgba(255,77,109,0.2);
+      border-radius: 20px;
+      padding: 60px;
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    #accessWall h3 { font-size: 22px; margin-bottom: 14px; color: var(--danger); }
+    #accessWall p  { color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
+
+    /* ── STATS ── */
     .stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      margin-bottom: 60px;
+      margin-bottom: 40px;
     }
 
     .stat-box {
-      background: #111c2e;
-      padding: 30px 20px;
+      background: var(--surface);
+      padding: 28px 20px;
       border-radius: 16px;
       text-align: center;
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
     }
+    .stat-box h2 { font-size: 36px; color: var(--accent); margin-bottom: 6px; font-weight: 800; }
+    .stat-box p  { color: var(--text-muted); font-size: 13px; }
 
-    .stat-box h2 {
-      font-size: 40px;
-      color: #00ffb3;
-      margin-bottom: 6px;
-    }
-
-    .stat-box p {
-      color: #aaa;
+    /* ── NOTICE ── */
+    .notice {
+      background: rgba(0,255,179,0.06);
+      border: 1px solid rgba(0,255,179,0.2);
+      border-radius: 12px;
+      padding: 14px 20px;
       font-size: 14px;
+      color: #c0fff1;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Space Mono', monospace;
     }
 
-    /* ── Filter bar ── */
+    /* ── FILTER BAR ── */
     .filter-bar {
       display: flex;
-      gap: 14px;
+      gap: 16px;
       flex-wrap: wrap;
       align-items: center;
-      margin-bottom: 36px;
-      background: #111c2e;
-      padding: 20px 24px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 28px;
+      background: var(--surface);
+      padding: 18px 24px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
     }
-
-    .filter-bar label {
-      color: #aaa;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-
+    .filter-bar label { color: var(--text-muted); font-size: 13px; white-space: nowrap; }
     .filter-bar select,
     .filter-bar input[type="text"] {
-      padding: 10px 14px;
-      background: #08111f;
-      border: 1px solid rgba(255,255,255,0.12);
+      padding: 9px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 10px;
       color: white;
-      font-size: 14px;
+      font-size: 13px;
       outline: none;
+      font-family: 'Syne', sans-serif;
     }
+    .filter-bar select:focus, .filter-bar input:focus { border-color: var(--accent); }
 
-    .filter-bar select:focus,
-    .filter-bar input:focus {
-      border-color: #00ffb3;
-    }
-
-    /* ── Listings table ── */
+    /* ── TABLE ── */
     .market {
-      background: #0d1728;
-      border-radius: 20px;
-      padding: 32px;
+      background: var(--surface2);
+      border-radius: 18px;
+      padding: 28px;
       overflow-x: auto;
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 700px;
-    }
+    table { width: 100%; border-collapse: collapse; min-width: 700px; }
 
     thead th {
       text-align: left;
-      padding: 14px 16px;
-      color: #00ffb3;
-      font-size: 13px;
+      padding: 12px 16px;
+      color: var(--accent);
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
     }
 
-    tbody tr {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      transition: background 0.2s;
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    tbody tr:hover { background: rgba(0,255,179,0.03); }
+    tbody td { padding: 15px 16px; font-size: 14px; color: #d0d8e0; }
+
+    .green { color: var(--accent); font-weight: 700; font-family: 'Space Mono', monospace; }
+    .mono  { font-family: 'Space Mono', monospace; font-size: 12px; }
+
+    /* ── POST FORM ── */
+    .form-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 40px;
+      border: 1px solid var(--border);
     }
+    .form-card h3 { color: var(--accent); font-size: 22px; margin-bottom: 8px; }
+    .form-card > p { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
 
-    tbody tr:hover {
-      background: rgba(0,255,179,0.04);
-    }
-
-    tbody td {
-      padding: 16px;
-      font-size: 14px;
-      color: #d6d6d6;
-    }
-
-    .green { color: #00ffb3; font-weight: bold; }
-
-    /* ── Post listing form ── */
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
     }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-size: 13px;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: 14px 16px;
-      background: #111c2e;
-      border: 1px solid rgba(255,255,255,0.1);
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-family: 'Space Mono', monospace; }
+    .form-group input, .form-group select {
+      padding: 13px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
       border-radius: 12px;
       color: white;
-      font-size: 15px;
+      font-size: 14px;
       outline: none;
       transition: border-color 0.2s;
+      font-family: 'Syne', sans-serif;
     }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: #00ffb3;
-    }
-
-    .form-group input::placeholder {
-      color: #555;
-    }
-
-    .form-card {
-      background: #111c2e;
-      border-radius: 20px;
-      padding: 40px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .form-card h3 {
-      color: #00ffb3;
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .form-card p {
-      color: #aaa;
-      font-size: 14px;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+    .form-group input::placeholder { color: #445; }
+    .form-group input:disabled, .form-group select:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .form-footer {
       margin-top: 28px;
@@ -328,16 +293,12 @@
       flex-wrap: wrap;
     }
 
-    .price-bounds {
-      font-size: 13px;
-      color: #aaa;
-    }
+    .price-bounds { font-size: 13px; color: var(--text-muted); font-family: 'Space Mono', monospace; }
+    .price-bounds span { color: var(--accent); }
 
-    .price-bounds span {
-      color: #00ffb3;
-    }
+    #formMsg { margin-top: 14px; font-size: 13px; font-family: 'Space Mono', monospace; display: none; }
 
-    /* ── Info cards ── */
+    /* ── HOW IT WORKS ── */
     .info-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -345,54 +306,62 @@
     }
 
     .card {
-      background: #111c2e;
+      background: var(--surface);
       padding: 30px;
-      border-radius: 20px;
-      transition: 0.3s;
-      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      transition: all 0.25s;
     }
+    .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+    .card h3 { margin-bottom: 12px; color: var(--accent); font-size: 16px; }
+    .card p  { color: var(--text-muted); font-size: 14px; line-height: 1.65; }
 
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: #00ffb3;
-    }
-
-    .card h3 {
-      margin-bottom: 12px;
-      color: #00ffb3;
-      font-size: 17px;
-    }
-
-    .card p {
-      color: #aaa;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* ── Notice banner ── */
-    .notice {
-      background: rgba(0,255,179,0.07);
-      border: 1px solid rgba(0,255,179,0.25);
-      border-radius: 12px;
-      padding: 16px 22px;
-      font-size: 14px;
-      color: #c0fff1;
-      margin-bottom: 36px;
-      display: flex;
+    /* ── BID MODAL ── */
+    #bidModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 2000;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
     }
+    #bidModal.open { display: flex; }
 
-    .notice span {
-      font-size: 20px;
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 460px;
+      width: 90%;
     }
+    .modal-box h3 { color: var(--accent); font-size: 20px; margin-bottom: 20px; }
+    .modal-box p  { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+    .modal-footer { display: flex; gap: 14px; margin-top: 24px; }
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      background: #050b14;
-      color: #aaa;
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.3s;
+      pointer-events: none;
+      max-width: 360px;
     }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { background: rgba(0,255,179,0.12); color: var(--accent); border: 1px solid var(--accent); }
+    #toast.error   { background: rgba(255,77,109,0.12); color: var(--danger); border: 1px solid var(--danger); }
+    #toast.info    { background: rgba(255,179,71,0.1);  color: var(--warning); border: 1px solid var(--warning); }
+
+    footer { text-align: center; padding: 30px; background: #050b14; color: #445; font-size: 13px; }
 
     @media(max-width: 768px) {
       .page-hero h1 { font-size: 34px; }
@@ -404,29 +373,75 @@
 
 <body>
 
-  <!-- Nav -->
-  <nav>
-    <div class="logo">SEC</div>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="#listings">Listings</a></li>
-      <li><a href="#post">Post Energy</a></li>
-      <li><a href="#how">How It Works</a></li>
-    </ul>
-  </nav>
+<div id="toast"></div>
 
-  <!-- Page Hero -->
-  <div class="page-hero">
-    <h1>Energy <span>Listings</span><br>Marketplace</h1>
-    <p>
-      Browse surplus energy available from verified producers on your local grid.
-      All listings are validated against regulator-set price bounds and written
-      immutably to the blockchain.
-    </p>
+<!-- BID MODAL -->
+<div id="bidModal">
+  <div class="modal-box">
+    <h3>⚡ Place Bid</h3>
+    <p id="modalListingInfo">Loading listing info...</p>
+    <p style="color:white; font-size:15px;">You are about to bid on this listing. This will call <code style="color:var(--accent)">placeBid()</code> on the TradeMatching contract.</p>
+    <p style="font-size:13px; color:var(--text-muted);">Funds will be held in escrow until energy delivery is confirmed on-chain.</p>
+    <div class="modal-footer">
+      <button class="btn" id="confirmBidBtn">Confirm Bid</button>
+      <button class="btn" style="background:var(--surface2); color:#aaa;" onclick="closeBidModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">SEC</a>
+  <ul>
+    <li><a href="energylisting.html" class="active">Listings</a></li>
+    <li><a href="#post">Post Energy</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Energy <span>Listings</span><br>Marketplace</h1>
+  <p>Browse surplus energy from verified producers on your local grid. All listings are validated against regulator-set price bounds and written immutably to the blockchain.</p>
+</div>
+
+<!-- MAIN SECTION -->
+<section>
+
+  <!-- Wallet Bar -->
+  <div class="wallet-bar">
+    <div class="wallet-stat">
+      <span class="label">Wallet</span>
+      <span class="value" id="walletAddr">Not Connected</span>
+    </div>
+    <div class="wallet-stat">
+      <span class="label">Network</span>
+      <span class="value" id="networkName">—</span>
+    </div>
+    <div class="wallet-stat">
+      <span class="label">Access</span>
+      <span id="accessDisplay"><span class="badge badge-none">—</span></span>
+    </div>
+    <div style="margin-left:auto; display:flex; gap:10px;">
+      <button class="btn-outline" onclick="refreshAccess()" style="padding:8px 16px; font-size:12px;">↻ Refresh</button>
+      <button class="btn" style="padding:9px 20px; font-size:13px;" onclick="connectWallet()" id="navConnectBtn">Connect</button>
+    </div>
   </div>
 
-  <!-- Live Stats -->
-  <section>
+  <!-- ACCESS WALL (shown when not a member/regulator) -->
+  <div id="accessWall">
+    <h3>🔒 Members Only</h3>
+    <p>You need to be a regulator-approved SEC member to access the energy marketplace. Connect your wallet and apply for membership on the home page.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn" onclick="connectWallet()">Connect Wallet</button>
+      <a href="index.html#portal" class="btn" style="background:var(--surface2); color:var(--accent); border:1.5px solid var(--accent);">Apply for Membership</a>
+    </div>
+  </div>
+
+  <!-- MARKETPLACE CONTENT (shown when member/regulator) -->
+  <div id="marketplaceContent" style="display:none;">
+
     <div class="stats">
       <div class="stat-box">
         <h2 id="stat-open">—</h2>
@@ -446,16 +461,14 @@
       </div>
     </div>
 
-    <!-- Notice -->
     <div class="notice">
       <span>🔗</span>
-      Connect your MetaMask wallet to place bids or post surplus energy.
-      All participants must be regulator-approved members.
+      You are connected as a verified member. You can browse listings and place bids below.
     </div>
 
-    <!-- Filter bar -->
+    <!-- Filters -->
     <div class="filter-bar" id="listings">
-      <label>Filter by Status</label>
+      <label>Status</label>
       <select id="filterStatus" onchange="filterListings()">
         <option value="all">All</option>
         <option value="open">Open</option>
@@ -464,7 +477,7 @@
         <option value="expired">Expired</option>
       </select>
 
-      <label>Grid Location</label>
+      <label>Grid Zone</label>
       <select id="filterLocation" onchange="filterListings()">
         <option value="all">All Zones</option>
         <option value="QLD-North">QLD North</option>
@@ -477,7 +490,7 @@
       <input type="text" id="filterSearch" placeholder="0x address..." oninput="filterListings()" />
     </div>
 
-    <!-- Listings Table -->
+    <!-- Table -->
     <div class="market">
       <table>
         <thead>
@@ -492,228 +505,313 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="listingTableBody">
-          <!-- Populated by JS -->
-        </tbody>
+        <tbody id="listingTableBody"></tbody>
       </table>
     </div>
-  </section>
 
-  <!-- Post a Listing -->
-  <section id="post">
-    <div class="section-title">
-      <h2>Post Surplus Energy</h2>
-      <p>Registered producers can advertise available kWh directly to the blockchain</p>
+  </div>
+</section>
+
+<!-- POST A LISTING -->
+<section id="post">
+  <div class="section-title">
+    <h2>Post Surplus Energy</h2>
+    <p>Registered producers can advertise available kWh directly to the blockchain</p>
+  </div>
+
+  <div class="form-card">
+    <h3>⚡ New Energy Listing</h3>
+    <p>Your listing will be validated against regulator-set price bounds before being written on-chain. You must be a verified member to post.</p>
+
+    <div id="postAccessMsg" style="display:none; margin-bottom:24px; padding:14px 20px; background:rgba(255,77,109,0.08); border:1px solid rgba(255,77,109,0.25); border-radius:12px; color:var(--danger); font-size:13px; font-family:'Space Mono',monospace;">
+      🔒 Connect your wallet and ensure you are an approved member to post listings.
     </div>
 
-    <div class="form-card">
-      <h3>⚡ New Energy Listing</h3>
-      <p>
-        Your listing will be validated against regulator-set price bounds before being
-        written on-chain. Once submitted, its status will show as <strong style="color:#00ffb3">Open</strong>
-        and will be visible to all platform participants.
-      </p>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label>kWh Available</label>
-          <input type="number" id="inputKwh" placeholder="e.g. 50" min="1" />
-        </div>
-        <div class="form-group">
-          <label>Asking Price per kWh (ETH)</label>
-          <input type="number" id="inputPrice" placeholder="e.g. 0.0005" step="0.0001" min="0" />
-        </div>
-        <div class="form-group">
-          <label>Time Window Start</label>
-          <input type="datetime-local" id="inputStart" />
-        </div>
-        <div class="form-group">
-          <label>Time Window End</label>
-          <input type="datetime-local" id="inputEnd" />
-        </div>
-        <div class="form-group">
-          <label>Grid Location / Zone</label>
-          <select id="inputLocation">
-            <option value="">Select zone...</option>
-            <option value="QLD-North">QLD North</option>
-            <option value="QLD-South">QLD South</option>
-            <option value="NSW">NSW</option>
-            <option value="VIC">VIC</option>
-          </select>
-        </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>kWh Available</label>
+        <input type="number" id="inputKwh" placeholder="e.g. 50" min="1" />
       </div>
-
-      <div class="form-footer">
-        <button class="btn" onclick="submitListing()">Submit Listing</button>
-        <div class="price-bounds">
-          Regulator bounds: <span>0.0001 ETH</span> – <span>0.001 ETH</span> per kWh
-        </div>
+      <div class="form-group">
+        <label>Asking Price per kWh (ETH)</label>
+        <input type="number" id="inputPrice" placeholder="e.g. 0.0005" step="0.0001" min="0" />
       </div>
-
-      <p id="formMsg" style="margin-top:16px; font-size:14px; color:#00ffb3; display:none;"></p>
-    </div>
-  </section>
-
-  <!-- How It Works -->
-  <section id="how">
-    <div class="section-title">
-      <h2>How Listings Work</h2>
-      <p>The lifecycle of every energy listing on the blockchain</p>
-    </div>
-
-    <div class="info-grid">
-      <div class="card">
-        <h3>1️⃣ Producer Submits</h3>
-        <p>
-          A verified producer posts kWh available, asking price, time window
-          and grid zone. SC2 validates all inputs against regulator price bounds.
-        </p>
+      <div class="form-group">
+        <label>Time Window Start</label>
+        <input type="datetime-local" id="inputStart" />
       </div>
-      <div class="card">
-        <h3>2️⃣ Status: Open</h3>
-        <p>
-          The listing is written on-chain and marked <strong style="color:#00ffb3">Open</strong>.
-          All platform participants can now browse and place bids through SC3.
-        </p>
+      <div class="form-group">
+        <label>Time Window End</label>
+        <input type="datetime-local" id="inputEnd" />
       </div>
-      <div class="card">
-        <h3>3️⃣ Status: Matched</h3>
-        <p>
-          When a consumer's bid is accepted, SC3 locks the listing as
-          <strong style="color:#ffc800">Matched</strong> and freezes the consumer's ETH in escrow.
-        </p>
-      </div>
-      <div class="card">
-        <h3>4️⃣ Status: Settled</h3>
-        <p>
-          Once oracle-verified smart-meter data confirms delivery, SC4 releases
-          payment to the producer and marks the listing <strong style="color:#64c864">Settled</strong>.
-        </p>
-      </div>
-      <div class="card">
-        <h3>⏱️ Status: Expired</h3>
-        <p>
-          If no match is made within the time window, the listing is automatically
-          marked <strong style="color:#ff5050">Expired</strong> and removed from the active market.
-        </p>
-      </div>
-      <div class="card">
-        <h3>🛡️ Regulator Oversight</h3>
-        <p>
-          The AER can audit all listings, set price bounds, flag non-compliant
-          entries, and approve or revoke producer registrations at any time.
-        </p>
+      <div class="form-group">
+        <label>Grid Zone</label>
+        <select id="inputLocation">
+          <option value="">Select zone...</option>
+          <option value="QLD-North">QLD North</option>
+          <option value="QLD-South">QLD South</option>
+          <option value="NSW">NSW</option>
+          <option value="VIC">VIC</option>
+        </select>
       </div>
     </div>
-  </section>
 
-  <footer>
-    © 2026 SEC | Blockchain Energy Trading Platform
-  </footer>
+    <div class="form-footer">
+      <button class="btn" id="submitListingBtn" onclick="submitListing()">Submit Listing</button>
+      <div class="price-bounds">Regulator bounds: <span>0.0001 ETH</span> – <span>0.001 ETH</span> per kWh</div>
+    </div>
 
-  <script>
-    // ── Sample listing data (replace with live contract calls via Ethers.js) ──
-    const sampleListings = [
-      { id: 1, producer: "0xA1b2...C3d4", kwh: 120, price: 0.0006, start: "09:00", end: "17:00", zone: "QLD-North", status: "open" },
-      { id: 2, producer: "0xE5f6...G7h8", kwh: 45,  price: 0.0008, start: "06:00", end: "12:00", zone: "QLD-South", status: "matched" },
-      { id: 3, producer: "0xI9j0...K1l2", kwh: 200, price: 0.0005, start: "00:00", end: "23:59", zone: "NSW",       status: "settled" },
-      { id: 4, producer: "0xM3n4...O5p6", kwh: 30,  price: 0.0007, start: "13:00", end: "18:00", zone: "VIC",       status: "open" },
-      { id: 5, producer: "0xQ7r8...S9t0", kwh: 85,  price: 0.0009, start: "07:00", end: "14:00", zone: "QLD-North", status: "expired" },
-      { id: 6, producer: "0xU1v2...W3x4", kwh: 60,  price: 0.0004, start: "10:00", end: "20:00", zone: "NSW",       status: "open" },
-    ];
+    <p id="formMsg"></p>
+  </div>
+</section>
 
-    function statusBadge(status) {
-      const map = { open: "badge-open", matched: "badge-matched", settled: "badge-settled", expired: "badge-expired" };
-      return `<span class="badge ${map[status]}">${status}</span>`;
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-title">
+    <h2>How Listings Work</h2>
+    <p>The lifecycle of every energy listing on the blockchain</p>
+  </div>
+  <div class="info-grid">
+    <div class="card">
+      <h3>1️⃣ Producer Submits</h3>
+      <p>A verified producer posts kWh, asking price, time window and grid zone. The contract validates inputs against regulator price bounds.</p>
+    </div>
+    <div class="card">
+      <h3>2️⃣ Status: Open</h3>
+      <p>The listing is written on-chain and marked <strong style="color:var(--accent)">Open</strong>. All members can browse and place bids.</p>
+    </div>
+    <div class="card">
+      <h3>3️⃣ Status: Matched</h3>
+      <p>When a bid is accepted, the listing is locked as <strong style="color:#ffc800">Matched</strong> and the consumer's ETH is held in escrow.</p>
+    </div>
+    <div class="card">
+      <h3>4️⃣ Status: Settled</h3>
+      <p>Once smart-meter data confirms delivery on-chain, payment is released to the producer and the listing is marked <strong style="color:#64c864">Settled</strong>.</p>
+    </div>
+    <div class="card">
+      <h3>⏱️ Status: Expired</h3>
+      <p>If no match is made within the time window, the listing is automatically marked <strong style="color:#ff5050">Expired</strong>.</p>
+    </div>
+    <div class="card">
+      <h3>🛡️ Regulator Oversight</h3>
+      <p>The AER can audit all listings, set price bounds, flag non-compliant entries, and manage producer registrations at any time.</p>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 SEC | Blockchain Energy Trading Platform</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+<script>
+
+  // ── CONFIG ────────────────────────────────────────────────
+  // Must match the address in index.html
+  const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS_HERE";
+
+  const AUTH_ABI = [
+    "function isMember(address) view returns (bool)",
+    "function isRegulator(address) view returns (bool)"
+  ];
+
+  // ── STATE ─────────────────────────────────────────────────
+  let provider, signer, authContract, currentAccount;
+  let currentAccess = null; // 'member' | 'regulator' | null
+  let selectedListing = null;
+
+  // ── SAMPLE DATA (replace with live contract reads) ────────
+  const sampleListings = [
+    { id: 1, producer: "0xA1b2...C3d4", kwh: 120, price: 0.0006, start: "09:00", end: "17:00", zone: "QLD-North", status: "open" },
+    { id: 2, producer: "0xE5f6...G7h8", kwh: 45,  price: 0.0008, start: "06:00", end: "12:00", zone: "QLD-South", status: "matched" },
+    { id: 3, producer: "0xI9j0...K1l2", kwh: 200, price: 0.0005, start: "00:00", end: "23:59", zone: "NSW",       status: "settled" },
+    { id: 4, producer: "0xM3n4...O5p6", kwh: 30,  price: 0.0007, start: "13:00", end: "18:00", zone: "VIC",       status: "open" },
+    { id: 5, producer: "0xQ7r8...S9t0", kwh: 85,  price: 0.0009, start: "07:00", end: "14:00", zone: "QLD-North", status: "expired" },
+    { id: 6, producer: "0xU1v2...W3x4", kwh: 60,  price: 0.0004, start: "10:00", end: "20:00", zone: "NSW",       status: "open" },
+  ];
+
+  // ── TOAST ─────────────────────────────────────────────────
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = `show ${type}`;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.className = '', 4500);
+  }
+
+  // ── CONNECT WALLET ────────────────────────────────────────
+  async function connectWallet() {
+    if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
+    try {
+      provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = await provider.getSigner();
+      currentAccount = await signer.getAddress();
+      authContract = new ethers.Contract(CONTRACT_ADDRESS, AUTH_ABI, signer);
+
+      const network = await provider.getNetwork();
+      document.getElementById('walletAddr').textContent = currentAccount;
+      document.getElementById('networkName').textContent = `${network.name} (${network.chainId})`;
+
+      const btn = document.getElementById('connectBtn');
+      btn.textContent = currentAccount.slice(0,6) + '...' + currentAccount.slice(-4);
+      btn.classList.add('connected');
+      document.getElementById('navConnectBtn').style.display = 'none';
+
+      await refreshAccess();
+      toast('Wallet connected', 'success');
+      window.ethereum.on('accountsChanged', () => location.reload());
+    } catch (err) {
+      toast(err.reason || err.message, 'error');
     }
+  }
 
-    function actionBtn(status) {
-      if (status === "open") return `<button class="btn-outline" onclick="placeBid(this)">Place Bid</button>`;
-      return `<span style="color:#555; font-size:13px;">—</span>`;
-    }
+  // ── CHECK ACCESS ──────────────────────────────────────────
+  async function refreshAccess() {
+    if (!authContract || !currentAccount) return;
+    try {
+      const [isMem, isReg] = await Promise.all([
+        authContract.isMember(currentAccount),
+        authContract.isRegulator(currentAccount)
+      ]);
 
-    function renderTable(data) {
-      const body = document.getElementById("listingTableBody");
-      if (data.length === 0) {
-        body.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#555; padding:40px;">No listings match your filters.</td></tr>`;
-        return;
-      }
-      body.innerHTML = data.map(l => `
-        <tr>
-          <td class="green">#${l.id}</td>
-          <td style="font-family:monospace; font-size:13px;">${l.producer}</td>
-          <td><strong>${l.kwh}</strong> kWh</td>
-          <td class="green">${l.price.toFixed(4)}</td>
-          <td style="font-size:13px;">${l.start} – ${l.end}</td>
-          <td>${l.zone}</td>
-          <td>${statusBadge(l.status)}</td>
-          <td>${actionBtn(l.status)}</td>
-        </tr>
-      `).join("");
-    }
+      currentAccess = isReg ? 'regulator' : (isMem ? 'member' : null);
 
-    function filterListings() {
-      const status   = document.getElementById("filterStatus").value;
-      const location = document.getElementById("filterLocation").value;
-      const search   = document.getElementById("filterSearch").value.toLowerCase();
+      // Update access badge
+      let badge = '<span class="badge badge-none">No Access</span>';
+      if (isReg)     badge = '<span class="badge badge-regulator">Regulator</span>';
+      else if (isMem) badge = '<span class="badge badge-member">Member</span>';
+      document.getElementById('accessDisplay').innerHTML = badge;
 
-      const filtered = sampleListings.filter(l => {
-        return (status   === "all" || l.status === status) &&
-               (location === "all" || l.zone === location) &&
-               (search   === ""    || l.producer.toLowerCase().includes(search));
-      });
-      renderTable(filtered);
-    }
+      // Show/hide marketplace
+      const hasAccess = isMem || isReg;
+      document.getElementById('accessWall').style.display       = hasAccess ? 'none'  : 'block';
+      document.getElementById('marketplaceContent').style.display = hasAccess ? 'block' : 'none';
 
-    function updateStats() {
-      const open    = sampleListings.filter(l => l.status === "open").length;
-      const kwh     = sampleListings.filter(l => l.status === "open").reduce((a,l) => a + l.kwh, 0);
-      const prices  = sampleListings.filter(l => l.status === "open").map(l => l.price);
-      const avg     = prices.length ? (prices.reduce((a,p) => a+p,0)/prices.length).toFixed(4) : "—";
-      const settled = sampleListings.filter(l => l.status === "settled").length;
-
-      document.getElementById("stat-open").textContent    = open;
-      document.getElementById("stat-kwh").textContent     = kwh + " kWh";
-      document.getElementById("stat-price").textContent   = avg;
-      document.getElementById("stat-settled").textContent = settled;
-    }
-
-    function placeBid(btn) {
-      alert("Connect MetaMask to place a bid.\n\nThis will call placeBid() on the TradeMatching contract (SC3).");
-    }
-
-    function submitListing() {
-      const kwh      = document.getElementById("inputKwh").value;
-      const price    = parseFloat(document.getElementById("inputPrice").value);
-      const start    = document.getElementById("inputStart").value;
-      const end      = document.getElementById("inputEnd").value;
-      const location = document.getElementById("inputLocation").value;
-      const msg      = document.getElementById("formMsg");
-
-      // Basic validation
-      if (!kwh || !price || !start || !end || !location) {
-        msg.style.color = "#ff5050";
-        msg.textContent = "⚠️ Please fill in all fields before submitting.";
-        msg.style.display = "block";
-        return;
-      }
-      if (price < 0.0001 || price > 0.001) {
-        msg.style.color = "#ff5050";
-        msg.textContent = "⚠️ Price must be within regulator bounds: 0.0001 – 0.001 ETH per kWh.";
-        msg.style.display = "block";
-        return;
+      if (hasAccess) {
+        renderTable(sampleListings);
+        updateStats();
       }
 
-      // TODO: replace with actual Ethers.js call to listingContract.listEnergy()
-      msg.style.color = "#00ffb3";
-      msg.textContent = "✅ Listing submitted to the blockchain. Awaiting confirmation...";
-      msg.style.display = "block";
+      // Post form access
+      document.getElementById('postAccessMsg').style.display = hasAccess ? 'none' : 'block';
+      document.getElementById('submitListingBtn').disabled   = !hasAccess;
+
+    } catch (err) {
+      toast('Could not verify access: ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // ── TABLE ─────────────────────────────────────────────────
+  function statusBadge(status) {
+    const map = { open:'badge-open', matched:'badge-matched', settled:'badge-settled', expired:'badge-expired' };
+    return `<span class="badge ${map[status]}">${status}</span>`;
+  }
+
+  function renderTable(data) {
+    const body = document.getElementById('listingTableBody');
+    if (!data.length) {
+      body.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#445; padding:40px; font-family:'Space Mono',monospace; font-size:13px;">No listings match your filters.</td></tr>`;
+      return;
+    }
+    body.innerHTML = data.map(l => `
+      <tr>
+        <td class="green">#${l.id}</td>
+        <td class="mono">${l.producer}</td>
+        <td><strong>${l.kwh}</strong> kWh</td>
+        <td class="green">${l.price.toFixed(4)}</td>
+        <td class="mono" style="font-size:12px;">${l.start} – ${l.end}</td>
+        <td>${l.zone}</td>
+        <td>${statusBadge(l.status)}</td>
+        <td>${l.status === 'open' ? `<button class="btn-outline" onclick="openBidModal(${l.id})">Place Bid</button>` : '<span style="color:#445; font-size:12px;">—</span>'}</td>
+      </tr>
+    `).join('');
+  }
+
+  function filterListings() {
+    const status   = document.getElementById('filterStatus').value;
+    const location = document.getElementById('filterLocation').value;
+    const search   = document.getElementById('filterSearch').value.toLowerCase();
+    renderTable(sampleListings.filter(l =>
+      (status   === 'all' || l.status === status) &&
+      (location === 'all' || l.zone === location) &&
+      (search   === ''    || l.producer.toLowerCase().includes(search))
+    ));
+  }
+
+  function updateStats() {
+    const open    = sampleListings.filter(l => l.status === 'open');
+    const kwh     = open.reduce((a,l) => a + l.kwh, 0);
+    const avg     = open.length ? (open.reduce((a,l) => a + l.price, 0) / open.length).toFixed(4) : '—';
+    const settled = sampleListings.filter(l => l.status === 'settled').length;
+    document.getElementById('stat-open').textContent    = open.length;
+    document.getElementById('stat-kwh').textContent     = kwh + ' kWh';
+    document.getElementById('stat-price').textContent   = avg;
+    document.getElementById('stat-settled').textContent = settled;
+  }
+
+  // ── BID MODAL ─────────────────────────────────────────────
+  function openBidModal(listingId) {
+    if (!currentAccess) { toast('Connect wallet to place bids', 'error'); return; }
+    selectedListing = sampleListings.find(l => l.id === listingId);
+    document.getElementById('modalListingInfo').innerHTML =
+      `<strong style="color:var(--accent)">#${selectedListing.id}</strong> &nbsp;·&nbsp; 
+       ${selectedListing.kwh} kWh &nbsp;·&nbsp; 
+       <span class="green">${selectedListing.price.toFixed(4)} ETH/kWh</span> &nbsp;·&nbsp; 
+       ${selectedListing.zone}`;
+    document.getElementById('bidModal').classList.add('open');
+  }
+
+  function closeBidModal() {
+    document.getElementById('bidModal').classList.remove('open');
+    selectedListing = null;
+  }
+
+  document.getElementById('confirmBidBtn').addEventListener('click', async () => {
+    if (!selectedListing) return;
+    // TODO: replace with actual ethers.js call to TradeMatching contract
+    // e.g. await tradeContract.placeBid(selectedListing.id, { value: ethers.parseEther(...) })
+    toast(`Bid placed on listing #${selectedListing.id} — awaiting TradeMatching contract (SC3)`, 'info');
+    closeBidModal();
+  });
+
+  // ── POST LISTING ──────────────────────────────────────────
+  function submitListing() {
+    if (!currentAccess) { toast('Must be a member to post listings', 'error'); return; }
+
+    const kwh      = document.getElementById('inputKwh').value;
+    const price    = parseFloat(document.getElementById('inputPrice').value);
+    const start    = document.getElementById('inputStart').value;
+    const end      = document.getElementById('inputEnd').value;
+    const location = document.getElementById('inputLocation').value;
+    const msg      = document.getElementById('formMsg');
+
+    if (!kwh || !price || !start || !end || !location) {
+      msg.style.color = 'var(--danger)';
+      msg.textContent = '⚠️ Please fill in all fields.';
+      msg.style.display = 'block';
+      return;
+    }
+    if (price < 0.0001 || price > 0.001) {
+      msg.style.color = 'var(--danger)';
+      msg.textContent = '⚠️ Price must be within bounds: 0.0001 – 0.001 ETH per kWh.';
+      msg.style.display = 'block';
+      return;
     }
 
-    // Init
-    renderTable(sampleListings);
-    updateStats();
-  </script>
+    // TODO: replace with actual ethers.js call to EnergyListing contract
+    // e.g. await listingContract.listEnergy(kwh, priceInWei, startTimestamp, endTimestamp, zone)
+    msg.style.color = 'var(--accent)';
+    msg.textContent = '✅ Listing submitted — awaiting EnergyListing contract (SC2) integration.';
+    msg.style.display = 'block';
+    toast('Listing submitted!', 'success');
+  }
 
+  // ── AUTO CONNECT ──────────────────────────────────────────
+  window.addEventListener('load', async () => {
+    if (!window.ethereum) return;
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    if (accounts.length > 0) connectWallet();
+  });
+
+</script>
 </body>
 </html>
