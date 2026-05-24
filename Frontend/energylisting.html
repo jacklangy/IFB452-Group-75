@@ -21,14 +21,9 @@
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      background: var(--bg);
-      color: white;
-      overflow-x: hidden;
-      font-family: 'Syne', sans-serif;
-    }
+    body { background: var(--bg); color: white; overflow-x: hidden; font-family: 'Syne', sans-serif; }
 
-    /* ── NAV ── */
+    /* NAV */
     nav {
       display: flex;
       justify-content: space-between;
@@ -41,9 +36,7 @@
       z-index: 1000;
       border-bottom: 1px solid var(--border);
     }
-
     .logo { font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 2px; text-decoration: none; }
-
     nav ul { display: flex; gap: 30px; list-style: none; align-items: center; }
     nav ul li a { text-decoration: none; color: #ccc; transition: color 0.2s; font-size: 15px; }
     nav ul li a:hover, nav ul li a.active { color: var(--accent); }
@@ -62,7 +55,7 @@
     #connectBtn:hover { background: var(--accent); color: var(--bg); }
     #connectBtn.connected { background: var(--accent-dim); }
 
-    /* ── PAGE HERO ── */
+    /* PAGE HERO */
     .page-hero {
       padding: 160px 8% 80px;
       background:
@@ -71,19 +64,16 @@
       background-size: cover;
       background-position: center;
     }
-
     .page-hero h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
     .page-hero h1 span { color: var(--accent); }
     .page-hero p { font-size: 18px; color: #b0bec5; max-width: 620px; line-height: 1.7; }
 
-    /* ── SECTIONS ── */
     section { padding: 80px 8%; }
-
     .section-title { text-align: center; margin-bottom: 50px; }
     .section-title h2 { font-size: 38px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
     .section-title p { color: var(--text-muted); }
 
-    /* ── BUTTONS ── */
+    /* BUTTONS */
     .btn {
       display: inline-block;
       padding: 13px 30px;
@@ -100,23 +90,36 @@
     }
     .btn:hover { opacity: 0.85; transform: translateY(-2px); }
     .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-
+    .btn-danger { background: var(--danger); color: white; }
     .btn-outline {
       background: transparent;
       border: 1.5px solid var(--accent);
       color: var(--accent);
-      padding: 8px 20px;
+      padding: 7px 18px;
       border-radius: 30px;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
       transition: all 0.2s;
       font-family: 'Space Mono', monospace;
     }
     .btn-outline:hover { background: var(--accent); color: var(--bg); }
     .btn-outline:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-cancel {
+      background: transparent;
+      border: 1.5px solid var(--danger);
+      color: var(--danger);
+      padding: 7px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+    .btn-cancel:hover { background: var(--danger); color: white; }
 
-    /* ── BADGES ── */
+    /* BADGES */
     .badge {
       display: inline-block;
       padding: 4px 14px;
@@ -127,15 +130,14 @@
       letter-spacing: 0.5px;
       font-family: 'Space Mono', monospace;
     }
-    .badge-open     { background: rgba(0,255,179,0.12);  color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
-    .badge-matched  { background: rgba(255,200,0,0.12);  color: #ffc800;        border: 1px solid rgba(255,200,0,0.3); }
-    .badge-settled  { background: rgba(100,200,100,0.12);color: #64c864;        border: 1px solid rgba(100,200,100,0.3); }
-    .badge-expired  { background: rgba(255,80,80,0.12);  color: #ff5050;        border: 1px solid rgba(255,80,80,0.3); }
+    .badge-active   { background: rgba(0,255,179,0.12);  color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
+    .badge-inactive { background: rgba(255,80,80,0.12);  color: #ff5050;        border: 1px solid rgba(255,80,80,0.3); }
     .badge-member   { background: var(--accent-dim);     color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
     .badge-regulator{ background: rgba(255,179,71,0.12); color: var(--warning); border: 1px solid rgba(255,179,71,0.3); }
     .badge-none     { background: rgba(255,255,255,0.06);color: #888;           border: 1px solid #333; }
+    .badge-you      { background: rgba(100,150,255,0.12);color: #88aaff;        border: 1px solid rgba(100,150,255,0.3); }
 
-    /* ── WALLET BAR ── */
+    /* WALLET BAR */
     .wallet-bar {
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -151,7 +153,7 @@
     .wallet-stat .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
     .wallet-stat .value { font-size: 13px; font-family: 'Space Mono', monospace; }
 
-    /* ── ACCESS WALL ── */
+    /* ACCESS WALL */
     #accessWall {
       background: var(--surface2);
       border: 1px solid rgba(255,77,109,0.2);
@@ -164,14 +166,27 @@
     #accessWall h3 { font-size: 22px; margin-bottom: 14px; color: var(--danger); }
     #accessWall p  { color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
 
-    /* ── STATS ── */
+    /* ROLE INFO BANNER — shown when access is granted */
+    .role-banner {
+      border-radius: 14px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      font-size: 14px;
+      font-family: 'Space Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .role-banner.member    { background: rgba(0,255,179,0.06); border: 1px solid rgba(0,255,179,0.2); color: #c0fff1; }
+    .role-banner.regulator { background: rgba(255,179,71,0.06); border: 1px solid rgba(255,179,71,0.2); color: #ffe0a0; }
+
+    /* STATS */
     .stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
       margin-bottom: 40px;
     }
-
     .stat-box {
       background: var(--surface);
       padding: 28px 20px;
@@ -182,22 +197,7 @@
     .stat-box h2 { font-size: 36px; color: var(--accent); margin-bottom: 6px; font-weight: 800; }
     .stat-box p  { color: var(--text-muted); font-size: 13px; }
 
-    /* ── NOTICE ── */
-    .notice {
-      background: rgba(0,255,179,0.06);
-      border: 1px solid rgba(0,255,179,0.2);
-      border-radius: 12px;
-      padding: 14px 20px;
-      font-size: 14px;
-      color: #c0fff1;
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'Space Mono', monospace;
-    }
-
-    /* ── FILTER BAR ── */
+    /* FILTER BAR */
     .filter-bar {
       display: flex;
       gap: 16px;
@@ -210,8 +210,7 @@
       border: 1px solid var(--border);
     }
     .filter-bar label { color: var(--text-muted); font-size: 13px; white-space: nowrap; }
-    .filter-bar select,
-    .filter-bar input[type="text"] {
+    .filter-bar select, .filter-bar input[type="text"] {
       padding: 9px 14px;
       background: var(--bg);
       border: 1px solid var(--border);
@@ -223,7 +222,7 @@
     }
     .filter-bar select:focus, .filter-bar input:focus { border-color: var(--accent); }
 
-    /* ── TABLE ── */
+    /* TABLE */
     .market {
       background: var(--surface2);
       border-radius: 18px;
@@ -231,9 +230,7 @@
       overflow-x: auto;
       border: 1px solid var(--border);
     }
-
     table { width: 100%; border-collapse: collapse; min-width: 700px; }
-
     thead th {
       text-align: left;
       padding: 12px 16px;
@@ -244,15 +241,13 @@
       border-bottom: 1px solid var(--border);
       font-family: 'Space Mono', monospace;
     }
-
     tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
     tbody tr:hover { background: rgba(0,255,179,0.03); }
     tbody td { padding: 15px 16px; font-size: 14px; color: #d0d8e0; }
-
     .green { color: var(--accent); font-weight: 700; font-family: 'Space Mono', monospace; }
     .mono  { font-family: 'Space Mono', monospace; font-size: 12px; }
 
-    /* ── POST FORM ── */
+    /* POST FORM */
     .form-card {
       background: var(--surface);
       border-radius: 20px;
@@ -261,13 +256,7 @@
     }
     .form-card h3 { color: var(--accent); font-size: 22px; margin-bottom: 8px; }
     .form-card > p { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
     .form-group { display: flex; flex-direction: column; gap: 8px; }
     .form-group label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-family: 'Space Mono', monospace; }
     .form-group input, .form-group select {
@@ -284,27 +273,44 @@
     .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
     .form-group input::placeholder { color: #445; }
     .form-group input:disabled, .form-group select:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    .form-footer {
-      margin-top: 28px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
+    .form-footer { margin-top: 28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
     .price-bounds { font-size: 13px; color: var(--text-muted); font-family: 'Space Mono', monospace; }
     .price-bounds span { color: var(--accent); }
-
     #formMsg { margin-top: 14px; font-size: 13px; font-family: 'Space Mono', monospace; display: none; }
 
-    /* ── HOW IT WORKS ── */
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
+    /* REGULATOR PANEL */
+    .reg-panel {
+      background: var(--surface2);
+      border: 1px solid rgba(255,179,71,0.2);
+      border-radius: 18px;
+      padding: 32px;
+      margin-top: 40px;
     }
+    .reg-panel h3 { color: var(--warning); font-size: 18px; margin-bottom: 24px; }
+    .reg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .reg-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .reg-card h4 { font-size: 11px; color: #aac; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+    .input-row { display: flex; gap: 10px; }
+    .input-row input {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white;
+      font-size: 13px;
+      outline: none;
+      font-family: 'Space Mono', monospace;
+    }
+    .input-row input:focus { border-color: var(--accent); }
 
+    /* HOW IT WORKS */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
     .card {
       background: var(--surface);
       padding: 30px;
@@ -316,31 +322,7 @@
     .card h3 { margin-bottom: 12px; color: var(--accent); font-size: 16px; }
     .card p  { color: var(--text-muted); font-size: 14px; line-height: 1.65; }
 
-    /* ── BID MODAL ── */
-    #bidModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-    #bidModal.open { display: flex; }
-
-    .modal-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 460px;
-      width: 90%;
-    }
-    .modal-box h3 { color: var(--accent); font-size: 20px; margin-bottom: 20px; }
-    .modal-box p  { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
-    .modal-footer { display: flex; gap: 14px; margin-top: 24px; }
-
-    /* ── TOAST ── */
+    /* TOAST */
     #toast {
       position: fixed;
       bottom: 30px;
@@ -354,7 +336,7 @@
       transform: translateY(6px);
       transition: all 0.3s;
       pointer-events: none;
-      max-width: 360px;
+      max-width: 380px;
     }
     #toast.show { opacity: 1; transform: translateY(0); }
     #toast.success { background: rgba(0,255,179,0.12); color: var(--accent); border: 1px solid var(--accent); }
@@ -375,26 +357,13 @@
 
 <div id="toast"></div>
 
-<!-- BID MODAL -->
-<div id="bidModal">
-  <div class="modal-box">
-    <h3>⚡ Place Bid</h3>
-    <p id="modalListingInfo">Loading listing info...</p>
-    <p style="color:white; font-size:15px;">You are about to bid on this listing. This will call <code style="color:var(--accent)">placeBid()</code> on the TradeMatching contract.</p>
-    <p style="font-size:13px; color:var(--text-muted);">Funds will be held in escrow until energy delivery is confirmed on-chain.</p>
-    <div class="modal-footer">
-      <button class="btn" id="confirmBidBtn">Confirm Bid</button>
-      <button class="btn" style="background:var(--surface2); color:#aaa;" onclick="closeBidModal()">Cancel</button>
-    </div>
-  </div>
-</div>
-
 <!-- NAV -->
 <nav>
   <a href="index.html" class="logo">SEC</a>
   <ul>
+    <li><a href="index.html">Home</a></li>
     <li><a href="energylisting.html" class="active">Listings</a></li>
-    <li><a href="#post">Post Energy</a></li>
+    <li><a href="#postSection">Post Energy</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
   </ul>
@@ -403,7 +372,7 @@
 <!-- HERO -->
 <div class="page-hero">
   <h1>Energy <span>Listings</span><br>Marketplace</h1>
-  <p>Browse surplus energy from verified producers on your local grid. All listings are validated against regulator-set price bounds and written immutably to the blockchain.</p>
+  <p>Browse surplus energy from verified producers on your local grid. All listings are validated and written immutably to the blockchain.</p>
 </div>
 
 <!-- MAIN SECTION -->
@@ -420,111 +389,123 @@
       <span class="value" id="networkName">—</span>
     </div>
     <div class="wallet-stat">
-      <span class="label">Access</span>
+      <span class="label">Role</span>
       <span id="accessDisplay"><span class="badge badge-none">—</span></span>
     </div>
-    <div style="margin-left:auto; display:flex; gap:10px;">
-      <button class="btn-outline" onclick="refreshAccess()" style="padding:8px 16px; font-size:12px;">↻ Refresh</button>
-      <button class="btn" style="padding:9px 20px; font-size:13px;" onclick="connectWallet()" id="navConnectBtn">Connect</button>
+    <div style="margin-left:auto; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn-outline" onclick="refreshAll()" style="padding:8px 16px; font-size:12px;">↻ Refresh</button>
     </div>
   </div>
 
-  <!-- ACCESS WALL (shown when not a member/regulator) -->
+  <!-- ACCESS WALL -->
   <div id="accessWall">
     <h3>🔒 Members Only</h3>
-    <p>You need to be a regulator-approved SEC member to access the energy marketplace. Connect your wallet and apply for membership on the home page.</p>
+    <p>You need to be a regulator-approved SEC member to access the energy marketplace. Connect your wallet, then apply for membership on the home page.</p>
     <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
       <button class="btn" onclick="connectWallet()">Connect Wallet</button>
       <a href="index.html#portal" class="btn" style="background:var(--surface2); color:var(--accent); border:1.5px solid var(--accent);">Apply for Membership</a>
     </div>
   </div>
 
-  <!-- MARKETPLACE CONTENT (shown when member/regulator) -->
+  <!-- MARKETPLACE (member + regulator) -->
   <div id="marketplaceContent" style="display:none;">
 
+    <!-- Role banner -->
+    <div id="roleBanner" class="role-banner member">
+      <span id="roleBannerIcon">✅</span>
+      <span id="roleBannerText">You are a verified member. You can browse listings, post surplus energy, and cancel your own listings.</span>
+    </div>
+
+    <!-- Stats -->
     <div class="stats">
       <div class="stat-box">
-        <h2 id="stat-open">—</h2>
-        <p>Open Listings</p>
+        <h2 id="statActive">—</h2>
+        <p>Active Listings</p>
       </div>
       <div class="stat-box">
-        <h2 id="stat-kwh">—</h2>
-        <p>kWh Available</p>
+        <h2 id="statKwh">—</h2>
+        <p>Total kWh Available</p>
       </div>
       <div class="stat-box">
-        <h2 id="stat-price">—</h2>
-        <p>Avg Price / kWh (ETH)</p>
+        <h2 id="statAvgPrice">—</h2>
+        <p>Avg Price / kWh (Wei)</p>
       </div>
       <div class="stat-box">
-        <h2 id="stat-settled">—</h2>
-        <p>Trades Settled Today</p>
+        <h2 id="statYours">—</h2>
+        <p>Your Active Listings</p>
       </div>
     </div>
 
-    <div class="notice">
-      <span>🔗</span>
-      You are connected as a verified member. You can browse listings and place bids below.
-    </div>
-
-    <!-- Filters -->
-    <div class="filter-bar" id="listings">
+    <!-- Filter bar -->
+    <div class="filter-bar">
       <label>Status</label>
-      <select id="filterStatus" onchange="filterListings()">
+      <select id="filterStatus" >
         <option value="all">All</option>
-        <option value="open">Open</option>
-        <option value="matched">Matched</option>
-        <option value="settled">Settled</option>
-        <option value="expired">Expired</option>
+        <option value="active">Active</option>
+        <option value="inactive">Cancelled</option>
       </select>
-
-      <label>Grid Zone</label>
-      <select id="filterLocation" onchange="filterListings()">
-        <option value="all">All Zones</option>
-        <option value="QLD-North">QLD North</option>
-        <option value="QLD-South">QLD South</option>
-        <option value="NSW">NSW</option>
-        <option value="VIC">VIC</option>
+      <label>Show</label>
+      <select id="filterOwner" >
+        <option value="all">All Sellers</option>
+        <option value="mine">My Listings</option>
       </select>
-
-      <label>Search Producer</label>
-      <input type="text" id="filterSearch" placeholder="0x address..." oninput="filterListings()" />
+      <label>Search Seller</label>
+      <input type="text" id="filterSearch" placeholder="0x address..."  />
+      <button class="btn-outline" onclick="loadListings()" style="margin-left:auto;">↻ Reload</button>
     </div>
 
-    <!-- Table -->
+    <!-- Listings Table -->
     <div class="market">
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Producer</th>
-            <th>kWh Available</th>
-            <th>Price / kWh (ETH)</th>
-            <th>Time Window</th>
-            <th>Grid Zone</th>
+            <th>ID</th>
+            <th>Seller</th>
+            <th>kWh</th>
+            <th>Price / kWh (Wei)</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="listingTableBody"></tbody>
+        <tbody id="listingTableBody">
+          <tr><td colspan="6" style="text-align:center; color:#445; padding:40px; font-family:'Space Mono',monospace; font-size:13px;">Connect wallet to load listings.</td></tr>
+        </tbody>
       </table>
     </div>
+
+  <!-- Regulator-only controls -->
+  <div id="regulatorControls" style="display:none;">
+    <div class="reg-panel">
+      <h3>🛡️ Regulator Controls — Listings</h3>
+      <div class="reg-grid">
+        <div class="reg-card">
+          <h4>Force Cancel Listing (by ID)</h4>
+          <div class="input-row">
+            <input type="number" id="regCancelId" placeholder="Listing ID" min="0" />
+            <button class="btn-cancel" onclick="regulatorCancelListing()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   </div>
 </section>
 
-<!-- POST A LISTING -->
-<section id="post">
+<!-- POST ENERGY -->
+<section id="postSection">
   <div class="section-title">
     <h2>Post Surplus Energy</h2>
-    <p>Registered producers can advertise available kWh directly to the blockchain</p>
+    <p>Verified members can advertise available kWh directly on the blockchain</p>
   </div>
 
   <div class="form-card">
     <h3>⚡ New Energy Listing</h3>
-    <p>Your listing will be validated against regulator-set price bounds before being written on-chain. You must be a verified member to post.</p>
+    <p>Calls <code style="color:var(--accent); font-family:'Space Mono',monospace;">listEnergy(amount, pricePerKwh)</code> on the EnergyTrading contract. You must be a verified member to post.</p>
 
+    <!-- Shown when not a member -->
     <div id="postAccessMsg" style="display:none; margin-bottom:24px; padding:14px 20px; background:rgba(255,77,109,0.08); border:1px solid rgba(255,77,109,0.25); border-radius:12px; color:var(--danger); font-size:13px; font-family:'Space Mono',monospace;">
-      🔒 Connect your wallet and ensure you are an approved member to post listings.
+      🔒 Regulators cannot post energy listings. Only approved members may list energy for sale.
     </div>
 
     <div class="form-grid">
@@ -533,32 +514,14 @@
         <input type="number" id="inputKwh" placeholder="e.g. 50" min="1" />
       </div>
       <div class="form-group">
-        <label>Asking Price per kWh (ETH)</label>
-        <input type="number" id="inputPrice" placeholder="e.g. 0.0005" step="0.0001" min="0" />
-      </div>
-      <div class="form-group">
-        <label>Time Window Start</label>
-        <input type="datetime-local" id="inputStart" />
-      </div>
-      <div class="form-group">
-        <label>Time Window End</label>
-        <input type="datetime-local" id="inputEnd" />
-      </div>
-      <div class="form-group">
-        <label>Grid Zone</label>
-        <select id="inputLocation">
-          <option value="">Select zone...</option>
-          <option value="QLD-North">QLD North</option>
-          <option value="QLD-South">QLD South</option>
-          <option value="NSW">NSW</option>
-          <option value="VIC">VIC</option>
-        </select>
+        <label>Price per kWh (Wei)</label>
+        <input type="number" id="inputPrice" placeholder="e.g. 500000000000000" min="1" />
+        <span style="font-size:11px; color:var(--text-muted); font-family:'Space Mono',monospace;">1 ETH = 1,000,000,000,000,000,000 Wei</span>
       </div>
     </div>
 
     <div class="form-footer">
-      <button class="btn" id="submitListingBtn" onclick="submitListing()">Submit Listing</button>
-      <div class="price-bounds">Regulator bounds: <span>0.0001 ETH</span> – <span>0.001 ETH</span> per kWh</div>
+      <button class="btn" id="submitListingBtn" onclick="submitListing()">Submit Listing On-Chain</button>
     </div>
 
     <p id="formMsg"></p>
@@ -573,28 +536,20 @@
   </div>
   <div class="info-grid">
     <div class="card">
-      <h3>1️⃣ Producer Submits</h3>
-      <p>A verified producer posts kWh, asking price, time window and grid zone. The contract validates inputs against regulator price bounds.</p>
+      <h3>1️⃣ Member Posts</h3>
+      <p>A verified member calls <code style="color:var(--accent)">listEnergy()</code> with their kWh amount and price per kWh in Wei. The contract records the listing on-chain.</p>
     </div>
     <div class="card">
-      <h3>2️⃣ Status: Open</h3>
-      <p>The listing is written on-chain and marked <strong style="color:var(--accent)">Open</strong>. All members can browse and place bids.</p>
+      <h3>2️⃣ Status: Active</h3>
+      <p>The listing is written on-chain with <code style="color:var(--accent)">isActive = true</code>. All members can browse it in the marketplace table.</p>
     </div>
     <div class="card">
-      <h3>3️⃣ Status: Matched</h3>
-      <p>When a bid is accepted, the listing is locked as <strong style="color:#ffc800">Matched</strong> and the consumer's ETH is held in escrow.</p>
-    </div>
-    <div class="card">
-      <h3>4️⃣ Status: Settled</h3>
-      <p>Once smart-meter data confirms delivery on-chain, payment is released to the producer and the listing is marked <strong style="color:#64c864">Settled</strong>.</p>
-    </div>
-    <div class="card">
-      <h3>⏱️ Status: Expired</h3>
-      <p>If no match is made within the time window, the listing is automatically marked <strong style="color:#ff5050">Expired</strong>.</p>
+      <h3>3️⃣ Cancel Listing</h3>
+      <p>The original seller can cancel their listing at any time by calling <code style="color:var(--accent)">cancelListing(id)</code>, setting <code style="color:var(--accent)">isActive = false</code>.</p>
     </div>
     <div class="card">
       <h3>🛡️ Regulator Oversight</h3>
-      <p>The AER can audit all listings, set price bounds, flag non-compliant entries, and manage producer registrations at any time.</p>
+      <p>Regulators can view all listings including inactive ones and have visibility over the full marketplace state.</p>
     </div>
   </div>
 </section>
@@ -604,31 +559,45 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
 
-  // ── CONFIG ────────────────────────────────────────────────
-  // Must match the address in index.html
-  const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS_HERE";
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CONFIG — paste your deployed contract addresses here
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  const AUTH_CONTRACT_ADDRESS   = "0x18Ed70a55E4967593d47f10e7cc43A1C4BE6A5eB";
+  const ENERGY_CONTRACT_ADDRESS = "0xa0B646406260c43677d7F8aA29883D0231a3dB69";
+
+  // authentication.sol ABI (role checks only)
   const AUTH_ABI = [
     "function isMember(address) view returns (bool)",
     "function isRegulator(address) view returns (bool)"
   ];
 
-  // ── STATE ─────────────────────────────────────────────────
-  let provider, signer, authContract, currentAccount;
-  let currentAccess = null; // 'member' | 'regulator' | null
-  let selectedListing = null;
-
-  // ── SAMPLE DATA (replace with live contract reads) ────────
-  const sampleListings = [
-    { id: 1, producer: "0xA1b2...C3d4", kwh: 120, price: 0.0006, start: "09:00", end: "17:00", zone: "QLD-North", status: "open" },
-    { id: 2, producer: "0xE5f6...G7h8", kwh: 45,  price: 0.0008, start: "06:00", end: "12:00", zone: "QLD-South", status: "matched" },
-    { id: 3, producer: "0xI9j0...K1l2", kwh: 200, price: 0.0005, start: "00:00", end: "23:59", zone: "NSW",       status: "settled" },
-    { id: 4, producer: "0xM3n4...O5p6", kwh: 30,  price: 0.0007, start: "13:00", end: "18:00", zone: "VIC",       status: "open" },
-    { id: 5, producer: "0xQ7r8...S9t0", kwh: 85,  price: 0.0009, start: "07:00", end: "14:00", zone: "QLD-North", status: "expired" },
-    { id: 6, producer: "0xU1v2...W3x4", kwh: 60,  price: 0.0004, start: "10:00", end: "20:00", zone: "NSW",       status: "open" },
+  // EnergyTrading.sol ABI
+  const ENERGY_ABI = [
+    // State reads
+    "function ListingId() view returns (uint256)",
+    "function listings(uint256) view returns (address seller, uint256 amountKwh, uint256 costPerKwh, bool isActive)",
+    "function isMember(address) view returns (bool)",
+    // Write functions
+    "function listEnergy(uint256 _amount, uint256 _price) external",
+    "function cancelListing(uint256 _id) external",
+    "function regulatorCancelListing(uint256 _id) external",
+    // Events
+    "event EnergyListed(uint256 indexed id, address indexed seller, uint256 amount, uint256 price)"
   ];
 
-  // ── TOAST ─────────────────────────────────────────────────
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // STATE
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  let provider, signer, authContract, energyContract, currentAccount;
+  let currentRole = null; // 'regulator' | 'member' | null
+  let allListings = [];   // cached on-chain listings
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // TOAST
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
   function toast(msg, type = 'success') {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -637,7 +606,10 @@
     el._t = setTimeout(() => el.className = '', 4500);
   }
 
-  // ── CONNECT WALLET ────────────────────────────────────────
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CONNECT WALLET
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
   async function connectWallet() {
     if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
     try {
@@ -645,18 +617,19 @@
       await provider.send("eth_requestAccounts", []);
       signer = await provider.getSigner();
       currentAccount = await signer.getAddress();
-      authContract = new ethers.Contract(CONTRACT_ADDRESS, AUTH_ABI, signer);
+
+      authContract   = new ethers.Contract(AUTH_CONTRACT_ADDRESS,   AUTH_ABI,   signer);
+      energyContract = new ethers.Contract(ENERGY_CONTRACT_ADDRESS, ENERGY_ABI, signer);
 
       const network = await provider.getNetwork();
-      document.getElementById('walletAddr').textContent = currentAccount;
+      document.getElementById('walletAddr').textContent  = currentAccount;
       document.getElementById('networkName').textContent = `${network.name} (${network.chainId})`;
 
       const btn = document.getElementById('connectBtn');
       btn.textContent = currentAccount.slice(0,6) + '...' + currentAccount.slice(-4);
       btn.classList.add('connected');
-      document.getElementById('navConnectBtn').style.display = 'none';
 
-      await refreshAccess();
+      await refreshAll();
       toast('Wallet connected', 'success');
       window.ethereum.on('accountsChanged', () => location.reload());
     } catch (err) {
@@ -664,8 +637,11 @@
     }
   }
 
-  // ── CHECK ACCESS ──────────────────────────────────────────
-  async function refreshAccess() {
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CHECK ROLE via authentication.sol
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function refreshAll() {
     if (!authContract || !currentAccount) return;
     try {
       const [isMem, isReg] = await Promise.all([
@@ -673,140 +649,285 @@
         authContract.isRegulator(currentAccount)
       ]);
 
-      currentAccess = isReg ? 'regulator' : (isMem ? 'member' : null);
+      currentRole = isReg ? 'regulator' : (isMem ? 'member' : null);
 
-      // Update access badge
+      // Role badge in wallet bar
       let badge = '<span class="badge badge-none">No Access</span>';
-      if (isReg)     badge = '<span class="badge badge-regulator">Regulator</span>';
-      else if (isMem) badge = '<span class="badge badge-member">Member</span>';
+      if (isReg)       badge = '<span class="badge badge-regulator">Regulator</span>';
+      else if (isMem)  badge = '<span class="badge badge-member">Member</span>';
       document.getElementById('accessDisplay').innerHTML = badge;
 
-      // Show/hide marketplace
       const hasAccess = isMem || isReg;
-      document.getElementById('accessWall').style.display       = hasAccess ? 'none'  : 'block';
-      document.getElementById('marketplaceContent').style.display = hasAccess ? 'block' : 'none';
+      // Only members (not regulators) can post listings
+      const canPost = isMem && !isReg;
 
-      if (hasAccess) {
-        renderTable(sampleListings);
-        updateStats();
+      // Show/hide sections
+      document.getElementById('accessWall').style.display          = hasAccess ? 'none'  : 'block';
+      document.getElementById('marketplaceContent').style.display  = hasAccess ? 'block' : 'none';
+      document.getElementById('postAccessMsg').style.display       = canPost   ? 'none'  : 'block';
+      document.getElementById('submitListingBtn').disabled         = !canPost;
+      // Hide the entire post section for regulators
+      document.getElementById('postSection').style.display         = isReg     ? 'none'  : 'block';
+
+      // Role-specific UI
+      if (isReg) {
+        // Regulator banner
+        const banner = document.getElementById('roleBanner');
+        banner.className = 'role-banner regulator';
+        document.getElementById('roleBannerIcon').textContent = '🛡️';
+        document.getElementById('roleBannerText').textContent =
+          'You are a Regulator. You have full visibility of all listings including cancelled ones.';
+        // Show regulator controls
+        document.getElementById('regulatorControls').style.display = 'block';
+        // Regulator view: show all listings including inactive
+        document.getElementById('filterStatus').value = 'all';
+      } else if (isMem) {
+        // Member banner
+        const banner = document.getElementById('roleBanner');
+        banner.className = 'role-banner member';
+        document.getElementById('roleBannerIcon').textContent = '✅';
+        document.getElementById('roleBannerText').textContent =
+          'You are a verified member. You can browse active listings, post surplus energy, and cancel your own listings.';
+        document.getElementById('regulatorControls').style.display = 'none';
+        // Default: show only active listings for members
+        document.getElementById('filterStatus').value = 'active';
       }
 
-      // Post form access
-      document.getElementById('postAccessMsg').style.display = hasAccess ? 'none' : 'block';
-      document.getElementById('submitListingBtn').disabled   = !hasAccess;
+      if (hasAccess) await loadListings();
 
     } catch (err) {
-      toast('Could not verify access: ' + (err.reason || err.message), 'error');
+      toast('Failed to verify role: ' + (err.reason || err.message), 'error');
     }
   }
 
-  // ── TABLE ─────────────────────────────────────────────────
-  function statusBadge(status) {
-    const map = { open:'badge-open', matched:'badge-matched', settled:'badge-settled', expired:'badge-expired' };
-    return `<span class="badge ${map[status]}">${status}</span>`;
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // LOAD ON-CHAIN LISTINGS from EnergyTrading.sol
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function loadListings() {
+    if (!energyContract) return;
+    try {
+      const totalId = await energyContract.ListingId();
+      const count = Number(totalId);
+
+      if (count === 0) {
+        allListings = [];
+        renderTable([]);
+        updateStats([]);
+        return;
+      }
+
+      // Fetch all listings in parallel
+      const promises = [];
+      for (let i = 0; i < count; i++) {
+        promises.push(energyContract.listings(i).then(l => ({
+          id:         i,
+          seller:     l.seller,
+          amountKwh:  Number(l.amountKwh),
+          costPerKwh: l.costPerKwh.toString(), // keep as string (Wei)
+          isActive:   l.isActive
+        })));
+      }
+
+      allListings = await Promise.all(promises);
+      filterListings();
+      updateStats(allListings);
+    } catch (err) {
+      toast('Failed to load listings: ' + (err.reason || err.message), 'error');
+    }
   }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // RENDER TABLE
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   function renderTable(data) {
     const body = document.getElementById('listingTableBody');
     if (!data.length) {
-      body.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#445; padding:40px; font-family:'Space Mono',monospace; font-size:13px;">No listings match your filters.</td></tr>`;
+      body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#445; padding:40px; font-family:'Space Mono',monospace; font-size:13px;">No listings found.</td></tr>`;
       return;
     }
-    body.innerHTML = data.map(l => `
-      <tr>
-        <td class="green">#${l.id}</td>
-        <td class="mono">${l.producer}</td>
-        <td><strong>${l.kwh}</strong> kWh</td>
-        <td class="green">${l.price.toFixed(4)}</td>
-        <td class="mono" style="font-size:12px;">${l.start} – ${l.end}</td>
-        <td>${l.zone}</td>
-        <td>${statusBadge(l.status)}</td>
-        <td>${l.status === 'open' ? `<button class="btn-outline" onclick="openBidModal(${l.id})">Place Bid</button>` : '<span style="color:#445; font-size:12px;">—</span>'}</td>
-      </tr>
-    `).join('');
+
+    body.innerHTML = data.map(l => {
+      const isOwner   = currentAccount && l.seller.toLowerCase() === currentAccount.toLowerCase();
+      const statusBadge = l.isActive
+        ? '<span class="badge badge-active">Active</span>'
+        : '<span class="badge badge-inactive">Cancelled</span>';
+
+      // Shorten address for display
+      const shortSeller = l.seller.slice(0,6) + '...' + l.seller.slice(-4);
+      const sellerDisplay = isOwner
+        ? `${shortSeller} <span class="badge badge-you" style="padding:2px 8px; font-size:10px;">You</span>`
+        : shortSeller;
+
+      // Action column — role-specific
+      let action = '<span style="color:#445; font-size:12px;">—</span>';
+      if (l.isActive) {
+        if (isOwner) {
+          // Seller can cancel their own listing
+          action = `<button class="btn-cancel" onclick="cancelListing(${l.id})">Cancel</button>`;
+        } else if (currentRole === 'member' || currentRole === 'regulator') {
+          // Other members see a placeholder (buy/bid — future SC3)
+          action = `<button class="btn-outline" disabled title="Trade matching coming soon">Bid (SC3)</button>`;
+        }
+      }
+
+      return `
+        <tr>
+          <td class="green">#${l.id}</td>
+          <td class="mono">${sellerDisplay}</td>
+          <td><strong>${l.amountKwh}</strong> kWh</td>
+          <td class="green mono">${l.costPerKwh} Wei</td>
+          <td>${statusBadge}</td>
+          <td>${action}</td>
+        </tr>
+      `;
+    }).join('');
   }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // FILTER
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   function filterListings() {
-    const status   = document.getElementById('filterStatus').value;
-    const location = document.getElementById('filterLocation').value;
-    const search   = document.getElementById('filterSearch').value.toLowerCase();
-    renderTable(sampleListings.filter(l =>
-      (status   === 'all' || l.status === status) &&
-      (location === 'all' || l.zone === location) &&
-      (search   === ''    || l.producer.toLowerCase().includes(search))
-    ));
+    const statusFilter = document.getElementById('filterStatus').value;
+    const ownerFilter  = document.getElementById('filterOwner').value;
+    const search       = document.getElementById('filterSearch').value.toLowerCase();
+
+    const filtered = allListings.filter(l => {
+      const matchStatus = statusFilter === 'all'
+        || (statusFilter === 'active'   &&  l.isActive)
+        || (statusFilter === 'inactive' && !l.isActive);
+      const matchOwner = ownerFilter === 'all'
+        || (ownerFilter === 'mine' && currentAccount && l.seller.toLowerCase() === currentAccount.toLowerCase());
+      const matchSearch = search === '' || l.seller.toLowerCase().includes(search);
+      return matchStatus && matchOwner && matchSearch;
+    });
+    renderTable(filtered);
   }
 
-  function updateStats() {
-    const open    = sampleListings.filter(l => l.status === 'open');
-    const kwh     = open.reduce((a,l) => a + l.kwh, 0);
-    const avg     = open.length ? (open.reduce((a,l) => a + l.price, 0) / open.length).toFixed(4) : '—';
-    const settled = sampleListings.filter(l => l.status === 'settled').length;
-    document.getElementById('stat-open').textContent    = open.length;
-    document.getElementById('stat-kwh').textContent     = kwh + ' kWh';
-    document.getElementById('stat-price').textContent   = avg;
-    document.getElementById('stat-settled').textContent = settled;
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // STATS
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  function updateStats(data) {
+    const active = data.filter(l => l.isActive);
+    const totalKwh = active.reduce((a, l) => a + l.amountKwh, 0);
+    const avgPrice = active.length
+      ? Math.round(active.reduce((a, l) => a + Number(l.costPerKwh), 0) / active.length)
+      : '—';
+    const mine = active.filter(l =>
+      currentAccount && l.seller.toLowerCase() === currentAccount.toLowerCase()
+    ).length;
+
+    document.getElementById('statActive').textContent   = active.length;
+    document.getElementById('statKwh').textContent      = totalKwh + ' kWh';
+    document.getElementById('statAvgPrice').textContent = avgPrice;
+    document.getElementById('statYours').textContent    = mine;
   }
 
-  // ── BID MODAL ─────────────────────────────────────────────
-  function openBidModal(listingId) {
-    if (!currentAccess) { toast('Connect wallet to place bids', 'error'); return; }
-    selectedListing = sampleListings.find(l => l.id === listingId);
-    document.getElementById('modalListingInfo').innerHTML =
-      `<strong style="color:var(--accent)">#${selectedListing.id}</strong> &nbsp;·&nbsp; 
-       ${selectedListing.kwh} kWh &nbsp;·&nbsp; 
-       <span class="green">${selectedListing.price.toFixed(4)} ETH/kWh</span> &nbsp;·&nbsp; 
-       ${selectedListing.zone}`;
-    document.getElementById('bidModal').classList.add('open');
-  }
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // LIST ENERGY — EnergyTrading.listEnergy()
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  function closeBidModal() {
-    document.getElementById('bidModal').classList.remove('open');
-    selectedListing = null;
-  }
+  async function submitListing() {
+    if (!currentRole) { toast('Must be a member to post listings', 'error'); return; }
 
-  document.getElementById('confirmBidBtn').addEventListener('click', async () => {
-    if (!selectedListing) return;
-    // TODO: replace with actual ethers.js call to TradeMatching contract
-    // e.g. await tradeContract.placeBid(selectedListing.id, { value: ethers.parseEther(...) })
-    toast(`Bid placed on listing #${selectedListing.id} — awaiting TradeMatching contract (SC3)`, 'info');
-    closeBidModal();
-  });
+    const kwh   = document.getElementById('inputKwh').value;
+    const price = document.getElementById('inputPrice').value;
+    const msg   = document.getElementById('formMsg');
 
-  // ── POST LISTING ──────────────────────────────────────────
-  function submitListing() {
-    if (!currentAccess) { toast('Must be a member to post listings', 'error'); return; }
-
-    const kwh      = document.getElementById('inputKwh').value;
-    const price    = parseFloat(document.getElementById('inputPrice').value);
-    const start    = document.getElementById('inputStart').value;
-    const end      = document.getElementById('inputEnd').value;
-    const location = document.getElementById('inputLocation').value;
-    const msg      = document.getElementById('formMsg');
-
-    if (!kwh || !price || !start || !end || !location) {
+    if (!kwh || Number(kwh) <= 0) {
       msg.style.color = 'var(--danger)';
-      msg.textContent = '⚠️ Please fill in all fields.';
+      msg.textContent = '⚠️ kWh amount must be greater than zero.';
       msg.style.display = 'block';
       return;
     }
-    if (price < 0.0001 || price > 0.001) {
+    if (!price || Number(price) <= 0) {
       msg.style.color = 'var(--danger)';
-      msg.textContent = '⚠️ Price must be within bounds: 0.0001 – 0.001 ETH per kWh.';
+      msg.textContent = '⚠️ Price must be greater than zero (in Wei).';
       msg.style.display = 'block';
       return;
     }
 
-    // TODO: replace with actual ethers.js call to EnergyListing contract
-    // e.g. await listingContract.listEnergy(kwh, priceInWei, startTimestamp, endTimestamp, zone)
-    msg.style.color = 'var(--accent)';
-    msg.textContent = '✅ Listing submitted — awaiting EnergyListing contract (SC2) integration.';
-    msg.style.display = 'block';
-    toast('Listing submitted!', 'success');
+    try {
+      msg.style.color = 'var(--warning)';
+      msg.textContent = '⏳ Sending transaction...';
+      msg.style.display = 'block';
+
+      const tx = await energyContract.listEnergy(
+        BigInt(kwh),
+        BigInt(price)
+      );
+      msg.textContent = '⏳ Waiting for confirmation...';
+      await tx.wait();
+
+      msg.style.color = 'var(--accent)';
+      msg.textContent = '✅ Listing submitted on-chain successfully!';
+      toast('Listing created!', 'success');
+
+      // Clear form
+      document.getElementById('inputKwh').value   = '';
+      document.getElementById('inputPrice').value = '';
+
+      // Reload listings
+      await loadListings();
+    } catch (err) {
+      msg.style.color = 'var(--danger)';
+      msg.textContent = '❌ ' + (err.reason || err.message);
+      msg.style.display = 'block';
+    }
   }
 
-  // ── AUTO CONNECT ──────────────────────────────────────────
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CANCEL LISTING — EnergyTrading.cancelListing()
+  // Only the original seller can call this (enforced by contract)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function cancelListing(id) {
+    if (!energyContract) return;
+    try {
+      toast('Sending cancel transaction...', 'info');
+      const tx = await energyContract.cancelListing(id);
+      toast('⏳ Waiting for confirmation...', 'info');
+      await tx.wait();
+      toast(`✅ Listing #${id} cancelled.`, 'success');
+      await loadListings();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // Regulator force-cancel — calls regulatorCancelListing() on the contract
+  async function regulatorCancelListing() {
+    const id = document.getElementById('regCancelId').value;
+    if (id === '') { toast('Enter a listing ID', 'error'); return; }
+    if (!energyContract) return;
+    try {
+      toast('Sending regulator cancel...', 'info');
+      const tx = await energyContract.regulatorCancelListing(Number(id));
+      toast('⏳ Waiting for confirmation...', 'info');
+      await tx.wait();
+      toast(`✅ Listing #${id} force-cancelled by regulator.`, 'success');
+      await loadListings();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+    document.getElementById('regCancelId').value = '';
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // AUTO CONNECT + FILTER LISTENERS
+  // Listeners added here (not inline onchange) so programmatic
+  // .value = '...' in refreshAll() never fires filterListings()
+  // before allListings is populated.
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
   window.addEventListener('load', async () => {
+    document.getElementById('filterStatus').addEventListener('change', filterListings);
+    document.getElementById('filterOwner').addEventListener('change', filterListings);
+    document.getElementById('filterSearch').addEventListener('input', filterListings);
+
     if (!window.ethereum) return;
     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
     if (accounts.length > 0) connectWallet();
