@@ -107,7 +107,6 @@
     .btn-outline:hover { background: var(--accent); color: var(--bg); }
     .btn-outline:disabled { opacity: 0.3; cursor: not-allowed; }
     .btn-sm { padding: 8px 18px; font-size: 12px; }
-
     .btn-cancel {
       background: transparent;
       border: 1.5px solid var(--danger);
@@ -120,16 +119,8 @@
       transition: all 0.2s;
       font-family: 'Space Mono', monospace;
     }
-
-    .btn-cancel:hover {
-      background: var(--danger);
-      color: white;
-    }
-
-    .btn-cancel:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
+    .btn-cancel:hover { background: var(--danger); color: white; }
+    .btn-cancel:disabled { opacity: 0.3; cursor: not-allowed; }
 
     /* ── BADGES ── */
     .badge {
@@ -385,7 +376,7 @@
   <ul>
     <li><a href="index.html">Home</a></li>
     <li><a href="energylisting.html">Listings</a></li>
-    <li><a href="trade-matching.html" class="active">Trade Matching</a></li>
+    <li><a href="tradematching.html" class="active">Trade Matching</a></li>
     <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
   </ul>
 </nav>
@@ -492,40 +483,92 @@
       </div>
     </div>
 
-    <!-- ── MY BIDS ── -->
-    <div id="myBidsSection">
+    <!-- ── CONSUMER: BIDS I PLACED ── -->
+    <div id="consumerBidsSection" style="display:none;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-        <h3 style="font-size:20px; color:var(--accent);">My Bids</h3>
+        <div>
+          <h3 style="font-size:20px; color:var(--accent);">My Bids</h3>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:4px; font-family:'Space Mono',monospace;">Bids you have placed on energy listings</p>
+        </div>
         <button class="btn-outline" onclick="loadMyBids()">↻ Reload</button>
       </div>
-
       <div class="filter-bar">
         <label>Status</label>
-        <select id="filterBidStatus">
+        <select id="filterConsumerBidStatus">
           <option value="all">All</option>
           <option value="active">Active</option>
-          <option value="inactive">Withdrawn / Matched</option>
+          <option value="inactive">Withdrawn</option>
         </select>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>Bid ID</th>
-              <th>Listing ID</th>
-              <th>Consumer</th>
-              <th>Offered (Wei)</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
+            <tr><th>Bid ID</th><th>Listing ID</th><th>Offered (Wei)</th><th>Status</th><th>Action</th></tr>
           </thead>
-          <tbody id="bidsTableBody">
-            <tr><td colspan="6" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">Connect wallet to load bids.</td></tr>
+          <tbody id="consumerBidsBody">
+            <tr><td colspan="5" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">No bids placed yet.</td></tr>
           </tbody>
         </table>
       </div>
     </div>
+
+    <!-- ── PRODUCER: INCOMING BIDS ON MY LISTINGS ── -->
+    <div id="producerBidsSection" style="display:none; margin-top:50px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h3 style="font-size:20px; color:var(--accent);">Incoming Bids</h3>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:4px; font-family:'Space Mono',monospace;">Bids placed on your energy listings — accept to lock a match</p>
+        </div>
+        <button class="btn-outline" onclick="loadMyBids()">↻ Reload</button>
+      </div>
+      <div class="filter-bar">
+        <label>Status</label>
+        <select id="filterProducerBidStatus">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="inactive">Matched / Expired</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Bid ID</th><th>Listing ID</th><th>Consumer</th><th>Offered (Wei)</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="producerBidsBody">
+            <tr><td colspan="6" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">No incoming bids on your listings.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── REGULATOR: ALL BIDS ── -->
+    <div id="regulatorBidsSection" style="display:none; margin-top:50px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h3 style="font-size:20px; color:var(--warning);">All Bids</h3>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:4px; font-family:'Space Mono',monospace;">Full visibility of all bids across the platform</p>
+        </div>
+        <button class="btn-outline" onclick="loadMyBids()">↻ Reload</button>
+      </div>
+      <div class="filter-bar">
+        <label>Status</label>
+        <select id="filterRegBidStatus">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Bid ID</th><th>Listing ID</th><th>Consumer</th><th>Producer</th><th>Offered (Wei)</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="regulatorBidsBody">
+            <tr><td colspan="7" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">No bids found.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>    </div>
 
     <!-- ── MATCHES ── -->
     <div id="matchesSection" style="margin-top:50px;">
@@ -633,11 +676,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
 
+
   // Config
-  // Contract addresses (update after deployment)
-  const AUTH_CONTRACT_ADDRESS  = "0x00c2B34466fF9508733B8b22f85E441A6e87088b";
-  const ENERGY_CONTRACT_ADDRESS = "0x49BA80969e6d484f274cc8D3869C90D0faE598B2";
-  const TRADE_CONTRACT_ADDRESS = "0x996f67E5217C5339E77A8579f973d54ABb5ba5EC";
+  const AUTH_CONTRACT_ADDRESS  = "0xa0E77f2017d0dF40852Ff4ad024e4ED50d3A396D";
+  const ENERGY_CONTRACT_ADDRESS = "0x37906841F290CC10d8B5CE95d003219A19DF6C06";
+  const TRADE_CONTRACT_ADDRESS = "0xB4C8886EaeF23f67cfb14Ae38E866d7d97d33AFf";
 
   const AUTH_ABI = [
     "function isMember(address) view returns (bool)",
@@ -743,24 +786,28 @@
 
       if (!hasAccess) return;
 
-      // Role banner
+      // Role banner + show correct bid sections per role
       const banner = document.getElementById('roleBanner');
       if (isReg) {
         banner.className = 'role-banner regulator';
         document.getElementById('roleBannerIcon').textContent = '🛡️';
         document.getElementById('roleBannerText').textContent =
-          'You are a Regulator. You can lock matches, confirm settlements, flag and cancel suspicious trades.';
-        document.getElementById('regulatorPanel').style.display   = 'block';
-        document.getElementById('placeBidSection').style.display  = 'none';
-        document.getElementById('myBidsSection').style.display    = 'none';
+          'You are a Regulator. Full visibility of all bids and matches. You can lock matches, confirm settlements, flag and cancel suspicious trades.';
+        document.getElementById('regulatorPanel').style.display       = 'block';
+        document.getElementById('placeBidSection').style.display      = 'none';
+        document.getElementById('consumerBidsSection').style.display  = 'none';
+        document.getElementById('producerBidsSection').style.display  = 'none';
+        document.getElementById('regulatorBidsSection').style.display = 'block';
       } else {
         banner.className = 'role-banner member';
         document.getElementById('roleBannerIcon').textContent = '✅';
         document.getElementById('roleBannerText').textContent =
-          'You are a verified member. You can place bids on active listings, withdraw unmatched bids, and lock matches as a producer.';
-        document.getElementById('regulatorPanel').style.display   = 'none';
-        document.getElementById('placeBidSection').style.display  = 'block';
-        document.getElementById('myBidsSection').style.display    = 'block';
+          'You are a verified member. Place bids as a consumer, or accept incoming bids on your energy listings as a producer.';
+        document.getElementById('regulatorPanel').style.display       = 'none';
+        document.getElementById('placeBidSection').style.display      = 'block';
+        document.getElementById('consumerBidsSection').style.display  = 'block';
+        document.getElementById('producerBidsSection').style.display  = 'block';
+        document.getElementById('regulatorBidsSection').style.display = 'none';
       }
 
       // Load contract balance
@@ -778,7 +825,7 @@
   }
 
 
-  // Listing Preview — reads from EnergyListing
+  // Listing Preview — reads from EnergyTrading 
   async function previewListing() {
     const id = document.getElementById('bidListingId').value;
     if (id === '') { toast('Enter a listing ID', 'error'); return; }
@@ -836,107 +883,168 @@
     }
   }
 
-
-  // Load my Bids
+  // LOAD BIDS — role-aware
+  //   Regulator : all bids
+  //   Producer  : bids placed on listings they own (via SC2)
+  //   Consumer  : bids they placed themselves
   async function loadMyBids() {
-    if (!tradeContract || !energyContract) return;
-
+    if (!tradeContract) return;
     try {
       const count = Number(await tradeContract.bidCount());
-      const bids = [];
-
-      for (let i = 0; i < count; i++) {
-        const b = await tradeContract.bids(i);
-
-        // Skip empty/uninitialized bids
-        if (b.consumer === ethers.ZeroAddress) continue;
-
-        // Get listing to determine producer/seller
-        let seller = ethers.ZeroAddress;
-
-        try {
-          const listing = await energyContract.listings(Number(b.listingId));
-          seller = listing.seller;
-        } catch (_) {}
-
-        const isConsumer =
-          b.consumer.toLowerCase() === currentAccount.toLowerCase();
-
-        const isProducer =
-          seller.toLowerCase() === currentAccount.toLowerCase();
-
-        const canSee =
-          currentRole === 'regulator' ||
-          isConsumer ||
-          isProducer;
-
-        if (canSee) {
-          bids.push({
-            id: i,
-            consumer: b.consumer,
-            producer: seller,
-            listingId: Number(b.listingId),
-            offeredWei: b.offeredWei.toString(),
-            isActive: b.isActive
-          });
-        }
+      if (count === 0) {
+        allBids = [];
+        renderBidsTable();
+        document.getElementById('statBids').textContent = 0;
+        return;
       }
 
-      allBids = bids;
-
-      renderBidsTable();
-
-      // Stats
-      const myActiveBids = bids.filter(
-        b =>
-          b.isActive &&
-          b.consumer.toLowerCase() === currentAccount.toLowerCase()
+      // Fetch all bids in parallel
+      const rawBids = await Promise.all(
+        Array.from({ length: count }, (_, i) =>
+          tradeContract.bids(i).then(b => ({
+            id:         i,
+            consumer:   b.consumer,
+            listingId:  Number(b.listingId),
+            offeredWei: b.offeredWei.toString(),
+            isActive:   b.isActive
+          }))
+        )
       );
 
+      // Always fetch the seller for every unique listing ID so b.producer is populated
+      // for all roles — producer filtering and regulator display both need it
+      const uniqueListingIds = [...new Set(rawBids.map(b => b.listingId))];
+      const listingOwners = {};
+      await Promise.all(
+        uniqueListingIds.map(async lid => {
+          try {
+            const l = await energyContract.listings(lid);
+            listingOwners[lid] = l.seller.toLowerCase();
+          } catch (_) {
+            listingOwners[lid] = ethers.ZeroAddress.toLowerCase();
+          }
+        })
+      );
+
+      // Annotate every bid with its producer address
+      rawBids.forEach(b => {
+        b.producer = listingOwners[b.listingId] || ethers.ZeroAddress.toLowerCase();
+      });
+
+      // All roles get the full annotated list — renderBidsTable filters per role
+      allBids = rawBids;
+      renderBidsTable();
+      // Stat: active bids the current user placed as consumer
       document.getElementById('statBids').textContent =
-        myActiveBids.length;
+        rawBids.filter(b => b.isActive && b.consumer.toLowerCase() === currentAccount.toLowerCase()).length;
 
     } catch (err) {
       toast('Failed to load bids: ' + (err.reason || err.message), 'error');
     }
   }
 
+  // ── Dispatch to correct table(s) based on role ──
   function renderBidsTable() {
-    const statusFilter = document.getElementById('filterBidStatus').value;
-    const body = document.getElementById('bidsTableBody');
-    const filtered = allBids.filter(b =>
-      statusFilter === 'all' ||
-      (statusFilter === 'active'   &&  b.isActive) ||
-      (statusFilter === 'inactive' && !b.isActive)
-    );
-    if (!filtered.length) {
-      body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#445; padding:24px; font-family:'Space Mono',monospace; font-size:13px;">No bids found.</td></tr>`;
-      return;
+    if (currentRole === 'regulator') {
+      renderRegulatorBids();
+    } else {
+      renderConsumerBids();
+      renderProducerBids();
     }
-    body.innerHTML = filtered.map(b => {
-      const statusBadge = b.isActive
-        ? '<span class="badge badge-active">Active</span>'
-        : '<span class="badge badge-inactive">Withdrawn</span>';
+  }
 
-      // Producer of that listing can lock the match; also show withdraw for own active bids
+  function bidStatusBadge(isActive) {
+    return isActive
+      ? '<span class="badge badge-active">Active</span>'
+      : '<span class="badge badge-inactive">Withdrawn</span>';
+  }
+
+  function emptyRow(cols, msg) {
+    return `<tr><td colspan="${cols}" style="text-align:center; color:#445; padding:24px; font-family:'Space Mono',monospace; font-size:13px;">${msg}</td></tr>`;
+  }
+
+  // Consumer: bids the current user placed
+  function renderConsumerBids() {
+    const statusFilter = document.getElementById('filterConsumerBidStatus').value;
+    const body = document.getElementById('consumerBidsBody');
+    const mine = allBids.filter(b => {
+      const isMine = b.consumer.toLowerCase() === currentAccount.toLowerCase();
+      const matchStatus = statusFilter === 'all'
+        || (statusFilter === 'active'   &&  b.isActive)
+        || (statusFilter === 'inactive' && !b.isActive);
+      return isMine && matchStatus;
+    });
+    if (!mine.length) { body.innerHTML = emptyRow(5, 'No bids placed yet.'); return; }
+    body.innerHTML = mine.map(b => {
       const action = b.isActive
-        ? `<div style="display:flex;gap:8px;flex-wrap:wrap;">
-             <button class="btn-outline" onclick="lockMatch(${b.id})" title="Lock this match (producer only on-chain)">Lock Match</button>
-             <button class="btn-cancel" onclick="withdrawBid(${b.id})">Withdraw</button>
-           </div>`
-        : '<span style="color:#445; font-size:12px;">—</span>';
+        ? `<button class="btn-cancel" onclick="withdrawBid(${b.id})">Withdraw</button>`
+        : '<span style="color:#445;font-size:12px;">—</span>';
+      return `<tr>
+        <td class="green">#${b.id}</td>
+        <td class="mono">#${b.listingId}</td>
+        <td class="mono">${b.offeredWei} Wei</td>
+        <td>${bidStatusBadge(b.isActive)}</td>
+        <td>${action}</td>
+      </tr>`;
+    }).join('');
+  }
 
-      return `
-        <tr>
-          <td class="green">#${b.id}</td>
-          <td class="mono">#${b.listingId}</td>
-          <td class="mono">
-            ${b.consumer.slice(0,6)}...${b.consumer.slice(-4)}
-          </td>
-          <td class="mono">${b.offeredWei} Wei</td>
-          <td>${statusBadge}</td>
-          <td>${action}</td>
-        </tr>`;
+  // Producer: bids placed on the current user's listings
+  function renderProducerBids() {
+    const statusFilter = document.getElementById('filterProducerBidStatus').value;
+    const body = document.getElementById('producerBidsBody');
+    const incoming = allBids.filter(b => {
+      const isMyListing = b.producer === currentAccount.toLowerCase();
+      const notMine = b.consumer.toLowerCase() !== currentAccount.toLowerCase();
+      const matchStatus = statusFilter === 'all'
+        || (statusFilter === 'active'   &&  b.isActive)
+        || (statusFilter === 'inactive' && !b.isActive);
+      return isMyListing && notMine && matchStatus;
+    });
+    if (!incoming.length) { body.innerHTML = emptyRow(6, 'No incoming bids on your listings.'); return; }
+    body.innerHTML = incoming.map(b => {
+      const shortConsumer = b.consumer.slice(0,6) + '...' + b.consumer.slice(-4);
+      const action = b.isActive
+        ? `<button class="btn-outline" onclick="lockMatch(${b.id})">✅ Accept & Lock</button>`
+        : '<span style="color:#445;font-size:12px;">—</span>';
+      return `<tr>
+        <td class="green">#${b.id}</td>
+        <td class="mono">#${b.listingId}</td>
+        <td class="mono">${shortConsumer}</td>
+        <td class="mono">${b.offeredWei} Wei</td>
+        <td>${bidStatusBadge(b.isActive)}</td>
+        <td>${action}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Regulator: all bids on the platform
+  function renderRegulatorBids() {
+    const statusFilter = document.getElementById('filterRegBidStatus').value;
+    const body = document.getElementById('regulatorBidsBody');
+    const filtered = allBids.filter(b =>
+      statusFilter === 'all'
+      || (statusFilter === 'active'   &&  b.isActive)
+      || (statusFilter === 'inactive' && !b.isActive)
+    );
+    if (!filtered.length) { body.innerHTML = emptyRow(7, 'No bids found.'); return; }
+    body.innerHTML = filtered.map(b => {
+      const shortConsumer = b.consumer.slice(0,6) + '...' + b.consumer.slice(-4);
+      const shortProducer = b.producer && b.producer !== ethers.ZeroAddress.toLowerCase()
+        ? b.producer.slice(0,6) + '...' + b.producer.slice(-4)
+        : '—';
+      const action = b.isActive
+        ? `<button class="btn-outline" onclick="lockMatch(${b.id})">Lock Match</button>`
+        : '<span style="color:#445;font-size:12px;">—</span>';
+      return `<tr>
+        <td class="green">#${b.id}</td>
+        <td class="mono">#${b.listingId}</td>
+        <td class="mono">${shortConsumer}</td>
+        <td class="mono">${shortProducer}</td>
+        <td class="mono">${b.offeredWei} Wei</td>
+        <td>${bidStatusBadge(b.isActive)}</td>
+        <td>${action}</td>
+      </tr>`;
     }).join('');
   }
 
@@ -1126,7 +1234,7 @@
   }
 
 
-  // URL Param — pre-fill listing ID if arriving from energylisting.html
+  // URL Param
   function checkUrlParams() {
     const params = new URLSearchParams(window.location.search);
     const listingId = params.get('listingId');
@@ -1137,10 +1245,13 @@
 
 
   // Auto Connect + Filter Listeners
+
   window.addEventListener('load', async () => {
     checkUrlParams();
 
-    document.getElementById('filterBidStatus').addEventListener('change', renderBidsTable);
+    document.getElementById('filterConsumerBidStatus').addEventListener('change', renderConsumerBids);
+    document.getElementById('filterProducerBidStatus').addEventListener('change', renderProducerBids);
+    document.getElementById('filterRegBidStatus').addEventListener('change', renderRegulatorBids);
     document.getElementById('filterMatchStatus').addEventListener('change', renderMatchesTable);
     document.getElementById('filterMatchOwner').addEventListener('change', renderMatchesTable);
 
