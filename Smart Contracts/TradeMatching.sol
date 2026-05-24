@@ -1,12 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-//  Desired Functionality
-//  Accept bids from verified consumers (authenticated via SC1)
-//  Match bids to active listings from SC2 based on price and kWh
-//  Lock matched pairs so neither side can cancel mid-settlement
-//  Emit events consumed by SC4 (Settlement) to trigger payment
-//  Allow the regulator to flag or forcibly cancel suspicious matches
 
 // SC3 can query SC1 without importing the full contract
 interface IAuthentication {
@@ -26,7 +20,7 @@ interface IEnergyListing {
             bool isActive
         );
 
-    function cancelListing(uint256 id) external;
+    function lockListingForMatch(uint256 id) external;
 }
 contract TradeMatching {
 
@@ -41,8 +35,8 @@ contract TradeMatching {
 
     struct Bid {
         address  consumer;
-        uint256  listingId;      // which SC2 listing this bid targets
-        uint256  offeredWei;     // total ETH (in wei) the consumer is willing to pay
+        uint256  listingId;    
+        uint256  offeredWei;    
         bool     isActive;
     }
 
@@ -52,7 +46,7 @@ contract TradeMatching {
         address     consumer;
         address     producer;
         uint256     amountKwh;
-        uint256     agreedWei;   // offered Wei locked at match time
+        uint256     agreedWei;   
         MatchStatus status;
         uint256     createdAt;
     }
@@ -65,11 +59,11 @@ contract TradeMatching {
     uint256 public bidCount;
     uint256 public matchCount;
 
-    // Consumer's active bid per listing (one open bid per listing per consumer)
+    // One open bid per consumer per listing
     mapping(address => mapping(uint256 => uint256)) public activeBidId;
     mapping(address => mapping(uint256 => bool))    public hasBid;
 
-    // Events
+    // -- Events
 
     // Emitted when a consumer places a bid on a listing
     event BidPlaced(
@@ -136,7 +130,7 @@ contract TradeMatching {
     // Consumer actions
 
 
-    // @param _listingId  The SC2 listing the consumer wants to purchase
+    // @param _listingId  The listing the consumer wants to purchase
     // Place a bid on a specific energy listing
     function placeBid(uint256 _listingId) external payable onlyMember {
         require(msg.value > 0, "Bid must include ETH");
@@ -223,7 +217,7 @@ contract TradeMatching {
 
         // Deactivate both the bid and the SC2 listing
         bid.isActive = false;
-        listingContract.cancelListing(bid.listingId);
+        listingContract.lockListingForMatch(bid.listingId);
 
         uint256 matchId = matchCount++;
 
