@@ -464,8 +464,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
 
-  // ── CONFIG ───────────────────────────────────────────────
-  // Replace with contract address after redeploying authentication.sol
+  // Contract Configuration
+
+  // Contract address (update after deployment)
   const CONTRACT_ADDRESS = "0x18Ed70a55E4967593d47f10e7cc43A1C4BE6A5eB";
 
   const ABI = [
@@ -485,7 +486,8 @@
 
   let provider, signer, contract, currentAccount;
 
-  // ── TOAST ────────────────────────────────────────────────
+  // Toast
+
   function toast(msg, type = 'success') {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -494,14 +496,16 @@
     el._t = setTimeout(() => el.className = '', 4500);
   }
 
-  // ── VIEWS ────────────────────────────────────────────────
+  // Views
+
   function showView(id) {
     ['viewNotConnected','viewNoRole','viewMember','viewRegulator']
       .forEach(v => document.getElementById(v).classList.remove('active'));
     document.getElementById(id).classList.add('active');
   }
 
-  // ── CONNECT ──────────────────────────────────────────────
+  // Wallet Connection
+
   async function connectWallet() {
     if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
     try {
@@ -528,7 +532,8 @@
     }
   }
 
-  // ── REFRESH STATUS ───────────────────────────────────────
+  // Refresh Functionality
+
   async function refreshStatus() {
     if (!contract || !currentAccount) return;
     try {
@@ -559,7 +564,8 @@
     }
   }
 
-  // ── APPLY ────────────────────────────────────────────────
+  // Membership Functionality
+
   async function applyForMembership() {
     if (!contract) { toast('Connect wallet first', 'error'); return; }
     try {
@@ -574,7 +580,7 @@
     }
   }
 
-  // ── MEMBER ACTION ────────────────────────────────────────
+  // Member Action Function
   async function callMemberAction() {
     if (!contract) return;
     try {
@@ -586,7 +592,7 @@
     }
   }
 
-  // ── LOAD APPLICANTS ──────────────────────────────────────
+  // Load Applicants Function
   async function loadApplicants() {
     if (!contract) return;
     try {
