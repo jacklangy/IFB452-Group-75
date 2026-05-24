@@ -306,7 +306,8 @@
     <a href="index.html" class="logo" style="text-decoration:none;">SEC</a>
     <ul>
       <li><a href="#features">Features</a></li>
-      <li><a href="energylisting.html">Marketplace</a></li>
+      <li><a href="energylisting.html">Listings</a></li>
+      <li><a href="trade-matching.html">Trade Matching</a></li>
       <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
     </ul>
   </nav>
@@ -464,10 +465,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
 
-  // Contract Configuration
-
+  // Config
   // Contract address (update after deployment)
-  const CONTRACT_ADDRESS = "0x18Ed70a55E4967593d47f10e7cc43A1C4BE6A5eB";
+  const CONTRACT_ADDRESS = "0x00c2B34466fF9508733B8b22f85E441A6e87088b";
 
   const ABI = [
     "function isMember(address) view returns (bool)",
@@ -487,7 +487,6 @@
   let provider, signer, contract, currentAccount;
 
   // Toast
-
   function toast(msg, type = 'success') {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -497,7 +496,6 @@
   }
 
   // Views
-
   function showView(id) {
     ['viewNotConnected','viewNoRole','viewMember','viewRegulator']
       .forEach(v => document.getElementById(v).classList.remove('active'));
@@ -505,7 +503,6 @@
   }
 
   // Wallet Connection
-
   async function connectWallet() {
     if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
     try {
@@ -533,7 +530,6 @@
   }
 
   // Refresh Functionality
-
   async function refreshStatus() {
     if (!contract || !currentAccount) return;
     try {
@@ -565,7 +561,6 @@
   }
 
   // Membership Functionality
-
   async function applyForMembership() {
     if (!contract) { toast('Connect wallet first', 'error'); return; }
     try {
@@ -616,7 +611,7 @@
     }
   }
 
-  // ── TX HELPER ────────────────────────────────────────────
+  // Tx Helper
   async function sendTx(fn) {
     try {
       toast('Sending transaction...', 'info');
@@ -630,7 +625,7 @@
     }
   }
 
-  // ── REGULATOR ACTIONS ────────────────────────────────────
+  // Regulator Actions
   async function approveApplicant(addr) {
     await sendTx(() => contract.approveApplicant(addr));
     await loadApplicants();
@@ -664,7 +659,7 @@
     document.getElementById('removeRegAddr').value = '';
   }
 
-  // ── AUTO CONNECT ─────────────────────────────────────────
+  // Auto Connect
   window.addEventListener('load', async () => {
     if (!window.ethereum) return;
     const accounts = await window.ethereum.request({ method: 'eth_accounts' });

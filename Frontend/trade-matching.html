@@ -3,794 +3,1152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart-Energy-Connect - Energy Listings</title>
+  <title>SEC - Trade Matching</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
+    :root {
+      --accent: #00ffb3;
+      --accent-dim: rgba(0,255,179,0.12);
+      --bg: #08111f;
+      --surface: #111c2e;
+      --surface2: #0d1728;
+      --border: rgba(255,255,255,0.08);
+      --text-muted: #8899aa;
+      --danger: #ff4d6d;
+      --warning: #ffb347;
+      --info: #88aaff;
     }
 
-    body {
-      background: #08111f;
-      color: white;
-      overflow-x: hidden;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: white; overflow-x: hidden; font-family: 'Syne', sans-serif; }
 
-    /* ── Nav ── */
+    /* ── NAV ── */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 25px 8%;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(8px);
+      padding: 22px 8%;
+      background: rgba(8,17,31,0.88);
+      backdrop-filter: blur(12px);
       position: fixed;
       width: 100%;
       z-index: 1000;
+      border-bottom: 1px solid var(--border);
     }
-
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #00ffb3;
+    .logo { font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 2px; text-decoration: none; }
+    nav ul { display: flex; gap: 30px; list-style: none; align-items: center; }
+    nav ul li a { text-decoration: none; color: #ccc; transition: color 0.2s; font-size: 15px; }
+    nav ul li a:hover, nav ul li a.active { color: var(--accent); }
+    #connectBtn {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      padding: 9px 22px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      transition: all 0.25s;
     }
+    #connectBtn:hover { background: var(--accent); color: var(--bg); }
+    #connectBtn.connected { background: var(--accent-dim); }
 
-    nav ul {
-      display: flex;
-      gap: 30px;
-      list-style: none;
-    }
-
-    nav ul li a {
-      text-decoration: none;
-      color: white;
-      transition: 0.3s;
-    }
-
-    nav ul li a:hover {
-      color: #00ffb3;
-    }
-
-    /* ── Page hero banner ── */
+    /* ── HERO ── */
     .page-hero {
       padding: 160px 8% 80px;
       background:
         linear-gradient(rgba(0,0,0,0.7), rgba(8,17,31,1)),
-        url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1600&auto=format&fit=crop');
+        url('https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=1600&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
     }
+    .page-hero h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p { font-size: 18px; color: #b0bec5; max-width: 620px; line-height: 1.7; }
 
-    .page-hero h1 {
-      font-size: 52px;
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
+    /* ── LAYOUT ── */
+    section { padding: 80px 8%; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 38px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+    .section-title p { color: var(--text-muted); }
 
-    .page-hero h1 span {
-      color: #00ffb3;
-    }
-
-    .page-hero p {
-      font-size: 18px;
-      color: #d6d6d6;
-      max-width: 620px;
-      line-height: 1.7;
-    }
-
-    /* ── Sections ── */
-    section {
-      padding: 80px 8%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .section-title h2 {
-      font-size: 38px;
-      color: #00ffb3;
-      margin-bottom: 10px;
-    }
-
-    .section-title p {
-      color: #aaa;
-      font-size: 16px;
-    }
-
-    /* ── Buttons ── */
+    /* ── BUTTONS ── */
     .btn {
       display: inline-block;
-      padding: 14px 32px;
-      background: #00ffb3;
-      color: #08111f;
+      padding: 13px 30px;
+      background: var(--accent);
+      color: var(--bg);
       text-decoration: none;
       border-radius: 40px;
-      font-weight: bold;
-      transition: 0.3s;
+      font-weight: 700;
       border: none;
       cursor: pointer;
-      font-size: 15px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      transition: all 0.2s;
     }
-
-    .btn:hover {
-      transform: translateY(-3px);
-      background: white;
-    }
-
+    .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .btn-danger  { background: var(--danger);  color: white; }
+    .btn-warning { background: var(--warning); color: var(--bg); }
     .btn-outline {
       background: transparent;
-      border: 2px solid #00ffb3;
-      color: #00ffb3;
-      padding: 10px 24px;
-      border-radius: 40px;
-      font-weight: bold;
-      font-size: 14px;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      padding: 7px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 12px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+    .btn-outline:hover { background: var(--accent); color: var(--bg); }
+    .btn-outline:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-sm { padding: 8px 18px; font-size: 12px; }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1.5px solid var(--danger);
+      color: var(--danger);
+      padding: 7px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
     }
 
-    .btn-outline:hover {
-      background: #00ffb3;
-      color: #08111f;
+    .btn-cancel:hover {
+      background: var(--danger);
+      color: white;
     }
 
-    /* ── Status badges ── */
+    .btn-cancel:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* ── BADGES ── */
     .badge {
       display: inline-block;
-      padding: 4px 14px;
+      padding: 4px 12px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      font-family: 'Space Mono', monospace;
     }
+    .badge-member    { background: var(--accent-dim);              color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
+    .badge-regulator { background: rgba(255,179,71,0.12);          color: var(--warning); border: 1px solid rgba(255,179,71,0.3); }
+    .badge-none      { background: rgba(255,255,255,0.06);         color: #888;           border: 1px solid #333; }
+    .badge-locked    { background: rgba(255,179,71,0.12);          color: var(--warning); border: 1px solid rgba(255,179,71,0.3); }
+    .badge-settled   { background: rgba(100,200,100,0.12);         color: #64c864;        border: 1px solid rgba(100,200,100,0.3); }
+    .badge-cancelled { background: rgba(255,80,80,0.12);           color: #ff5050;        border: 1px solid rgba(255,80,80,0.3); }
+    .badge-flagged   { background: rgba(255,77,109,0.15);          color: var(--danger);  border: 1px solid rgba(255,77,109,0.4); }
+    .badge-pending   { background: rgba(100,150,255,0.12);         color: var(--info);    border: 1px solid rgba(100,150,255,0.3); }
+    .badge-active    { background: rgba(0,255,179,0.12);           color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
+    .badge-inactive  { background: rgba(255,80,80,0.12);           color: #ff5050;        border: 1px solid rgba(255,80,80,0.3); }
+    .badge-you       { background: rgba(100,150,255,0.12);         color: var(--info);    border: 1px solid rgba(100,150,255,0.3); }
 
-    .badge-open    { background: rgba(0,255,179,0.15); color: #00ffb3; border: 1px solid #00ffb3; }
-    .badge-matched { background: rgba(255,200,0,0.15);  color: #ffc800; border: 1px solid #ffc800; }
-    .badge-settled { background: rgba(100,200,100,0.15);color: #64c864; border: 1px solid #64c864; }
-    .badge-expired { background: rgba(255,80,80,0.15);  color: #ff5050; border: 1px solid #ff5050; }
+    /* ── WALLET BAR ── */
+    .wallet-bar {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 28px;
+      margin-bottom: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      align-items: center;
+    }
+    .wallet-stat { display: flex; flex-direction: column; gap: 5px; }
+    .wallet-stat .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+    .wallet-stat .value { font-size: 13px; font-family: 'Space Mono', monospace; }
 
-    /* ── Stats row ── */
+    /* ── ACCESS WALL ── */
+    #accessWall {
+      background: var(--surface2);
+      border: 1px solid rgba(255,77,109,0.2);
+      border-radius: 20px;
+      padding: 60px;
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    #accessWall h3 { font-size: 22px; margin-bottom: 14px; color: var(--danger); }
+    #accessWall p  { color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
+
+    /* ── ROLE BANNER ── */
+    .role-banner {
+      border-radius: 14px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      font-size: 14px;
+      font-family: 'Space Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .role-banner.member    { background: rgba(0,255,179,0.06);   border: 1px solid rgba(0,255,179,0.2);   color: #c0fff1; }
+    .role-banner.regulator { background: rgba(255,179,71,0.06);  border: 1px solid rgba(255,179,71,0.2);  color: #ffe0a0; }
+
+    /* ── STATS ── */
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 60px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 40px;
     }
+    .stat-box { background: var(--surface); padding: 24px 18px; border-radius: 14px; text-align: center; border: 1px solid var(--border); }
+    .stat-box h2 { font-size: 32px; color: var(--accent); margin-bottom: 6px; font-weight: 800; }
+    .stat-box p  { color: var(--text-muted); font-size: 12px; }
 
-    .stat-box {
-      background: #111c2e;
-      padding: 30px 20px;
+    /* ── LISTING PREVIEW (when arriving from energylisting.html) ── */
+    #listingPreview {
+      background: var(--surface2);
+      border: 1px solid rgba(0,255,179,0.2);
       border-radius: 16px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 28px;
+      margin-bottom: 32px;
+      display: none;
     }
+    #listingPreview h4 { color: var(--accent); font-size: 14px; margin-bottom: 14px; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+    .preview-row { display: flex; flex-wrap: wrap; gap: 28px; }
+    .preview-stat { display: flex; flex-direction: column; gap: 4px; }
+    .preview-stat .plabel { font-size: 11px; color: var(--text-muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+    .preview-stat .pvalue { font-size: 15px; font-family: 'Space Mono', monospace; color: white; }
 
-    .stat-box h2 {
-      font-size: 40px;
-      color: #00ffb3;
-      margin-bottom: 6px;
+    /* ── BID FORM ── */
+    .form-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 36px;
+      border: 1px solid var(--border);
+      margin-bottom: 40px;
     }
+    .form-card h3 { color: var(--accent); font-size: 20px; margin-bottom: 8px; }
+    .form-card > p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
 
-    .stat-box p {
-      color: #aaa;
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-bottom: 24px; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-family: 'Space Mono', monospace; }
+    .form-group input, .form-group select {
+      padding: 12px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: white;
       font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: 'Syne', sans-serif;
+      width: 100%;
     }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+    .form-group input::placeholder { color: #445; }
+    .form-group input:disabled { opacity: 0.4; cursor: not-allowed; }
+    .form-msg { margin-top: 14px; font-size: 13px; font-family: 'Space Mono', monospace; display: none; }
 
-    /* ── Filter bar ── */
+    /* ── TABLES ── */
+    .table-wrap {
+      background: var(--surface2);
+      border-radius: 18px;
+      padding: 24px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    thead th {
+      text-align: left;
+      padding: 11px 14px;
+      color: var(--accent);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+    }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    tbody tr:hover { background: rgba(0,255,179,0.025); }
+    tbody td { padding: 13px 14px; font-size: 13px; color: #d0d8e0; }
+    .green { color: var(--accent); font-weight: 700; font-family: 'Space Mono', monospace; }
+    .mono  { font-family: 'Space Mono', monospace; font-size: 12px; }
+
+    /* ── FILTER BAR ── */
     .filter-bar {
       display: flex;
       gap: 14px;
       flex-wrap: wrap;
       align-items: center;
-      margin-bottom: 36px;
-      background: #111c2e;
-      padding: 20px 24px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 20px;
+      background: var(--surface);
+      padding: 16px 22px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
     }
-
-    .filter-bar label {
-      color: #aaa;
-      font-size: 14px;
-      white-space: nowrap;
+    .filter-bar label { color: var(--text-muted); font-size: 13px; }
+    .filter-bar select {
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: white;
+      font-size: 13px;
+      outline: none;
     }
+    .filter-bar select:focus { border-color: var(--accent); }
 
-    .filter-bar select,
-    .filter-bar input[type="text"] {
+    /* ── REGULATOR PANEL ── */
+    .reg-panel {
+      background: var(--surface2);
+      border: 1px solid rgba(255,179,71,0.2);
+      border-radius: 18px;
+      padding: 32px;
+      margin-top: 40px;
+    }
+    .reg-panel h3 { color: var(--warning); font-size: 18px; margin-bottom: 24px; }
+    .reg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .reg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+    .reg-card h4 { font-size: 11px; color: #aac; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+    .input-row { display: flex; gap: 10px; }
+    .input-row input {
+      flex: 1;
       padding: 10px 14px;
-      background: #08111f;
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--surface2);
+      border: 1px solid var(--border);
       border-radius: 10px;
       color: white;
-      font-size: 14px;
+      font-size: 13px;
       outline: none;
+      font-family: 'Space Mono', monospace;
     }
-
-    .filter-bar select:focus,
-    .filter-bar input:focus {
-      border-color: #00ffb3;
-    }
-
-    /* ── Listings table ── */
-    .market {
-      background: #0d1728;
-      border-radius: 20px;
-      padding: 32px;
-      overflow-x: auto;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    table {
+    .input-row input:focus { border-color: var(--accent); }
+    .reg-card textarea {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 700px;
-    }
-
-    thead th {
-      text-align: left;
-      padding: 14px 16px;
-      color: #00ffb3;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    tbody tr {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      transition: background 0.2s;
-    }
-
-    tbody tr:hover {
-      background: rgba(0,255,179,0.04);
-    }
-
-    tbody td {
-      padding: 16px;
-      font-size: 14px;
-      color: #d6d6d6;
-    }
-
-    .green { color: #00ffb3; font-weight: bold; }
-
-    /* ── Post listing form ── */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-size: 13px;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: 14px 16px;
-      background: #111c2e;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
       color: white;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: #00ffb3;
-    }
-
-    .form-group input::placeholder {
-      color: #555;
-    }
-
-    .form-card {
-      background: #111c2e;
-      border-radius: 20px;
-      padding: 40px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .form-card h3 {
-      color: #00ffb3;
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .form-card p {
-      color: #aaa;
-      font-size: 14px;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    .form-footer {
-      margin-top: 28px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .price-bounds {
       font-size: 13px;
-      color: #aaa;
+      outline: none;
+      font-family: 'Space Mono', monospace;
+      resize: none;
+      margin-bottom: 10px;
     }
+    .reg-card textarea:focus { border-color: var(--warning); }
 
-    .price-bounds span {
-      color: #00ffb3;
-    }
-
-    /* ── Info cards ── */
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
-    }
-
-    .card {
-      background: #111c2e;
-      padding: 30px;
-      border-radius: 20px;
-      transition: 0.3s;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: #00ffb3;
-    }
-
-    .card h3 {
-      margin-bottom: 12px;
-      color: #00ffb3;
-      font-size: 17px;
-    }
-
-    .card p {
-      color: #aaa;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* ── Notice banner ── */
-    .notice {
-      background: rgba(0,255,179,0.07);
-      border: 1px solid rgba(0,255,179,0.25);
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 22px;
       border-radius: 12px;
-      padding: 16px 22px;
-      font-size: 14px;
-      color: #c0fff1;
-      margin-bottom: 36px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.3s;
+      pointer-events: none;
+      max-width: 400px;
     }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { background: rgba(0,255,179,0.12);  color: var(--accent);  border: 1px solid var(--accent); }
+    #toast.error   { background: rgba(255,77,109,0.12); color: var(--danger);  border: 1px solid var(--danger); }
+    #toast.info    { background: rgba(255,179,71,0.1);  color: var(--warning); border: 1px solid var(--warning); }
 
-    .notice span {
-      font-size: 20px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px;
-      background: #050b14;
-      color: #aaa;
-    }
+    footer { text-align: center; padding: 30px; background: #050b14; color: #445; font-size: 13px; }
 
     @media(max-width: 768px) {
       .page-hero h1 { font-size: 34px; }
       nav ul { display: none; }
-      .form-card { padding: 24px; }
+      .form-card { padding: 22px; }
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
+<div id="toast"></div>
 
-  <div class="navbar">
-    <div class="title">
-      Trade Matching Dashboard
-    </div>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">SEC</a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="energylisting.html">Listings</a></li>
+    <li><a href="trade-matching.html" class="active">Trade Matching</a></li>
+    <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
+  </ul>
+</nav>
 
-    <div class="wallet-box" id="wallet">
-      Wallet Not Connected
-    </div>
-  </div>
-
-  <div class="grid">
-
-    <!-- CREATE ORDER -->
-
-    <div class="card">
-
-      <h2>Create Trade</h2>
-
-      <div class="form-group">
-        <label>Item Offered</label>
-        <input id="itemOffered" placeholder="e.g. Apple">
-      </div>
-
-      <div class="form-group">
-        <label>Item Wanted</label>
-        <input id="itemWanted" placeholder="e.g. Banana">
-      </div>
-
-      <button onclick="connectWallet()">
-        Connect Wallet
-      </button>
-
-      <button onclick="createOrder()">
-        Create Trade
-      </button>
-
-    </div>
-
-    <!-- MATCHING -->
-
-    <div class="card">
-
-      <h2>Trade Matching</h2>
-
-      <p>
-        Select two compatible trades manually
-        or run automated matching.
-      </p>
-
-      <div class="actions">
-
-        <button onclick="manualMatch()">
-          Manual Match
-        </button>
-
-        <button
-          class="secondary-btn"
-          onclick="runAutoMatch()">
-          Auto Match
-        </button>
-
-      </div>
-
-      <div id="matchStatus"></div>
-
-    </div>
-
-  </div>
-
-  <!-- ORDERS -->
-
-  <div class="card full-width">
-
-    <h2>Open Trades</h2>
-
-    <button onclick="loadOrders()">
-      Refresh Orders
-    </button>
-
-    <table>
-
-      <thead>
-      <tr>
-        <th>Select</th>
-        <th>ID</th>
-        <th>Owner</th>
-        <th>Offers</th>
-        <th>Wants</th>
-        <th>Status</th>
-      </tr>
-      </thead>
-
-      <tbody id="ordersTable"></tbody>
-
-    </table>
-
-  </div>
-
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Trade <span>Matching</span></h1>
+  <p>Place bids on active energy listings, lock matched trades, and track settlement status — all on-chain via the TradeMatching contract.</p>
 </div>
 
+<!-- MAIN -->
+<section>
+
+  <!-- Wallet Bar -->
+  <div class="wallet-bar">
+    <div class="wallet-stat">
+      <span class="label">Wallet</span>
+      <span class="value" id="walletAddr">Not Connected</span>
+    </div>
+    <div class="wallet-stat">
+      <span class="label">Network</span>
+      <span class="value" id="networkName">—</span>
+    </div>
+    <div class="wallet-stat">
+      <span class="label">Role</span>
+      <span id="accessDisplay"><span class="badge badge-none">—</span></span>
+    </div>
+    <div class="wallet-stat">
+      <span class="label">Contract Balance</span>
+      <span class="value" id="contractBalance">—</span>
+    </div>
+    <div style="margin-left:auto;">
+      <button class="btn-outline" onclick="refreshAll()" style="padding:8px 16px; font-size:12px;">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- ACCESS WALL -->
+  <div id="accessWall">
+    <h3>🔒 Members Only</h3>
+    <p>Connect your wallet to access trade matching. You must be a regulator-approved SEC member to place or manage bids.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn" onclick="connectWallet()">Connect Wallet</button>
+      <a href="index.html#portal" class="btn" style="background:var(--surface2); color:var(--accent); border:1.5px solid var(--accent);">Apply for Membership</a>
+    </div>
+  </div>
+
+  <!-- CONTENT (member + regulator) -->
+  <div id="mainContent" style="display:none;">
+
+    <!-- Role Banner -->
+    <div id="roleBanner" class="role-banner member">
+      <span id="roleBannerIcon">✅</span>
+      <span id="roleBannerText">Loading...</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-box"><h2 id="statBids">—</h2><p>Your Active Bids</p></div>
+      <div class="stat-box"><h2 id="statMatches">—</h2><p>Total Matches</p></div>
+      <div class="stat-box"><h2 id="statLocked">—</h2><p>Locked Matches</p></div>
+      <div class="stat-box"><h2 id="statSettled">—</h2><p>Settled Matches</p></div>
+    </div>
+
+    <!-- ── LISTING PREVIEW (pre-filled from energylisting.html) ── -->
+    <div id="listingPreview">
+      <h4>⚡ Selected Listing</h4>
+      <div class="preview-row">
+        <div class="preview-stat"><span class="plabel">Listing ID</span><span class="pvalue" id="previewId">—</span></div>
+        <div class="preview-stat"><span class="plabel">Seller</span><span class="pvalue" id="previewSeller">—</span></div>
+        <div class="preview-stat"><span class="plabel">kWh</span><span class="pvalue" id="previewKwh">—</span></div>
+        <div class="preview-stat"><span class="plabel">Price / kWh</span><span class="pvalue" id="previewPrice">—</span></div>
+        <div class="preview-stat"><span class="plabel">Total Cost</span><span class="pvalue" id="previewTotal">—</span></div>
+        <div class="preview-stat"><span class="plabel">Status</span><span class="pvalue" id="previewStatus">—</span></div>
+      </div>
+    </div>
+
+    <!-- ── PLACE BID (members only) ── -->
+    <div id="placeBidSection">
+      <div class="form-card">
+        <h3>💰 Place a Bid</h3>
+        <p>Select an active listing and send ETH to cover the full listing cost. Your ETH is held in the contract until the match is locked and settled.</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Listing ID</label>
+            <input type="number" id="bidListingId" placeholder="e.g. 0" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Listing Details</label>
+            <input type="text" id="bidListingInfo" placeholder="Click 'Preview' to load" readonly />
+          </div>
+          <div class="form-group">
+            <label>ETH to Send (Wei)</label>
+            <input type="number" id="bidAmountWei" placeholder="Auto-filled on preview" min="1" />
+            <span style="font-size:11px; color:var(--text-muted); font-family:'Space Mono',monospace;">Must be ≥ costPerKwh × amountKwh</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn-outline" onclick="previewListing()">🔍 Preview Listing</button>
+          <button class="btn" id="placeBidBtn" onclick="placeBid()">Place Bid</button>
+        </div>
+        <p class="form-msg" id="bidMsg"></p>
+      </div>
+    </div>
+
+    <!-- ── MY BIDS ── -->
+    <div id="myBidsSection">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <h3 style="font-size:20px; color:var(--accent);">My Bids</h3>
+        <button class="btn-outline" onclick="loadMyBids()">↻ Reload</button>
+      </div>
+
+      <div class="filter-bar">
+        <label>Status</label>
+        <select id="filterBidStatus">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="inactive">Withdrawn / Matched</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bid ID</th>
+              <th>Listing ID</th>
+              <th>Consumer</th>
+              <th>Offered (Wei)</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="bidsTableBody">
+            <tr><td colspan="6" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">Connect wallet to load bids.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── MATCHES ── -->
+    <div id="matchesSection" style="margin-top:50px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <h3 style="font-size:20px; color:var(--accent);">Matches</h3>
+        <button class="btn-outline" onclick="loadMatches()">↻ Reload</button>
+      </div>
+
+      <div class="filter-bar">
+        <label>Status</label>
+        <select id="filterMatchStatus">
+          <option value="all">All</option>
+          <option value="1">Locked</option>
+          <option value="2">Settled</option>
+          <option value="3">Cancelled</option>
+          <option value="4">Flagged</option>
+        </select>
+        <label style="margin-left:8px;">Show</label>
+        <select id="filterMatchOwner">
+          <option value="all">All Matches</option>
+          <option value="mine">My Matches</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Match ID</th>
+              <th>Listing ID</th>
+              <th>Consumer</th>
+              <th>Producer</th>
+              <th>kWh</th>
+              <th>Agreed (Wei)</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="matchesTableBody">
+            <tr><td colspan="8" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">Connect wallet to load matches.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── REGULATOR PANEL ── -->
+    <div id="regulatorPanel" style="display:none;">
+      <div class="reg-panel">
+        <h3>🛡️ Regulator Controls — Trade Matching</h3>
+        <div class="reg-grid">
+
+          <div class="reg-card">
+            <h4>Lock Match (by Bid ID)</h4>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+              Normally called by the producer. Regulators can also lock a match.
+            </p>
+            <div class="input-row">
+              <input type="number" id="regLockBidId" placeholder="Bid ID" min="0" />
+              <button class="btn btn-sm" onclick="regulatorLockMatch()">Lock</button>
+            </div>
+          </div>
+
+          <div class="reg-card">
+            <h4>Confirm Settlement (by Match ID)</h4>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+              Confirms energy delivery and releases ETH to the producer.
+            </p>
+            <div class="input-row">
+              <input type="number" id="regSettleMatchId" placeholder="Match ID" min="0" />
+              <button class="btn btn-sm" onclick="confirmSettlement()">Confirm</button>
+            </div>
+          </div>
+
+          <div class="reg-card">
+            <h4>Flag Suspicious Match</h4>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+              Flags a Locked match for manual review. Pauses settlement.
+            </p>
+            <input type="number" id="regFlagMatchId" placeholder="Match ID" min="0"
+              style="width:100%; padding:10px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; color:white; font-size:13px; outline:none; margin-bottom:10px; font-family:'Space Mono',monospace;" />
+            <textarea id="regFlagReason" rows="2" placeholder="Reason for flagging..."></textarea>
+            <button class="btn btn-warning btn-sm" style="width:100%;" onclick="flagMatch()">Flag Match</button>
+          </div>
+
+          <div class="reg-card">
+            <h4>Cancel Flagged Match</h4>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+              Cancels a Flagged match and refunds ETH to the consumer.
+            </p>
+            <div class="input-row">
+              <input type="number" id="regCancelMatchId" placeholder="Match ID" min="0" />
+              <button class="btn btn-danger btn-sm" onclick="cancelFlaggedMatch()">Cancel</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>© 2026 SEC | Blockchain Energy Trading Platform</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
 
-  // ==========================
-  // CONFIG
-  // ==========================
+  // Config
+  // Contract addresses (update after deployment)
+  const AUTH_CONTRACT_ADDRESS  = "0x00c2B34466fF9508733B8b22f85E441A6e87088b";
+  const ENERGY_CONTRACT_ADDRESS = "0x49BA80969e6d484f274cc8D3869C90D0faE598B2";
+  const TRADE_CONTRACT_ADDRESS = "0x996f67E5217C5339E77A8579f973d54ABb5ba5EC";
 
-  const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS";
-
-  const ABI = [
-    "function createTrade(string memory offered,string memory wanted) public",
-    "function matchTrades(uint256 a,uint256 b) public",
-    "function getTrade(uint256 id) public view returns(tuple(address owner,string offered,string wanted,bool matched))",
-    "function tradeCounter() public view returns(uint256)"
+  const AUTH_ABI = [
+    "function isMember(address) view returns (bool)",
+    "function isRegulator(address) view returns (bool)"
   ];
 
-  let provider;
-  let signer;
-  let contract;
+  const ENERGY_ABI = [
+    "function listings(uint256) view returns (address seller, uint256 amountKwh, uint256 costPerKwh, bool isActive)"
+  ];
 
-  let selectedTrades = [];
+  const TRADE_ABI = [
+    // View
+    "function bidCount() view returns (uint256)",
+    "function matchCount() view returns (uint256)",
+    "function bids(uint256) view returns (address consumer, uint256 listingId, uint256 offeredWei, bool isActive)",
+    "function matches(uint256) view returns (uint256 bidId, uint256 listingId, address consumer, address producer, uint256 amountKwh, uint256 agreedWei, uint8 status, uint256 createdAt)",
+    "function contractBalance() view returns (uint256)",
+    "function hasBid(address, uint256) view returns (bool)",
+    // Member write
+    "function placeBid(uint256 _listingId) external payable",
+    "function withdrawBid(uint256 _bidId) external",
+    "function lockMatch(uint256 _bidId) external",
+    // Regulator write
+    "function confirmSettlement(uint256 _matchId) external",
+    "function flagMatch(uint256 _matchId, string calldata _reason) external",
+    "function cancelFlaggedMatch(uint256 _matchId) external",
+    // Events
+    "event BidPlaced(uint256 indexed bidId, uint256 indexed listingId, address indexed consumer, uint256 offeredWei)",
+    "event MatchLocked(uint256 indexed matchId, uint256 indexed listingId, uint256 indexed bidId, address consumer, address producer, uint256 amountKwh, uint256 agreedWei)"
+  ];
 
-  // ==========================
-  // CONNECT WALLET
-  // ==========================
 
-  async function connectWallet(){
+  // State
+  let provider, signer, authContract, energyContract, tradeContract, currentAccount;
+  let currentRole = null;
+  let allBids     = [];
+  let allMatches  = [];
 
-    if(!window.ethereum){
-      alert("MetaMask required");
-      return;
-    }
+  // MatchStatus enum mapping (matches Solidity order)
+  const MATCH_STATUS = { 0:'Pending', 1:'Locked', 2:'Settled', 3:'Cancelled', 4:'Flagged' };
 
-    provider = new ethers.BrowserProvider(window.ethereum);
 
-    await provider.send("eth_requestAccounts", []);
-
-    signer = await provider.getSigner();
-
-    contract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      ABI,
-      signer
-    );
-
-    const address = await signer.getAddress();
-
-    document.getElementById("wallet")
-      .innerText =
-      address.slice(0,6) + "..." +
-      address.slice(-4);
-
-    loadOrders();
+  // Toast
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = `show ${type}`;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.className = '', 5000);
   }
 
-  // ==========================
-  // CREATE ORDER
-  // ==========================
 
-  async function createOrder(){
+  // Connect Wallet
+  async function connectWallet() {
+    if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
+    try {
+      provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = await provider.getSigner();
+      currentAccount = await signer.getAddress();
 
-    try{
+      authContract   = new ethers.Contract(AUTH_CONTRACT_ADDRESS,   AUTH_ABI,   signer);
+      energyContract = new ethers.Contract(ENERGY_CONTRACT_ADDRESS, ENERGY_ABI, signer);
+      tradeContract  = new ethers.Contract(TRADE_CONTRACT_ADDRESS,  TRADE_ABI,  signer);
 
-      const offered =
-        document.getElementById("itemOffered").value;
+      const network = await provider.getNetwork();
+      document.getElementById('walletAddr').textContent  = currentAccount;
+      document.getElementById('networkName').textContent = `${network.name} (${network.chainId})`;
 
-      const wanted =
-        document.getElementById("itemWanted").value;
+      const btn = document.getElementById('connectBtn');
+      btn.textContent = currentAccount.slice(0,6) + '...' + currentAccount.slice(-4);
+      btn.classList.add('connected');
 
-      const tx =
-        await contract.createTrade(
-          offered,
-          wanted
-        );
-
-      await tx.wait();
-
-      alert("Trade Created");
-
-      loadOrders();
-
-    }catch(err){
-      console.error(err);
-      alert("Transaction Failed");
-    }
-  }
-
-  // ==========================
-  // LOAD ORDERS
-  // ==========================
-
-  async function loadOrders(){
-
-    const tbody =
-      document.getElementById("ordersTable");
-
-    tbody.innerHTML = "";
-
-    const total =
-      await contract.tradeCounter();
-
-    for(let i=0;i<total;i++){
-
-      const t =
-        await contract.getTrade(i);
-
-      const row =
-        document.createElement("tr");
-
-      row.innerHTML = `
-        <td>
-          ${
-            !t.matched
-            ? `<input
-                type="checkbox"
-                onchange="toggleTrade(${i})"
-              />`
-            : ""
-          }
-        </td>
-
-        <td>${i}</td>
-
-        <td>
-          ${t.owner.slice(0,6)}...
-        </td>
-
-        <td>${t.offered}</td>
-
-        <td>${t.wanted}</td>
-
-        <td class="${
-          t.matched
-          ? 'status-matched'
-          : 'status-open'
-        }">
-          ${
-            t.matched
-            ? 'Matched'
-            : 'Open'
-          }
-        </td>
-      `;
-
-      tbody.appendChild(row);
+      await refreshAll();
+      toast('Wallet connected', 'success');
+      window.ethereum.on('accountsChanged', () => location.reload());
+    } catch (err) {
+      toast(err.reason || err.message, 'error');
     }
   }
 
-  // ==========================
-  // TOGGLE SELECT
-  // ==========================
 
-  function toggleTrade(id){
+  // Refresh All — role check + load data
+  async function refreshAll() {
+    if (!authContract || !currentAccount) return;
+    try {
+      const [isMem, isReg] = await Promise.all([
+        authContract.isMember(currentAccount),
+        authContract.isRegulator(currentAccount)
+      ]);
 
-    if(selectedTrades.includes(id)){
+      currentRole = isReg ? 'regulator' : (isMem ? 'member' : null);
 
-      selectedTrades =
-        selectedTrades.filter(
-          t => t !== id
-        );
+      // Role badge
+      let badge = '<span class="badge badge-none">No Access</span>';
+      if (isReg)      badge = '<span class="badge badge-regulator">Regulator</span>';
+      else if (isMem) badge = '<span class="badge badge-member">Member</span>';
+      document.getElementById('accessDisplay').innerHTML = badge;
 
-    }else{
+      const hasAccess = isMem || isReg;
+      document.getElementById('accessWall').style.display   = hasAccess ? 'none'  : 'block';
+      document.getElementById('mainContent').style.display  = hasAccess ? 'block' : 'none';
 
-      if(selectedTrades.length >= 2){
-        alert("Select only 2 trades");
-        return;
+      if (!hasAccess) return;
+
+      // Role banner
+      const banner = document.getElementById('roleBanner');
+      if (isReg) {
+        banner.className = 'role-banner regulator';
+        document.getElementById('roleBannerIcon').textContent = '🛡️';
+        document.getElementById('roleBannerText').textContent =
+          'You are a Regulator. You can lock matches, confirm settlements, flag and cancel suspicious trades.';
+        document.getElementById('regulatorPanel').style.display   = 'block';
+        document.getElementById('placeBidSection').style.display  = 'none';
+        document.getElementById('myBidsSection').style.display    = 'none';
+      } else {
+        banner.className = 'role-banner member';
+        document.getElementById('roleBannerIcon').textContent = '✅';
+        document.getElementById('roleBannerText').textContent =
+          'You are a verified member. You can place bids on active listings, withdraw unmatched bids, and lock matches as a producer.';
+        document.getElementById('regulatorPanel').style.display   = 'none';
+        document.getElementById('placeBidSection').style.display  = 'block';
+        document.getElementById('myBidsSection').style.display    = 'block';
       }
 
-      selectedTrades.push(id);
-    }
+      // Load contract balance
+      try {
+        const bal = await tradeContract.contractBalance();
+        document.getElementById('contractBalance').textContent =
+          ethers.formatEther(bal) + ' ETH';
+      } catch(_) {}
 
-    console.log(selectedTrades);
+      await Promise.all([loadMyBids(), loadMatches()]);
+
+    } catch (err) {
+      toast('Failed to verify role: ' + (err.reason || err.message), 'error');
+    }
   }
 
-  // ==========================
-  // MANUAL MATCH
-  // ==========================
 
-  async function manualMatch(){
+  // Listing Preview — reads from EnergyListing
+  async function previewListing() {
+    const id = document.getElementById('bidListingId').value;
+    if (id === '') { toast('Enter a listing ID', 'error'); return; }
+    try {
+      const l = await energyContract.listings(Number(id));
+      const totalCost = BigInt(l.costPerKwh) * BigInt(l.amountKwh);
 
-    if(selectedTrades.length !== 2){
-      alert("Select 2 trades");
+      document.getElementById('bidListingInfo').value =
+        `${l.amountKwh} kWh @ ${l.costPerKwh} Wei/kWh — ${l.isActive ? 'Active' : 'Inactive'}`;
+      document.getElementById('bidAmountWei').value = totalCost.toString();
+
+      // Show preview card
+      document.getElementById('previewId').textContent     = '#' + id;
+      document.getElementById('previewSeller').textContent = l.seller.slice(0,6) + '...' + l.seller.slice(-4);
+      document.getElementById('previewKwh').textContent    = l.amountKwh.toString() + ' kWh';
+      document.getElementById('previewPrice').textContent  = l.costPerKwh.toString() + ' Wei';
+      document.getElementById('previewTotal').textContent  = totalCost.toString() + ' Wei';
+      document.getElementById('previewStatus').textContent = l.isActive ? '🟢 Active' : '🔴 Inactive';
+      document.getElementById('listingPreview').style.display = 'block';
+
+      toast('Listing loaded', 'success');
+    } catch (err) {
+      toast('Failed to load listing: ' + (err.reason || err.message), 'error');
+    }
+  }
+
+
+  // Place Bid
+  async function placeBid() {
+    const listingId = document.getElementById('bidListingId').value;
+    const amountWei = document.getElementById('bidAmountWei').value;
+    const msgEl     = document.getElementById('bidMsg');
+
+    if (!listingId || !amountWei || Number(amountWei) <= 0) {
+      showMsg(msgEl, '⚠️ Please preview a listing and confirm the ETH amount.', 'error');
       return;
     }
-
-    try{
-
-      document.getElementById(
-        "matchStatus"
-      ).innerText =
-      "Matching trades...";
-
-      const tx =
-        await contract.matchTrades(
-          selectedTrades[0],
-          selectedTrades[1]
-        );
-
+    try {
+      showMsg(msgEl, '⏳ Sending bid transaction...', 'info');
+      const tx = await tradeContract.placeBid(
+        Number(listingId),
+        { value: BigInt(amountWei) }
+      );
+      showMsg(msgEl, '⏳ Waiting for confirmation...', 'info');
       await tx.wait();
-
-      document.getElementById(
-        "matchStatus"
-      ).innerText =
-      "Trades matched successfully";
-
-      selectedTrades = [];
-
-      loadOrders();
-
-    }catch(err){
-
-      console.error(err);
-
-      document.getElementById(
-        "matchStatus"
-      ).innerText =
-      "Match failed";
+      showMsg(msgEl, '✅ Bid placed successfully!', 'success');
+      toast('Bid placed!', 'success');
+      document.getElementById('bidListingId').value  = '';
+      document.getElementById('bidAmountWei').value  = '';
+      document.getElementById('bidListingInfo').value = '';
+      document.getElementById('listingPreview').style.display = 'none';
+      await loadMyBids();
+    } catch (err) {
+      showMsg(msgEl, '❌ ' + (err.reason || err.message), 'error');
     }
   }
 
-  // ==========================
-  // AUTO MATCH
-  // ==========================
 
-  async function runAutoMatch(){
+  // Load my Bids
+  async function loadMyBids() {
+    if (!tradeContract || !energyContract) return;
 
-    const total =
-      await contract.tradeCounter();
+    try {
+      const count = Number(await tradeContract.bidCount());
+      const bids = [];
 
-    const trades = [];
+      for (let i = 0; i < count; i++) {
+        const b = await tradeContract.bids(i);
 
-    for(let i=0;i<total;i++){
+        // Skip empty/uninitialized bids
+        if (b.consumer === ethers.ZeroAddress) continue;
 
-      const t =
-        await contract.getTrade(i);
+        // Get listing to determine producer/seller
+        let seller = ethers.ZeroAddress;
 
-      trades.push({
-        id:i,
-        owner:t.owner,
-        offered:t.offered,
-        wanted:t.wanted,
-        matched:t.matched
-      });
-    }
+        try {
+          const listing = await energyContract.listings(Number(b.listingId));
+          seller = listing.seller;
+        } catch (_) {}
 
-    for(let i=0;i<trades.length;i++){
+        const isConsumer =
+          b.consumer.toLowerCase() === currentAccount.toLowerCase();
 
-      for(let j=i+1;j<trades.length;j++){
+        const isProducer =
+          seller.toLowerCase() === currentAccount.toLowerCase();
 
-        const a = trades[i];
-        const b = trades[j];
+        const canSee =
+          currentRole === 'regulator' ||
+          isConsumer ||
+          isProducer;
 
-        if(a.matched || b.matched)
-          continue;
-
-        if(
-          a.offered === b.wanted &&
-          a.wanted === b.offered
-        ){
-
-          try{
-
-            const tx =
-              await contract.matchTrades(
-                a.id,
-                b.id
-              );
-
-            await tx.wait();
-
-          }catch(err){
-            console.error(err);
-          }
+        if (canSee) {
+          bids.push({
+            id: i,
+            consumer: b.consumer,
+            producer: seller,
+            listingId: Number(b.listingId),
+            offeredWei: b.offeredWei.toString(),
+            isActive: b.isActive
+          });
         }
       }
+
+      allBids = bids;
+
+      renderBidsTable();
+
+      // Stats
+      const myActiveBids = bids.filter(
+        b =>
+          b.isActive &&
+          b.consumer.toLowerCase() === currentAccount.toLowerCase()
+      );
+
+      document.getElementById('statBids').textContent =
+        myActiveBids.length;
+
+    } catch (err) {
+      toast('Failed to load bids: ' + (err.reason || err.message), 'error');
     }
-
-    loadOrders();
-
-    document.getElementById(
-      "matchStatus"
-    ).innerText =
-    "Automated matching completed";
   }
 
-</script>
+  function renderBidsTable() {
+    const statusFilter = document.getElementById('filterBidStatus').value;
+    const body = document.getElementById('bidsTableBody');
+    const filtered = allBids.filter(b =>
+      statusFilter === 'all' ||
+      (statusFilter === 'active'   &&  b.isActive) ||
+      (statusFilter === 'inactive' && !b.isActive)
+    );
+    if (!filtered.length) {
+      body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#445; padding:24px; font-family:'Space Mono',monospace; font-size:13px;">No bids found.</td></tr>`;
+      return;
+    }
+    body.innerHTML = filtered.map(b => {
+      const statusBadge = b.isActive
+        ? '<span class="badge badge-active">Active</span>'
+        : '<span class="badge badge-inactive">Withdrawn</span>';
 
+      // Producer of that listing can lock the match; also show withdraw for own active bids
+      const action = b.isActive
+        ? `<div style="display:flex;gap:8px;flex-wrap:wrap;">
+             <button class="btn-outline" onclick="lockMatch(${b.id})" title="Lock this match (producer only on-chain)">Lock Match</button>
+             <button class="btn-cancel" onclick="withdrawBid(${b.id})">Withdraw</button>
+           </div>`
+        : '<span style="color:#445; font-size:12px;">—</span>';
+
+      return `
+        <tr>
+          <td class="green">#${b.id}</td>
+          <td class="mono">#${b.listingId}</td>
+          <td class="mono">
+            ${b.consumer.slice(0,6)}...${b.consumer.slice(-4)}
+          </td>
+          <td class="mono">${b.offeredWei} Wei</td>
+          <td>${statusBadge}</td>
+          <td>${action}</td>
+        </tr>`;
+    }).join('');
+  }
+
+
+  // Withdraw Bid
+  async function withdrawBid(bidId) {
+    try {
+      toast('Withdrawing bid...', 'info');
+      const tx = await tradeContract.withdrawBid(bidId);
+      await tx.wait();
+      toast(`✅ Bid #${bidId} withdrawn, ETH refunded.`, 'success');
+      await loadMyBids();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+  }
+
+
+  // Lock Match (producer or regulator)
+  async function lockMatch(bidId) {
+    try {
+      toast('Locking match...', 'info');
+      const tx = await tradeContract.lockMatch(bidId);
+      await tx.wait();
+      toast(`✅ Match locked for bid #${bidId}!`, 'success');
+      await Promise.all([loadMyBids(), loadMatches()]);
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  async function regulatorLockMatch() {
+    const bidId = document.getElementById('regLockBidId').value;
+    if (bidId === '') { toast('Enter a Bid ID', 'error'); return; }
+    await lockMatch(Number(bidId));
+    document.getElementById('regLockBidId').value = '';
+  }
+
+
+  // Load Matches
+  async function loadMatches() {
+    if (!tradeContract) return;
+    try {
+      const count = Number(await tradeContract.matchCount());
+      const matches = [];
+      for (let i = 0; i < count; i++) {
+        const m = await tradeContract.matches(i);
+        matches.push({
+          id:        i,
+          bidId:     Number(m.bidId),
+          listingId: Number(m.listingId),
+          consumer:  m.consumer,
+          producer:  m.producer,
+          amountKwh: Number(m.amountKwh),
+          agreedWei: m.agreedWei.toString(),
+          status:    Number(m.status),
+          createdAt: Number(m.createdAt)
+        });
+      }
+      allMatches = matches;
+      renderMatchesTable();
+      document.getElementById('statMatches').textContent = matches.length;
+      document.getElementById('statLocked').textContent  = matches.filter(m => m.status === 1).length;
+      document.getElementById('statSettled').textContent = matches.filter(m => m.status === 2).length;
+    } catch (err) {
+      toast('Failed to load matches: ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  function matchStatusBadge(status) {
+    const map = {
+      0: '<span class="badge badge-pending">Pending</span>',
+      1: '<span class="badge badge-locked">Locked</span>',
+      2: '<span class="badge badge-settled">Settled</span>',
+      3: '<span class="badge badge-cancelled">Cancelled</span>',
+      4: '<span class="badge badge-flagged">Flagged</span>'
+    };
+    return map[status] || '—';
+  }
+
+  function renderMatchesTable() {
+    const statusFilter = document.getElementById('filterMatchStatus').value;
+    const ownerFilter  = document.getElementById('filterMatchOwner').value;
+    const body = document.getElementById('matchesTableBody');
+
+    const filtered = allMatches.filter(m => {
+      const matchStatus = statusFilter === 'all' || m.status === Number(statusFilter);
+      const matchOwner  = ownerFilter === 'all' ||
+        (currentAccount && (
+          m.consumer.toLowerCase() === currentAccount.toLowerCase() ||
+          m.producer.toLowerCase() === currentAccount.toLowerCase()
+        ));
+      return matchStatus && matchOwner;
+    });
+
+    if (!filtered.length) {
+      body.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#445; padding:24px; font-family:'Space Mono',monospace; font-size:13px;">No matches found.</td></tr>`;
+      return;
+    }
+
+    body.innerHTML = filtered.map(m => {
+      const isConsumer = currentAccount && m.consumer.toLowerCase() === currentAccount.toLowerCase();
+      const isProducer = currentAccount && m.producer.toLowerCase() === currentAccount.toLowerCase();
+
+      const shortConsumer = m.consumer.slice(0,6)+'...'+m.consumer.slice(-4) +
+        (isConsumer ? ' <span class="badge badge-you" style="padding:2px 8px;font-size:10px;">You</span>' : '');
+      const shortProducer = m.producer.slice(0,6)+'...'+m.producer.slice(-4) +
+        (isProducer ? ' <span class="badge badge-you" style="padding:2px 8px;font-size:10px;">You</span>' : '');
+
+      // Producer can lock, regulator can settle/flag/cancel flagged
+      let action = '<span style="color:#445;font-size:12px;">—</span>';
+      if (m.status === 1 && isProducer) {
+        // Locked, producer can request settlement
+        action = `<span style="font-size:12px;color:var(--text-muted);">Awaiting settlement</span>`;
+      }
+
+      return `
+        <tr>
+          <td class="green">#${m.id}</td>
+          <td class="mono">#${m.listingId}</td>
+          <td class="mono">${shortConsumer}</td>
+          <td class="mono">${shortProducer}</td>
+          <td><strong>${m.amountKwh}</strong> kWh</td>
+          <td class="mono">${m.agreedWei} Wei</td>
+          <td>${matchStatusBadge(m.status)}</td>
+          <td>${action}</td>
+        </tr>`;
+    }).join('');
+  }
+
+
+  // Regulator Actions
+  async function confirmSettlement() {
+    const matchId = document.getElementById('regSettleMatchId').value;
+    if (matchId === '') { toast('Enter a Match ID', 'error'); return; }
+    try {
+      toast('Confirming settlement...', 'info');
+      const tx = await tradeContract.confirmSettlement(Number(matchId));
+      await tx.wait();
+      toast(`✅ Match #${matchId} settled. ETH released to producer.`, 'success');
+      await loadMatches();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+    document.getElementById('regSettleMatchId').value = '';
+  }
+
+  async function flagMatch() {
+    const matchId = document.getElementById('regFlagMatchId').value;
+    const reason  = document.getElementById('regFlagReason').value.trim();
+    if (!matchId)  { toast('Enter a Match ID', 'error'); return; }
+    if (!reason)   { toast('Enter a reason for flagging', 'error'); return; }
+    try {
+      toast('Flagging match...', 'info');
+      const tx = await tradeContract.flagMatch(Number(matchId), reason);
+      await tx.wait();
+      toast(`⚠️ Match #${matchId} flagged.`, 'info');
+      await loadMatches();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+    document.getElementById('regFlagMatchId').value  = '';
+    document.getElementById('regFlagReason').value   = '';
+  }
+
+  async function cancelFlaggedMatch() {
+    const matchId = document.getElementById('regCancelMatchId').value;
+    if (!matchId) { toast('Enter a Match ID', 'error'); return; }
+    try {
+      toast('Cancelling flagged match...', 'info');
+      const tx = await tradeContract.cancelFlaggedMatch(Number(matchId));
+      await tx.wait();
+      toast(`✅ Match #${matchId} cancelled. ETH refunded to consumer.`, 'success');
+      await loadMatches();
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+    document.getElementById('regCancelMatchId').value = '';
+  }
+
+
+  // Helpers
+  function showMsg(el, msg, type) {
+    el.textContent = msg;
+    el.style.color = type === 'error' ? 'var(--danger)' : type === 'info' ? 'var(--warning)' : 'var(--accent)';
+    el.style.display = 'block';
+  }
+
+
+  // URL Param — pre-fill listing ID if arriving from energylisting.html
+  function checkUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const listingId = params.get('listingId');
+    if (listingId !== null) {
+      document.getElementById('bidListingId').value = listingId;
+    }
+  }
+
+
+  // Auto Connect + Filter Listeners
+  window.addEventListener('load', async () => {
+    checkUrlParams();
+
+    document.getElementById('filterBidStatus').addEventListener('change', renderBidsTable);
+    document.getElementById('filterMatchStatus').addEventListener('change', renderMatchesTable);
+    document.getElementById('filterMatchOwner').addEventListener('change', renderMatchesTable);
+
+    if (!window.ethereum) return;
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    if (accounts.length > 0) connectWallet();
+  });
+
+</script>
 </body>
 </html>

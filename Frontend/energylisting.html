@@ -363,8 +363,9 @@
   <ul>
     <li><a href="index.html">Home</a></li>
     <li><a href="energylisting.html" class="active">Listings</a></li>
-    <li><a href="#postSection">Post Energy</a></li>
+    <li><a href="trade-matching.html">Trade Matching</a></li>
     <li><a href="#how">How It Works</a></li>
+    
     <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
   </ul>
 </nav>
@@ -559,12 +560,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CONFIG — paste your deployed contract addresses here
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  const AUTH_CONTRACT_ADDRESS   = "0x18Ed70a55E4967593d47f10e7cc43A1C4BE6A5eB";
-  const ENERGY_CONTRACT_ADDRESS = "0xa0B646406260c43677d7F8aA29883D0231a3dB69";
+  // Config — deployed contract addresses here
+  const AUTH_CONTRACT_ADDRESS   = "0x00c2B34466fF9508733B8b22f85E441A6e87088b";
+  const ENERGY_CONTRACT_ADDRESS = "0x49BA80969e6d484f274cc8D3869C90D0faE598B2";
 
   // authentication.sol ABI (role checks only)
   const AUTH_ABI = [
@@ -586,18 +585,14 @@
     "event EnergyListed(uint256 indexed id, address indexed seller, uint256 amount, uint256 price)"
   ];
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // STATE
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // State
   let provider, signer, authContract, energyContract, currentAccount;
   let currentRole = null; // 'regulator' | 'member' | null
   let allListings = [];   // cached on-chain listings
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // TOAST
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Toast
   function toast(msg, type = 'success') {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -606,10 +601,8 @@
     el._t = setTimeout(() => el.className = '', 4500);
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CONNECT WALLET
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Connect Wallet
   async function connectWallet() {
     if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
     try {
@@ -637,10 +630,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CHECK ROLE via authentication.sol
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Check Role via authentication.sol
   async function refreshAll() {
     if (!authContract || !currentAccount) return;
     try {
@@ -700,10 +691,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // LOAD ON-CHAIN LISTINGS from EnergyTrading.sol
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Load On-Chain Listings from energy_listing.sol
   async function loadListings() {
     if (!energyContract) return;
     try {
@@ -737,10 +726,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // RENDER TABLE
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Render Table
   function renderTable(data) {
     const body = document.getElementById('listingTableBody');
     if (!data.length) {
@@ -766,9 +753,9 @@
         if (isOwner) {
           // Seller can cancel their own listing
           action = `<button class="btn-cancel" onclick="cancelListing(${l.id})">Cancel</button>`;
-        } else if (currentRole === 'member' || currentRole === 'regulator') {
+        } else if (currentRole === 'member') {
           // Other members see a placeholder (buy/bid — future SC3)
-          action = `<button class="btn-outline" disabled title="Trade matching coming soon">Bid (SC3)</button>`;
+          action = `<a href="trade-matching.html?listingId=${l.id}" class="btn-outline">Place Bid</a>`;
         }
       }
 
@@ -785,10 +772,8 @@
     }).join('');
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // FILTER
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Filter
   function filterListings() {
     const statusFilter = document.getElementById('filterStatus').value;
     const ownerFilter  = document.getElementById('filterOwner').value;
@@ -806,10 +791,8 @@
     renderTable(filtered);
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // STATS
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Stats
   function updateStats(data) {
     const active = data.filter(l => l.isActive);
     const totalKwh = active.reduce((a, l) => a + l.amountKwh, 0);
@@ -826,10 +809,8 @@
     document.getElementById('statYours').textContent    = mine;
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // LIST ENERGY — EnergyTrading.listEnergy()
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // List Energy — EnergyTrading.listEnergy()
   async function submitListing() {
     if (!currentRole) { toast('Must be a member to post listings', 'error'); return; }
 
@@ -879,11 +860,9 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CANCEL LISTING — EnergyTrading.cancelListing()
-  // Only the original seller can call this (enforced by contract)
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Cancel Listing — EnergyTrading.cancelListing()
+  // Only the original seller can call this (enforced by contract)
   async function cancelListing(id) {
     if (!energyContract) return;
     try {
@@ -916,13 +895,8 @@
     document.getElementById('regCancelId').value = '';
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // AUTO CONNECT + FILTER LISTENERS
-  // Listeners added here (not inline onchange) so programmatic
-  // .value = '...' in refreshAll() never fires filterListings()
-  // before allListings is populated.
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Auto Connect + Filter Listeners
   window.addEventListener('load', async () => {
     document.getElementById('filterStatus').addEventListener('change', filterListings);
     document.getElementById('filterOwner').addEventListener('change', filterListings);
