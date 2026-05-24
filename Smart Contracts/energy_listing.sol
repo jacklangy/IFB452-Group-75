@@ -9,6 +9,7 @@ interface IAuthentication {
 
 contract EnergyTrading {
     address public owner;
+    address public tradeMatchingContract;
     IAuthentication public authContract;
 
 
@@ -21,8 +22,11 @@ contract EnergyTrading {
     mapping(uint256 => EnergyListing) public listings;
     uint256 public ListingId;
     
+
+    // Events
     event EnergyListed(uint256 indexed id, address indexed seller, uint256 amount, uint256 price);
     event ListingCancelled(uint256 indexed id, address indexed cancelledBy);
+    event ListingLockedByMatch(uint256 indexed id, address indexed lockedBy);
     // event EnergyPurchased(uint256 indexed id, address indexed buyer, uint256 amount);
 
     constructor(address _authContractAddress) {
@@ -31,17 +35,25 @@ contract EnergyTrading {
     }
 
     modifier onlyMember() {
-    require(
-        authContract.isMember(msg.sender),
-        "Must be an approved member"
-    );
-    _;
+        require(
+            authContract.isMember(msg.sender),
+            "Must be an approved member"
+        );
+        _;
     }
 
     modifier onlyRegulator() {
         require(
             authContract.isRegulator(msg.sender),
             "Must be a regulator"
+        );
+        _;
+    }
+
+    modifier onlyTradeMatching() {
+        require(
+            msg.sender == tradeMatchingContract,
+            "Only TradeMatching contract can call this"
         );
         _;
     }
@@ -76,16 +88,35 @@ contract EnergyTrading {
     }
 
     function regulatorCancelListing(uint256 _id) external onlyRegulator {
-    require(listings[_id].isActive, "Listing already inactive");
+        require(_id < ListingId, "Listing does not exist");
+        require(listings[_id].isActive, "Listing already inactive");
 
-    listings[_id].isActive = false;
+        listings[_id].isActive = false;
 
-    emit ListingCancelled(_id, msg.sender);
+        emit ListingCancelled(_id, msg.sender);
+    }
+
+    function lockListingForMatch(uint256 _id) external onlyTradeMatching {
+        require(_id < ListingId, "Listing does not exist");
+        require(listings[_id].isActive, "Listing is not active");
+
+        listings[_id].isActive = false;
+
+        emit ListingLockedByMatch(_id, msg.sender);
     }
 
     function setAuthContract(address _newAuthAddress) external {
-    require(msg.sender == owner, "Only owner can update auth contract");
+        require(msg.sender == owner, "Only owner can update auth contract");
 
-    authContract = IAuthentication(_newAuthAddress);
+        authContract = IAuthentication(_newAuthAddress);
     }
+
+    function setTradeMatchingContract(address _tradeMatchingAddress) external {
+        require(msg.sender == owner, "Only owner can set TradeMatching address");
+        require(_tradeMatchingAddress != address(0), "Invalid address");
+
+        tradeMatchingContract = _tradeMatchingAddress;
+    }
+
+    
 }
