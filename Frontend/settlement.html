@@ -617,10 +617,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CONFIG
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Config
   const AUTH_CONTRACT_ADDRESS       = "0xa48660A8745aE85a922ED919048ce5A69488476F";
   const TRADE_CONTRACT_ADDRESS      = "0x352A686366b43E2EeE0e123a6Ef8B3Db94d400ca";
   const SETTLEMENT_CONTRACT_ADDRESS = "0x77026726B7Df67586F4e813dEBC6f507954A43EE";
@@ -656,18 +654,14 @@
   // DeliveryStatus enum (matches Solidity order)
   const DELIVERY_STATUS = { 0: 'Pending', 1: 'Confirmed', 2: 'Disputed' };
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // STATE
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // State
   let provider, signer, authContract, tradeContract, settlementContract, currentAccount;
   let currentRole = null;
   let allSettlements = [];
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // TOAST
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Toast
   function toast(msg, type = 'success') {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -682,10 +676,8 @@
     el.style.display = 'block';
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CONNECT WALLET
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Connect Wallet
   async function connectWallet() {
     if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
     try {
@@ -714,10 +706,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // REFRESH ALL
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Refresh All
   async function refreshAll() {
     if (!authContract || !currentAccount) return;
     try {
@@ -762,10 +752,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // LOAD ENERGY ACCOUNT
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Load Energy Account
   async function loadEnergyAccount() {
     if (!settlementContract) return;
     try {
@@ -779,10 +767,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // LOAD SETTLEMENTS
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Load Settlements
   async function loadSettlements() {
     if (!settlementContract || !tradeContract) return;
     try {
@@ -854,10 +840,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // RENDER SETTLEMENTS TABLE
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Render Settlements Table
   function deliveryBadge(status) {
     const map = {
       0: '<span class="badge badge-pending">Pending</span>',
@@ -923,10 +907,8 @@
     }).join('');
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // STATS
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Stats
   function updateStats(records) {
     const confirmed = records.filter(s => s.deliveryStatus === 1);
     const disputed  = records.filter(s => s.deliveryStatus === 2);
@@ -941,10 +923,8 @@
     document.getElementById('statDisputes').textContent = disputed.length;
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CONFIRM DELIVERY (regulator)
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Confirm Delivery (regulator)
   async function confirmDelivery() {
     const matchId = document.getElementById('regConfirmMatchId').value;
     if (matchId === '') { toast('Enter a Match ID', 'error'); return; }
@@ -964,10 +944,8 @@
     }
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // RESOLVE DISPUTE (regulator)
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Resolve Dispute (regulator)
   async function resolveDispute(proceed) {
     const idField = proceed
       ? document.getElementById('regResolveMatchId')
@@ -991,10 +969,8 @@
     idField.value = '';
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // RAISE DISPUTE (member)
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Raise Dispute (member)
   async function raiseDispute() {
     const matchId = document.getElementById('disputeMatchId').value;
     const reason  = document.getElementById('disputeReason').value.trim();
@@ -1021,10 +997,8 @@
     document.getElementById('disputeSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // AUTO CONNECT + FILTER LISTENERS
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  // Auto Connect + Filter Listeners
   window.addEventListener('load', async () => {
     document.getElementById('filterSettlementStatus').addEventListener('change', renderSettlementsTable);
     document.getElementById('filterSettlementOwner').addEventListener('change', renderSettlementsTable);
