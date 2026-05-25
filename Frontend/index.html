@@ -468,7 +468,7 @@
 
   // Config
   // Contract address (update after deployment)
-  const CONTRACT_ADDRESS = "0xa48660A8745aE85a922ED919048ce5A69488476F";
+  const AUTH_CONTRACT_ADDRESS = "0xa48660A8745aE85a922ED919048ce5A69488476F";
 
   const ABI = [
     "function isMember(address) view returns (bool)",
@@ -511,7 +511,7 @@
       await provider.send("eth_requestAccounts", []);
       signer = await provider.getSigner();
       currentAccount = await signer.getAddress();
-      contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+      contract = new ethers.Contract(AUTH_CONTRACT_ADDRESS, ABI, signer);
 
       const network = await provider.getNetwork();
       document.getElementById('walletAddr').textContent = currentAccount;
