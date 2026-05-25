@@ -3,498 +3,1037 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SEC Settlement Portal</title>
+  <title>SEC - Settlement Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial, Helvetica, sans-serif;
+    :root {
+      --accent:   #00ffb3;
+      --accent-dim: rgba(0,255,179,0.12);
+      --bg:       #08111f;
+      --surface:  #111c2e;
+      --surface2: #0d1728;
+      --border:   rgba(255,255,255,0.08);
+      --muted:    #8899aa;
+      --danger:   #ff4d6d;
+      --warning:  #ffb347;
+      --info:     #88aaff;
+      --settled:  #64c864;
     }
 
-    body{
-      background:#08111f;
-      color:white;
-      overflow-x:hidden;
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--bg);
+      color: white;
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
     }
 
-    nav{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:25px 8%;
-      background:rgba(0,0,0,0.3);
-      backdrop-filter:blur(8px);
-      position:fixed;
-      width:100%;
-      z-index:1000;
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 8%;
+      background: rgba(8,17,31,0.88);
+      backdrop-filter: blur(12px);
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border);
     }
-
-    .logo{
-      font-size:28px;
-      font-weight:bold;
-      color:#00ffb3;
+    .logo { font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 2px; text-decoration: none; }
+    nav ul { display: flex; gap: 30px; list-style: none; align-items: center; }
+    nav ul li a { text-decoration: none; color: #ccc; transition: color 0.2s; font-size: 15px; }
+    nav ul li a:hover, nav ul li a.active { color: var(--accent); }
+    #connectBtn {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      padding: 9px 22px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      transition: all 0.25s;
     }
+    #connectBtn:hover { background: var(--accent); color: var(--bg); }
+    #connectBtn.connected { background: var(--accent-dim); }
 
-    nav ul{
-      display:flex;
-      gap:30px;
-      list-style:none;
-    }
-
-    nav ul li a{
-      text-decoration:none;
-      color:white;
-      transition:0.3s;
-    }
-
-    nav ul li a:hover{
-      color:#00ffb3;
-    }
-
-    .hero{
-      padding-top:140px;
-      padding-bottom:80px;
-      text-align:center;
+    /* ── HERO ── */
+    .page-hero {
+      padding: 160px 8% 90px;
       background:
-        linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+        linear-gradient(rgba(0,0,0,0.65), rgba(8,17,31,1)),
         url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=1600&auto=format&fit=crop');
-      background-size:cover;
-      background-position:center;
+      background-size: cover;
+      background-position: center;
+    }
+    .page-hero h1 { font-size: 54px; font-weight: 800; line-height: 1.1; margin-bottom: 18px; }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p { font-size: 18px; color: #b0bec5; max-width: 640px; line-height: 1.7; }
+
+    /* ── LAYOUT ── */
+    section { padding: 80px 8%; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 38px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+    .section-title p { color: var(--muted); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-block;
+      padding: 13px 30px;
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 40px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .btn-danger  { background: var(--danger);  color: white; }
+    .btn-warning { background: var(--warning); color: var(--bg); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+    .btn-outline:hover { background: var(--accent); color: var(--bg); }
+    .btn-sm { padding: 8px 18px; font-size: 12px; }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: 'Space Mono', monospace;
+    }
+    .badge-member    { background: var(--accent-dim);            color: var(--accent);  border: 1px solid rgba(0,255,179,0.3); }
+    .badge-regulator { background: rgba(255,179,71,0.12);        color: var(--warning); border: 1px solid rgba(255,179,71,0.3); }
+    .badge-none      { background: rgba(255,255,255,0.06);       color: #888;           border: 1px solid #333; }
+    .badge-locked    { background: rgba(255,179,71,0.12);        color: var(--warning); border: 1px solid rgba(255,179,71,0.3); }
+    .badge-settled   { background: rgba(100,200,100,0.12);       color: var(--settled); border: 1px solid rgba(100,200,100,0.3); }
+    .badge-disputed  { background: rgba(255,77,109,0.12);        color: var(--danger);  border: 1px solid rgba(255,77,109,0.3); }
+    .badge-pending   { background: rgba(100,150,255,0.12);       color: var(--info);    border: 1px solid rgba(100,150,255,0.3); }
+    .badge-confirmed { background: rgba(100,200,100,0.12);       color: var(--settled); border: 1px solid rgba(100,200,100,0.3); }
+
+    /* ── WALLET BAR ── */
+    .wallet-bar {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 28px;
+      margin-bottom: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      align-items: center;
+    }
+    .wallet-stat { display: flex; flex-direction: column; gap: 5px; }
+    .wallet-stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+    .wallet-stat .value { font-size: 13px; font-family: 'Space Mono', monospace; }
+
+    /* ── ACCESS WALL ── */
+    #accessWall {
+      background: var(--surface2);
+      border: 1px solid rgba(255,77,109,0.2);
+      border-radius: 20px;
+      padding: 60px;
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    #accessWall h3 { font-size: 22px; margin-bottom: 14px; color: var(--danger); }
+    #accessWall p  { color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+
+    /* ── ROLE BANNER ── */
+    .role-banner {
+      border-radius: 14px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      font-size: 14px;
+      font-family: 'Space Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .role-banner.member    { background: rgba(0,255,179,0.06);  border: 1px solid rgba(0,255,179,0.2);  color: #c0fff1; }
+    .role-banner.regulator { background: rgba(255,179,71,0.06); border: 1px solid rgba(255,179,71,0.2); color: #ffe0a0; }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 40px;
+    }
+    .stat-box { background: var(--surface); padding: 24px 18px; border-radius: 14px; text-align: center; border: 1px solid var(--border); }
+    .stat-box h2 { font-size: 30px; color: var(--accent); margin-bottom: 6px; font-weight: 800; }
+    .stat-box p  { color: var(--muted); font-size: 12px; }
+
+    /* ── ENERGY ACCOUNT CARD ── */
+    .account-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+    .account-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px;
+    }
+    .account-card .ac-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; margin-bottom: 10px; }
+    .account-card .ac-value { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Space Mono', monospace; }
+    .account-card .ac-sub   { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ── CONFIRM DELIVERY FORM (regulator) ── */
+    .form-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 36px;
+      border: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .form-card h3 { color: var(--accent); font-size: 20px; margin-bottom: 8px; }
+    .form-card > p { color: var(--muted); font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+    .form-group label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-family: 'Space Mono', monospace; }
+    .form-group input, .form-group textarea, .form-group select {
+      padding: 12px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: 'Syne', sans-serif;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #445; }
+    .form-group textarea { resize: none; min-height: 80px; }
+    .form-msg { margin-top: 14px; font-size: 13px; font-family: 'Space Mono', monospace; display: none; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    /* ── TABLES ── */
+    .table-wrap {
+      background: var(--surface2);
+      border-radius: 18px;
+      padding: 24px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 700px; }
+    thead th {
+      text-align: left;
+      padding: 11px 14px;
+      color: var(--accent);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+    }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    tbody tr:hover { background: rgba(0,255,179,0.025); }
+    tbody td { padding: 13px 14px; font-size: 13px; color: #d0d8e0; }
+    .green { color: var(--accent); font-weight: 700; font-family: 'Space Mono', monospace; }
+    .mono  { font-family: 'Space Mono', monospace; font-size: 12px; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 20px;
+      background: var(--surface);
+      padding: 16px 22px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+    .filter-bar label { color: var(--muted); font-size: 13px; }
+    .filter-bar select {
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: white;
+      font-size: 13px;
+      outline: none;
+      font-family: 'Syne', sans-serif;
+    }
+    .filter-bar select:focus { border-color: var(--accent); }
+
+    /* ── REGULATOR PANEL ── */
+    .reg-panel {
+      background: var(--surface2);
+      border: 1px solid rgba(255,179,71,0.2);
+      border-radius: 18px;
+      padding: 32px;
+      margin-top: 40px;
+    }
+    .reg-panel h3 { color: var(--warning); font-size: 18px; margin-bottom: 24px; }
+    .reg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .reg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+    .reg-card h4 { font-size: 11px; color: #aac; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+    .reg-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+    .input-row { display: flex; gap: 10px; }
+    .input-row input {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white;
+      font-size: 13px;
+      outline: none;
+      font-family: 'Space Mono', monospace;
+    }
+    .input-row input:focus { border-color: var(--accent); }
+    .reg-card textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white;
+      font-size: 13px;
+      outline: none;
+      font-family: 'Space Mono', monospace;
+      resize: none;
+      margin-bottom: 10px;
     }
 
-    .hero h1{
-      font-size:58px;
-      margin-bottom:20px;
+    /* ── DISPUTE SECTION (member) ── */
+    .dispute-card {
+      background: var(--surface2);
+      border: 1px solid rgba(255,77,109,0.2);
+      border-radius: 18px;
+      padding: 32px;
+      margin-top: 40px;
     }
+    .dispute-card h3 { color: var(--danger); font-size: 18px; margin-bottom: 10px; }
+    .dispute-card > p { color: var(--muted); font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
 
-    .hero p{
-      color:#d6d6d6;
-      font-size:20px;
-      max-width:700px;
-      margin:auto;
-      line-height:1.6;
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.3s;
+      pointer-events: none;
+      max-width: 400px;
     }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { background: rgba(0,255,179,0.12);  color: var(--accent);  border: 1px solid var(--accent); }
+    #toast.error   { background: rgba(255,77,109,0.12); color: var(--danger);  border: 1px solid var(--danger); }
+    #toast.info    { background: rgba(255,179,71,0.1);  color: var(--warning); border: 1px solid var(--warning); }
 
-    section{
-      padding:90px 8%;
+    /* ── HOW IT WORKS ── */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+    .card {
+      background: var(--surface);
+      padding: 30px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      transition: all 0.25s;
     }
+    .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+    .card h3 { margin-bottom: 12px; color: var(--accent); font-size: 16px; }
+    .card p  { color: var(--muted); font-size: 14px; line-height: 1.65; }
 
-    .section-title{
-      text-align:center;
-      margin-bottom:60px;
+    footer { text-align: center; padding: 30px; background: #050b14; color: #445; font-size: 13px; }
+
+    @media(max-width: 768px) {
+      .page-hero h1 { font-size: 36px; }
+      nav ul { display: none; }
+      .form-row { grid-template-columns: 1fr; }
     }
-
-    .section-title h2{
-      font-size:42px;
-      color:#00ffb3;
-      margin-bottom:10px;
-    }
-
-    .settlement-container{
-      display:grid;
-      grid-template-columns:2fr 1fr;
-      gap:40px;
-    }
-
-    .card{
-      background:#111c2e;
-      padding:35px;
-      border-radius:25px;
-      border:1px solid rgba(255,255,255,0.08);
-    }
-
-    .card h3{
-      color:#00ffb3;
-      margin-bottom:25px;
-      font-size:28px;
-    }
-
-    .trade-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:20px 0;
-      border-bottom:1px solid rgba(255,255,255,0.08);
-    }
-
-    .trade-row:last-child{
-      border-bottom:none;
-    }
-
-    .trade-info h4{
-      margin-bottom:8px;
-      font-size:20px;
-    }
-
-    .trade-info p{
-      color:#bdbdbd;
-      line-height:1.6;
-    }
-
-    .green{
-      color:#00ffb3;
-      font-weight:bold;
-    }
-
-    .status{
-      padding:8px 18px;
-      border-radius:20px;
-      background:#00ffb320;
-      color:#00ffb3;
-      font-size:14px;
-      font-weight:bold;
-    }
-
-    .summary-box{
-      display:flex;
-      flex-direction:column;
-      gap:25px;
-    }
-
-    .summary-item{
-      background:#08111f;
-      padding:20px;
-      border-radius:18px;
-    }
-
-    .summary-item p{
-      color:#bdbdbd;
-      margin-bottom:10px;
-    }
-
-    .summary-item h2{
-      color:#00ffb3;
-      font-size:32px;
-    }
-
-    .payment-methods{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:25px;
-      margin-top:40px;
-    }
-
-    .payment-card{
-      background:#111c2e;
-      padding:30px;
-      border-radius:20px;
-      text-align:center;
-      border:1px solid rgba(255,255,255,0.08);
-      transition:0.3s;
-    }
-
-    .payment-card:hover{
-      transform:translateY(-5px);
-      border-color:#00ffb3;
-    }
-
-    .payment-card h3{
-      color:#00ffb3;
-      margin-bottom:15px;
-    }
-
-    .checkout{
-      margin-top:60px;
-      background:#111c2e;
-      padding:40px;
-      border-radius:25px;
-    }
-
-    form{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:25px;
-    }
-
-    .full{
-      grid-column:1/3;
-    }
-
-    input{
-      padding:16px;
-      border:none;
-      border-radius:12px;
-      background:#08111f;
-      color:white;
-      font-size:15px;
-    }
-
-    .btn{
-      display:inline-block;
-      padding:16px 35px;
-      background:#00ffb3;
-      color:#08111f;
-      text-decoration:none;
-      border-radius:40px;
-      font-weight:bold;
-      transition:0.3s;
-      border:none;
-      cursor:pointer;
-    }
-
-    .btn:hover{
-      background:white;
-      transform:translateY(-3px);
-    }
-
-    .settlement-status{
-      margin-top:50px;
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:25px;
-    }
-
-    .status-card{
-      background:#111c2e;
-      padding:30px;
-      border-radius:20px;
-      text-align:center;
-    }
-
-    .status-card h2{
-      font-size:40px;
-      color:#00ffb3;
-      margin-bottom:10px;
-    }
-
-    footer{
-      text-align:center;
-      padding:30px;
-      background:#050b14;
-      color:#aaa;
-      margin-top:60px;
-    }
-
-    @media(max-width:900px){
-
-      .settlement-container{
-        grid-template-columns:1fr;
-      }
-
-      form{
-        grid-template-columns:1fr;
-      }
-
-      .full{
-        grid-column:auto;
-      }
-
-      .hero h1{
-        font-size:42px;
-      }
-
-      nav ul{
-        display:none;
-      }
-
-    }
-
   </style>
 </head>
 
 <body>
 
-  <nav>
-    <div class="logo">SEC</div>
+<div id="toast"></div>
 
-    <ul>
-      <li><a href="#">Settlement</a></li>
-      <li><a href="#">Ethereum</a></li>
-      <li><a href="#">Smart Contracts</a></li>
-      <li><a href="#">Oracle</a></li>
-    </ul>
-  </nav>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">SEC</a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="energylisting.html">Listings</a></li>
+    <li><a href="trade-matching.html">Trade Matching</a></li>
+    <li><a href="settlement.html" class="active">Settlement</a></li>
+    <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
+  </ul>
+</nav>
 
-  <div class="hero">
-    <h1>Ethereum Energy Settlement</h1>
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Energy <span>Settlement</span><br>Portal</h1>
+  <p>Oracle-verified energy delivery confirmation, on-chain ETH release, and full dispute resolution — powered by the Settlement contract.</p>
+</div>
 
-    <p>
-      Secure blockchain settlement between energy buyers and stakeholders
-      using Ethereum smart contracts and oracle verified delivery data.
-    </p>
+<!-- MAIN -->
+<section>
+
+  <!-- Wallet Bar -->
+  <div class="wallet-bar">
+    <div class="wallet-stat">
+      <span class="label">Wallet</span>
+      <span class="value" id="walletAddr">Not Connected</span>
+    </div>
+    <div class="wallet-stat">
+      <span class="label">Network</span>
+      <span class="value" id="networkName">—</span>
+    </div>
+    <div class="wallet-stat">
+      <span class="label">Role</span>
+      <span id="accessDisplay"><span class="badge badge-none">—</span></span>
+    </div>
+    <div style="margin-left:auto;">
+      <button class="btn-outline" onclick="refreshAll()" style="padding:8px 16px; font-size:12px;">↻ Refresh</button>
+    </div>
   </div>
 
-  <section>
+  <!-- ACCESS WALL -->
+  <div id="accessWall">
+    <h3>🔒 Members Only</h3>
+    <p>Connect your wallet to access the settlement portal. You must be a regulator-approved SEC member.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn" onclick="connectWallet()">Connect Wallet</button>
+      <a href="index.html#portal" class="btn" style="background:var(--surface2); color:var(--accent); border:1.5px solid var(--accent);">Apply for Membership</a>
+    </div>
+  </div>
 
-    <div class="section-title">
-      <h2>Pending Settlement</h2>
-      <p>Blockchain verified energy transaction overview</p>
+  <!-- MAIN CONTENT -->
+  <div id="mainContent" style="display:none;">
+
+    <!-- Role Banner -->
+    <div id="roleBanner" class="role-banner member">
+      <span id="roleBannerIcon">✅</span>
+      <span id="roleBannerText">Loading...</span>
     </div>
 
-    <div class="settlement-container">
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-box"><h2 id="statTotal">—</h2><p>Total Settlements</p></div>
+      <div class="stat-box"><h2 id="statKwh">—</h2><p>Total kWh Settled</p></div>
+      <div class="stat-box"><h2 id="statEth">—</h2><p>Total ETH Released</p></div>
+      <div class="stat-box"><h2 id="statDisputes">—</h2><p>Active Disputes</p></div>
+    </div>
 
-      <div class="card">
+    <!-- Energy Account -->
+    <div style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="font-size:20px; color:var(--accent);">Your Energy Account</h3>
+      <button class="btn-outline" onclick="loadEnergyAccount()">↻ Reload</button>
+    </div>
+    <div class="account-grid" id="accountGrid">
+      <div class="account-card">
+        <div class="ac-label">kWh Delivered (sold)</div>
+        <div class="ac-value" id="accKwhDelivered">—</div>
+        <div class="ac-sub">Confirmed deliveries as producer</div>
+      </div>
+      <div class="account-card">
+        <div class="ac-label">kWh Received (bought)</div>
+        <div class="ac-value" id="accKwhReceived">—</div>
+        <div class="ac-sub">Confirmed receipts as consumer</div>
+      </div>
+      <div class="account-card">
+        <div class="ac-label">Total Earned (Wei)</div>
+        <div class="ac-value" id="accEarned">—</div>
+        <div class="ac-sub">ETH received as producer</div>
+      </div>
+      <div class="account-card">
+        <div class="ac-label">Total Spent (Wei)</div>
+        <div class="ac-value" id="accSpent">—</div>
+        <div class="ac-sub">ETH paid as consumer</div>
+      </div>
+    </div>
 
-        <h3>Trade Details</h3>
+    <!-- Settlements Table -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+      <h3 style="font-size:20px; color:var(--accent);">Settlement Records</h3>
+      <button class="btn-outline" onclick="loadSettlements()">↻ Reload</button>
+    </div>
 
-        <div class="trade-row">
-          <div class="trade-info">
-            <h4>Producer</h4>
-            <p>SolarGrid Homes Pty Ltd</p>
+    <div class="filter-bar">
+      <label>Status</label>
+      <select id="filterSettlementStatus">
+        <option value="all">All</option>
+        <option value="0">Pending</option>
+        <option value="1">Confirmed</option>
+        <option value="2">Disputed</option>
+      </select>
+      <label style="margin-left:8px;">Show</label>
+      <select id="filterSettlementOwner">
+        <option value="all">All Records</option>
+        <option value="mine">My Settlements</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Match ID</th>
+            <th>Producer</th>
+            <th>Consumer</th>
+            <th>kWh</th>
+            <th>Agreed (Wei)</th>
+            <th>Delivery</th>
+            <th>Confirmed At</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="settlementsTableBody">
+          <tr><td colspan="8" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">Connect wallet to load settlements.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Member: Raise Dispute -->
+    <div id="disputeSection" class="dispute-card" style="display:none;">
+      <h3>⚠️ Raise a Dispute</h3>
+      <p>If energy was not delivered as agreed on a Locked match, you can raise a dispute. A regulator will review and resolve it.</p>
+      <div class="form-row" style="margin-bottom:14px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Match ID</label>
+          <input type="number" id="disputeMatchId" placeholder="e.g. 0" min="0" />
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Reason</label>
+          <input type="text" id="disputeReason" placeholder="Brief description..." />
+        </div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="raiseDispute()">Raise Dispute</button>
+      <p class="form-msg" id="disputeMsg"></p>
+    </div>
+
+    <!-- Regulator Panel -->
+    <div id="regulatorPanel" style="display:none;">
+      <div class="reg-panel">
+        <h3>🛡️ Regulator Controls — Settlement</h3>
+        <div class="reg-grid">
+
+          <div class="reg-card">
+            <h4>Confirm Delivery</h4>
+            <p>Oracle has verified energy delivery. Confirm to release ETH to the producer.</p>
+            <div class="input-row">
+              <input type="number" id="regConfirmMatchId" placeholder="Match ID" min="0" />
+              <button class="btn btn-sm" onclick="confirmDelivery()">Confirm</button>
+            </div>
           </div>
 
-          <span class="status">Verified</span>
-        </div>
-
-        <div class="trade-row">
-          <div class="trade-info">
-            <h4>Consumer</h4>
-            <p>West District Apartments</p>
+          <div class="reg-card">
+            <h4>Resolve Dispute — Proceed</h4>
+            <p>Override dispute: energy was delivered. Release ETH to producer.</p>
+            <div class="input-row">
+              <input type="number" id="regResolveMatchId" placeholder="Match ID" min="0" />
+              <button class="btn btn-sm" onclick="resolveDispute(true)">Proceed</button>
+            </div>
           </div>
 
-          <span class="status">Matched</span>
-        </div>
-
-        <div class="trade-row">
-          <div class="trade-info">
-            <h4>Energy Delivered</h4>
-            <p>245 kWh Renewable Solar Energy</p>
+          <div class="reg-card">
+            <h4>Resolve Dispute — Reject</h4>
+            <p>Override dispute: energy was NOT delivered. Reject settlement (then use Trade Matching to cancel the match and refund consumer).</p>
+            <div class="input-row">
+              <input type="number" id="regRejectMatchId" placeholder="Match ID" min="0" />
+              <button class="btn btn-danger btn-sm" onclick="resolveDispute(false)">Reject</button>
+            </div>
           </div>
 
-          <span class="green">Confirmed</span>
         </div>
-
-        <div class="trade-row">
-          <div class="trade-info">
-            <h4>Settlement Window</h4>
-            <p>14 May 2026 • 6:00 PM AEST</p>
-          </div>
-
-          <span class="green">Active</span>
-        </div>
-
       </div>
-
-      <div class="summary-box">
-
-        <div class="summary-item">
-          <p>Total Trade Value</p>
-          <h2>0.084 ETH</h2>
-        </div>
-
-        <div class="summary-item">
-          <p>Estimated Gas Fee</p>
-          <h2>0.0012 ETH</h2>
-        </div>
-
-        <div class="summary-item">
-          <p>Settlement Status</p>
-          <h2>Pending</h2>
-        </div>
-
-      </div>
-
     </div>
 
-  </section>
+  </div>
+</section>
 
-  <section>
-
-    <div class="section-title">
-      <h2>Ethereum Settlement</h2>
-      <p>Secure smart contract settlement using Ethereum blockchain</p>
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-title">
+    <h2>How Settlement Works</h2>
+    <p>The oracle-verified payment flow from locked match to final ETH release</p>
+  </div>
+  <div class="info-grid">
+    <div class="card">
+      <h3>1️⃣ Match Locked</h3>
+      <p>SC3 locks a bid to a listing. Consumer ETH is held in the TradeMatching contract, awaiting delivery confirmation.</p>
     </div>
-
-    <div class="payment-methods">
-
-      <div class="payment-card">
-        <h3>⟠ Ethereum Smart Contract</h3>
-
-        <p>
-          All settlements are processed through Ethereum smart contracts
-          with decentralized verification and immutable transaction records.
-        </p>
-      </div>
-
-      <div class="payment-card">
-        <h3>🔐 Wallet Authentication</h3>
-
-        <p>
-          Buyers and stakeholders authenticate transactions using
-          Ethereum wallet signatures and blockchain verification.
-        </p>
-      </div>
-
-      <div class="payment-card">
-        <h3>⚡ Oracle Verification</h3>
-
-        <p>
-          Smart meter oracle data confirms energy delivery before
-          Ethereum settlement is finalized on-chain.
-        </p>
-      </div>
-
+    <div class="card">
+      <h3>2️⃣ Oracle Confirms</h3>
+      <p>Smart-meter data is read off-chain by the regulator acting as oracle, verifying that the agreed kWh was delivered.</p>
     </div>
-
-    <div class="checkout">
-
-      <h3 style="margin-bottom:30px; color:#00ffb3; font-size:32px;">
-        Complete Ethereum Settlement
-      </h3>
-
-      <form>
-
-        <input type="text" placeholder="Buyer Wallet Address" required>
-
-        <input type="text" placeholder="Producer Wallet Address" required>
-
-        <input type="text" placeholder="Ethereum Smart Contract ID" class="full" required>
-
-        <input type="text" placeholder="Settlement Amount (ETH)" required>
-
-        <input type="text" placeholder="Gas Fee Estimate (GWEI)">
-
-        <input type="text" placeholder="Oracle Verification ID" class="full">
-
-        <button class="btn full" type="submit">
-          Confirm On-Chain Settlement
-        </button>
-
-      </form>
-
+    <div class="card">
+      <h3>3️⃣ Regulator Calls SC4</h3>
+      <p>The regulator calls <code style="color:var(--accent)">confirmDelivery(matchId)</code> on this Settlement contract, which updates the energy ledger.</p>
     </div>
-
-  </section>
-
-  <section>
-
-    <div class="section-title">
-      <h2>Blockchain Settlement Stats</h2>
-      <p>Live transaction metrics from SEC Ethereum network</p>
+    <div class="card">
+      <h3>4️⃣ ETH Released</h3>
+      <p>SC4 calls <code style="color:var(--accent)">SC3.confirmSettlement()</code>, which transfers the locked ETH directly to the producer's wallet.</p>
     </div>
-
-    <div class="settlement-status">
-
-      <div class="status-card">
-        <h2>1,284</h2>
-        <p>Completed Smart Contracts</p>
-      </div>
-
-      <div class="status-card">
-        <h2>184 ETH</h2>
-        <p>Total Energy Settled</p>
-      </div>
-
-      <div class="status-card">
-        <h2>99.98%</h2>
-        <p>Settlement Accuracy</p>
-      </div>
-
-      <div class="status-card">
-        <h2>4 sec</h2>
-        <p>Average Block Confirmation</p>
-      </div>
-
+    <div class="card">
+      <h3>⚠️ Dispute Flow</h3>
+      <p>Either party can raise a dispute before settlement. The regulator reviews and either proceeds (pays producer) or rejects (refunds consumer via SC3).</p>
     </div>
+    <div class="card">
+      <h3>📊 Energy Ledger</h3>
+      <p>Every confirmed settlement updates on-chain balances: kWh delivered/received and ETH earned/spent per address — fully auditable.</p>
+    </div>
+  </div>
+</section>
 
-  </section>
+<footer>© 2026 SEC | Settlement Portal</footer>
 
-  <footer>
-    © 2026 SEC Ethereum Settlement Portal
-  </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+<script>
 
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CONFIG
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  const AUTH_CONTRACT_ADDRESS       = "0xa48660A8745aE85a922ED919048ce5A69488476F";
+  const TRADE_CONTRACT_ADDRESS      = "0x352A686366b43E2EeE0e123a6Ef8B3Db94d400ca";
+  const SETTLEMENT_CONTRACT_ADDRESS = "0x77026726B7Df67586F4e813dEBC6f507954A43EE";
+
+  const AUTH_ABI = [
+    "function isMember(address) view returns (bool)",
+    "function isRegulator(address) view returns (bool)"
+  ];
+
+  // Only the functions SC4 needs from SC3 (for reading match status)
+  const TRADE_ABI = [
+    "function matchCount() view returns (uint256)",
+    "function matches(uint256) view returns (uint256 bidId, uint256 listingId, address consumer, address producer, uint256 amountKwh, uint256 agreedWei, uint8 status, uint256 createdAt)"
+  ];
+
+  const SETTLEMENT_ABI = [
+    // View
+    "function settlementCount() view returns (uint256)",
+    "function getSettledMatchIds() view returns (uint256[])",
+    "function getSettlement(uint256 matchId) view returns (tuple(uint256 matchId, address producer, address consumer, uint256 amountKwh, uint256 agreedWei, uint8 deliveryStatus, uint256 confirmedAt, address confirmedBy))",
+    "function getEnergyAccount(address account) view returns (tuple(uint256 kwhDelivered, uint256 kwhReceived, uint256 totalEarned, uint256 totalSpent))",
+    // Regulator write
+    "function confirmDelivery(uint256 _matchId) external",
+    "function resolveDispute(uint256 _matchId, bool _proceed) external",
+    // Member write
+    "function raiseDispute(uint256 _matchId, string calldata _reason) external",
+    // Events
+    "event DeliveryConfirmed(uint256 indexed matchId, address indexed producer, address indexed consumer, uint256 amountKwh, uint256 weiReleased, address confirmedBy)",
+    "event DeliveryDisputed(uint256 indexed matchId, address indexed raisedBy, string reason)",
+    "event DisputeResolved(uint256 indexed matchId, address indexed resolvedBy, bool settlementProceeded)"
+  ];
+
+  // DeliveryStatus enum (matches Solidity order)
+  const DELIVERY_STATUS = { 0: 'Pending', 1: 'Confirmed', 2: 'Disputed' };
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // STATE
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  let provider, signer, authContract, tradeContract, settlementContract, currentAccount;
+  let currentRole = null;
+  let allSettlements = [];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // TOAST
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = `show ${type}`;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.className = '', 5000);
+  }
+
+  function showMsg(el, msg, type) {
+    el.textContent = msg;
+    el.style.color = type === 'error' ? 'var(--danger)' : type === 'info' ? 'var(--warning)' : 'var(--accent)';
+    el.style.display = 'block';
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CONNECT WALLET
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function connectWallet() {
+    if (!window.ethereum) { toast('MetaMask not detected', 'error'); return; }
+    try {
+      provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = await provider.getSigner();
+      currentAccount = await signer.getAddress();
+
+      authContract       = new ethers.Contract(AUTH_CONTRACT_ADDRESS,       AUTH_ABI,       signer);
+      tradeContract      = new ethers.Contract(TRADE_CONTRACT_ADDRESS,      TRADE_ABI,      signer);
+      settlementContract = new ethers.Contract(SETTLEMENT_CONTRACT_ADDRESS, SETTLEMENT_ABI, signer);
+
+      const network = await provider.getNetwork();
+      document.getElementById('walletAddr').textContent  = currentAccount;
+      document.getElementById('networkName').textContent = `${network.name} (${network.chainId})`;
+
+      const btn = document.getElementById('connectBtn');
+      btn.textContent = currentAccount.slice(0,6) + '...' + currentAccount.slice(-4);
+      btn.classList.add('connected');
+
+      await refreshAll();
+      toast('Wallet connected', 'success');
+      window.ethereum.on('accountsChanged', () => location.reload());
+    } catch (err) {
+      toast(err.reason || err.message, 'error');
+    }
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // REFRESH ALL
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function refreshAll() {
+    if (!authContract || !currentAccount) return;
+    try {
+      const [isMem, isReg] = await Promise.all([
+        authContract.isMember(currentAccount),
+        authContract.isRegulator(currentAccount)
+      ]);
+
+      currentRole = isReg ? 'regulator' : (isMem ? 'member' : null);
+
+      let badge = '<span class="badge badge-none">No Access</span>';
+      if (isReg)      badge = '<span class="badge badge-regulator">Regulator</span>';
+      else if (isMem) badge = '<span class="badge badge-member">Member</span>';
+      document.getElementById('accessDisplay').innerHTML = badge;
+
+      const hasAccess = isMem || isReg;
+      document.getElementById('accessWall').style.display  = hasAccess ? 'none'  : 'block';
+      document.getElementById('mainContent').style.display = hasAccess ? 'block' : 'none';
+      if (!hasAccess) return;
+
+      const banner = document.getElementById('roleBanner');
+      if (isReg) {
+        banner.className = 'role-banner regulator';
+        document.getElementById('roleBannerIcon').textContent = '🛡️';
+        document.getElementById('roleBannerText').textContent =
+          'You are a Regulator. Confirm deliveries, resolve disputes, and monitor all settlements.';
+        document.getElementById('regulatorPanel').style.display = 'block';
+        document.getElementById('disputeSection').style.display = 'none';
+      } else {
+        banner.className = 'role-banner member';
+        document.getElementById('roleBannerIcon').textContent = '✅';
+        document.getElementById('roleBannerText').textContent =
+          'You are a verified member. View your settlement history, energy account, and raise disputes if needed.';
+        document.getElementById('regulatorPanel').style.display = 'none';
+        document.getElementById('disputeSection').style.display = 'block';
+      }
+
+      await Promise.all([loadEnergyAccount(), loadSettlements()]);
+
+    } catch (err) {
+      toast('Failed to load: ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // LOAD ENERGY ACCOUNT
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function loadEnergyAccount() {
+    if (!settlementContract) return;
+    try {
+      const acc = await settlementContract.getEnergyAccount(currentAccount);
+      document.getElementById('accKwhDelivered').textContent = acc.kwhDelivered.toString() + ' kWh';
+      document.getElementById('accKwhReceived').textContent  = acc.kwhReceived.toString()  + ' kWh';
+      document.getElementById('accEarned').textContent       = acc.totalEarned.toString()  + ' Wei';
+      document.getElementById('accSpent').textContent        = acc.totalSpent.toString()   + ' Wei';
+    } catch (err) {
+      toast('Failed to load energy account: ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // LOAD SETTLEMENTS
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function loadSettlements() {
+    if (!settlementContract || !tradeContract) return;
+    try {
+      // Get all settled match IDs from SC4
+      const settledIds = await settlementContract.getSettledMatchIds();
+
+      // Also scan all matches from SC3 to catch disputed-but-not-yet-settled ones
+      const matchCount = Number(await tradeContract.matchCount());
+
+      // Build a set of match IDs that have a settlement record
+      const settledSet = new Set(settledIds.map(id => Number(id)));
+
+      const records = [];
+
+      // Load settled records from SC4
+      for (const id of settledIds) {
+        try {
+          const s = await settlementContract.getSettlement(Number(id));
+          if (s.confirmedAt > 0 || s.deliveryStatus > 0) {
+            records.push({
+              matchId:        Number(s.matchId),
+              producer:       s.producer,
+              consumer:       s.consumer,
+              amountKwh:      Number(s.amountKwh),
+              agreedWei:      s.agreedWei.toString(),
+              deliveryStatus: Number(s.deliveryStatus),
+              confirmedAt:    Number(s.confirmedAt),
+              confirmedBy:    s.confirmedBy
+            });
+          }
+        } catch (_) {}
+      }
+
+      // Pull locked matches from SC3 not yet in SC4 (status=1 Locked)
+      for (let i = 0; i < matchCount; i++) {
+        if (settledSet.has(i)) continue;
+        try {
+          const m = await tradeContract.matches(i);
+          const status = Number(m.status);
+          // Only show Locked (1) or Flagged (4) matches as pending settlements
+          if (status === 1 || status === 4) {
+            // Check if there's a pending dispute record in SC4
+            let deliveryStatus = 0; // Pending
+            try {
+              const s = await settlementContract.getSettlement(i);
+              deliveryStatus = Number(s.deliveryStatus);
+            } catch (_) {}
+
+            records.push({
+              matchId:        i,
+              producer:       m.producer,
+              consumer:       m.consumer,
+              amountKwh:      Number(m.amountKwh),
+              agreedWei:      m.agreedWei.toString(),
+              deliveryStatus: deliveryStatus,
+              confirmedAt:    0,
+              confirmedBy:    null
+            });
+          }
+        } catch (_) {}
+      }
+
+      allSettlements = records;
+      renderSettlementsTable();
+      updateStats(records);
+
+    } catch (err) {
+      toast('Failed to load settlements: ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // RENDER SETTLEMENTS TABLE
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  function deliveryBadge(status) {
+    const map = {
+      0: '<span class="badge badge-pending">Pending</span>',
+      1: '<span class="badge badge-confirmed">Confirmed</span>',
+      2: '<span class="badge badge-disputed">Disputed</span>'
+    };
+    return map[status] || '—';
+  }
+
+  function renderSettlementsTable() {
+    const statusFilter = document.getElementById('filterSettlementStatus').value;
+    const ownerFilter  = document.getElementById('filterSettlementOwner').value;
+    const body = document.getElementById('settlementsTableBody');
+
+    const filtered = allSettlements.filter(s => {
+      const matchStatus = statusFilter === 'all' || s.deliveryStatus === Number(statusFilter);
+      const matchOwner  = ownerFilter === 'all' || (currentAccount && (
+        s.producer.toLowerCase() === currentAccount.toLowerCase() ||
+        s.consumer.toLowerCase() === currentAccount.toLowerCase()
+      ));
+      return matchStatus && matchOwner;
+    });
+
+    if (!filtered.length) {
+      body.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#445; padding:30px; font-family:'Space Mono',monospace; font-size:13px;">No settlement records found.</td></tr>`;
+      return;
+    }
+
+    body.innerHTML = filtered.map(s => {
+      const isProducer = currentAccount && s.producer.toLowerCase() === currentAccount.toLowerCase();
+      const isConsumer = currentAccount && s.consumer.toLowerCase() === currentAccount.toLowerCase();
+
+      const shortProducer = s.producer.slice(0,6)+'...'+s.producer.slice(-4) +
+        (isProducer ? ' <span class="badge badge-member" style="padding:2px 8px;font-size:10px;">You</span>' : '');
+      const shortConsumer = s.consumer.slice(0,6)+'...'+s.consumer.slice(-4) +
+        (isConsumer ? ' <span class="badge badge-member" style="padding:2px 8px;font-size:10px;">You</span>' : '');
+
+      const confirmedAt = s.confirmedAt > 0
+        ? new Date(s.confirmedAt * 1000).toLocaleDateString('en-AU', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })
+        : '—';
+
+      // Action: regulator can confirm pending; member can raise dispute
+      let action = '<span style="color:#445;font-size:12px;">—</span>';
+      if (s.deliveryStatus === 0) {
+        if (currentRole === 'regulator') {
+          action = `<button class="btn btn-sm" onclick="confirmDeliveryById(${s.matchId})">Confirm</button>`;
+        } else if (isProducer || isConsumer) {
+          action = `<button class="btn btn-danger btn-sm" onclick="prefillDispute(${s.matchId})">Dispute</button>`;
+        }
+      }
+
+      return `
+        <tr>
+          <td class="green">#${s.matchId}</td>
+          <td class="mono">${shortProducer}</td>
+          <td class="mono">${shortConsumer}</td>
+          <td><strong>${s.amountKwh}</strong> kWh</td>
+          <td class="mono">${s.agreedWei} Wei</td>
+          <td>${deliveryBadge(s.deliveryStatus)}</td>
+          <td class="mono" style="font-size:11px;">${confirmedAt}</td>
+          <td>${action}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // STATS
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  function updateStats(records) {
+    const confirmed = records.filter(s => s.deliveryStatus === 1);
+    const disputed  = records.filter(s => s.deliveryStatus === 2);
+    const totalKwh  = confirmed.reduce((a, s) => a + s.amountKwh, 0);
+    const totalWei  = confirmed.reduce((a, s) => a + BigInt(s.agreedWei), 0n);
+
+
+
+    document.getElementById('statTotal').textContent    = confirmed.length;
+    document.getElementById('statEth').textContent = totalWei.toString() + ' Wei';
+    document.getElementById('statKwh').textContent      = totalKwh + ' kWh';
+    document.getElementById('statDisputes').textContent = disputed.length;
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CONFIRM DELIVERY (regulator)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function confirmDelivery() {
+    const matchId = document.getElementById('regConfirmMatchId').value;
+    if (matchId === '') { toast('Enter a Match ID', 'error'); return; }
+    await confirmDeliveryById(Number(matchId));
+    document.getElementById('regConfirmMatchId').value = '';
+  }
+
+  async function confirmDeliveryById(matchId) {
+    try {
+      toast('Confirming delivery...', 'info');
+      const tx = await settlementContract.confirmDelivery(matchId);
+      await tx.wait();
+      toast(`✅ Match #${matchId} confirmed. ETH released to producer.`, 'success');
+      await Promise.all([loadEnergyAccount(), loadSettlements()]);
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // RESOLVE DISPUTE (regulator)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function resolveDispute(proceed) {
+    const idField = proceed
+      ? document.getElementById('regResolveMatchId')
+      : document.getElementById('regRejectMatchId');
+    const matchId = idField.value;
+    if (!matchId) { toast('Enter a Match ID', 'error'); return; }
+    try {
+      toast(proceed ? 'Resolving: proceeding with settlement...' : 'Resolving: rejecting settlement...', 'info');
+      const tx = await settlementContract.resolveDispute(Number(matchId), proceed);
+      await tx.wait();
+      toast(
+        proceed
+          ? `✅ Dispute resolved — Match #${matchId} settled, ETH released.`
+          : `✅ Dispute resolved — Match #${matchId} rejected. Use Trade Matching to cancel and refund.`,
+        'success'
+      );
+      await Promise.all([loadEnergyAccount(), loadSettlements()]);
+    } catch (err) {
+      toast('❌ ' + (err.reason || err.message), 'error');
+    }
+    idField.value = '';
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // RAISE DISPUTE (member)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  async function raiseDispute() {
+    const matchId = document.getElementById('disputeMatchId').value;
+    const reason  = document.getElementById('disputeReason').value.trim();
+    const msgEl   = document.getElementById('disputeMsg');
+    if (!matchId)  { showMsg(msgEl, '⚠️ Enter a Match ID.', 'error'); return; }
+    if (!reason)   { showMsg(msgEl, '⚠️ Enter a reason for the dispute.', 'error'); return; }
+    try {
+      showMsg(msgEl, '⏳ Submitting dispute...', 'info');
+      const tx = await settlementContract.raiseDispute(Number(matchId), reason);
+      await tx.wait();
+      showMsg(msgEl, `✅ Dispute raised for Match #${matchId}. A regulator will review.`, 'success');
+      toast('Dispute raised.', 'info');
+      document.getElementById('disputeMatchId').value = '';
+      document.getElementById('disputeReason').value  = '';
+      await loadSettlements();
+    } catch (err) {
+      showMsg(msgEl, '❌ ' + (err.reason || err.message), 'error');
+    }
+  }
+
+  // Pre-fill dispute form from table action button
+  function prefillDispute(matchId) {
+    document.getElementById('disputeMatchId').value = matchId;
+    document.getElementById('disputeSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // AUTO CONNECT + FILTER LISTENERS
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  window.addEventListener('load', async () => {
+    document.getElementById('filterSettlementStatus').addEventListener('change', renderSettlementsTable);
+    document.getElementById('filterSettlementOwner').addEventListener('change', renderSettlementsTable);
+
+    if (!window.ethereum) return;
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    if (accounts.length > 0) connectWallet();
+  });
+
+</script>
 </body>
 </html>

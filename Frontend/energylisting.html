@@ -102,6 +102,7 @@
       cursor: pointer;
       transition: all 0.2s;
       font-family: 'Space Mono', monospace;
+      text-decoration: none;
     }
     .btn-outline:hover { background: var(--accent); color: var(--bg); }
     .btn-outline:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -364,7 +365,7 @@
     <li><a href="index.html">Home</a></li>
     <li><a href="energylisting.html" class="active">Listings</a></li>
     <li><a href="trade-matching.html">Trade Matching</a></li>
-    <li><a href="#how">How It Works</a></li>
+    <li><a href="settlement.html">Settlement</a></li>
     
     <li><button id="connectBtn" onclick="connectWallet()">Connect Wallet</button></li>
   </ul>
@@ -562,8 +563,8 @@
 
 
   // Config — deployed contract addresses here
-  const AUTH_CONTRACT_ADDRESS   = "0xa0E77f2017d0dF40852Ff4ad024e4ED50d3A396D";
-  const ENERGY_CONTRACT_ADDRESS = "0x37906841F290CC10d8B5CE95d003219A19DF6C06";
+  const AUTH_CONTRACT_ADDRESS   = "0xa48660A8745aE85a922ED919048ce5A69488476F";
+  const ENERGY_CONTRACT_ADDRESS = "0x3f5B8a7dfB4f9C6B10fc2623F8bF002A7B221996";
 
   // authentication.sol ABI (role checks only)
   const AUTH_ABI = [
