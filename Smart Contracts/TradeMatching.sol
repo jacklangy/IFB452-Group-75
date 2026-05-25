@@ -28,6 +28,7 @@ contract TradeMatching {
 
     IAuthentication public authContract;
     IEnergyListing  public listingContract;
+    address public settlementContract;
 
     // Data structures
 
@@ -244,8 +245,8 @@ contract TradeMatching {
     }
 
     // Settlement callback (called by SC4)
-
-    // SC4 calls this after verifying oracle delivery to release ETH to the producer and mark the match settled.
+    // SC4 calls this after oracle confirms energy delivery.
+    // Releases locked ETH to the producer.
     // @param _matchId  The match that has been confirmed delivered
     function confirmSettlement(uint256 _matchId) external {
         Match storage m = matches[_matchId];
@@ -255,10 +256,9 @@ contract TradeMatching {
         // In production, restrict this to the deployed SC4 address.
         // For the prototype, any regulator-approved address may call this.
         require(
-            authContract.isRegulator(msg.sender),
-            "Only regulator/SC4 can confirm settlement"
+            msg.sender == settlementContract,
+            "Only the Settlement contract (SC4) can confirm settlement"
         );
-
         m.status = MatchStatus.Settled;
 
         uint256 payment = m.agreedWei;
@@ -268,6 +268,15 @@ contract TradeMatching {
         require(sent, "ETH transfer to producer failed");
 
         emit MatchSettled(_matchId);
+    }
+
+    function setSettlementContract(address _settlementAddress) external {
+        require(
+            authContract.isRegulator(msg.sender),
+            "Only regulator can set settlement contract"
+        );
+        require(_settlementAddress != address(0), "Invalid address");
+        settlementContract = _settlementAddress;
     }
 
     // Regulator actions
